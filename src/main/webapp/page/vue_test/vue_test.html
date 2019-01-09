@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VUE</title>
+    <script src="../../js/vue/vue.js"></script>
+</head>
+
+<body>
+
+<div id='app'>
+    <!--解决闪烁问题，当数值还没加载的时候-->
+    解决闪烁<br>
+    <span v-text='name'></span>
+
+    <br><br>
+
+    {{name}}
+
+    <br><br>
+
+    双向绑定测试：<br>
+    <input v-model="num1">+
+    <input v-model="num2">={{result}}
+    <!--{{Number.parseInt(num1)+Number.parseInt(num2)}}-->
+    <!--监听事件-->
+    <button v-on:click='change()'>计算</button>
+
+    <br><br>
+
+    <a :href="url">绑定链接也可以绑定样式等[v-bind:可以简写为:]</a>
+
+    <br><br>
+    <ul>
+        <li v-for='(itim,index) in list' :key="index" v-if="index %2 ==0">索引:{{index}}--值:{{itim}}</li>
+        <li v-for='(itim,index) in json'>索引:{{index}}--值:{{itim}}</li>
+        <li v-for='(itim,index) in jsonList' :key="itim.name">
+            <div v-if="itim.name=='Jerry'" style="background: rebeccapurple">
+                索引:{{index}}--值:{{itim.name}}
+            </div>
+            <div v-else>
+                索引:{{index}}--值:{{itim.name}}
+            </div>
+
+        </li>
+
+    </ul>
+
+
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            name: 'tom',
+            num1: 1,
+            num2: 1,
+            result: 0,
+            url: 'http://www.baidu.com',
+            list: [1, 2, 3, 4, 5],
+            json: {name: 'tom', age: 13},
+            jsonList: [
+                {name: 'Tom', age: 13},
+                {name: 'Jerry', age: 11}
+            ]
+
+        },
+        methods: {
+            change: function () {
+                this.result = Number.parseInt(this.num1) + Number.parseInt(this.num2)
+                return this.result
+            }
+        }
+    })
+
+
+</script>
+</body>
+</html>

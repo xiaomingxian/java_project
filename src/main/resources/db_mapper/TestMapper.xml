@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.TestMapper">
+    <resultMap id="BaseResultMap" type="pojo.Test">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+    <sql id="baseCloum">
+       id,info,create_time,status
+   </sql>
+
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="baseCloum"/>
+        from test
+    </select>
+
+    <!--getCount-->
+    <select id="getCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from test
+        <where>
+            <if test="createTime !=null">
+                and create_time &gt; #{createTime}
+            </if>
+        </where>
+    </select>
+    <!--分页-->
+    <select id="selectByMyPageHelper" resultMap="BaseResultMap">
+
+        select
+        <include refid="baseCloum"/>
+        from test
+        <where>
+            <if test="p.object.createTime != null">
+                and create_time &gt; #{p.object.createTime}
+            </if>
+        </where>
+
+        <if test="p.mypage.isLimit">
+            limit #{p.mypage.startPage} ,#{p.mypage.pageSize}
+        </if>
+
+    </select>
+
+
+</mapper>

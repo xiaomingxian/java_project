@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--trigger(执行周期/时机)里有quartz(任务),shedule里有trigger和quartz-->
+
+
+    <!--方式一-->
+    <bean id="simpleJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="myBean"/>
+        <property name="targetMethod" value="printMessage"/>
+    </bean>
+    <!--方式二-->
+    <bean id="firstJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="spring_quartz.JobDetail"></property>
+        <!--存储位置设置-->
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="anotherBean" value-ref="anotherBean"/>
+            </map>
+        </property>
+        <!--加入触发器，就算任务没有绑定Triggle，仍然可以保存在以上位置-->
+        <property name="durability" value="true"/>
+    </bean>
+
+    <!--定义Triggle1-->
+    <bean name="mySimpleTriggle" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="simpleJobDetail"></property>
+        <property name="startDelay" value="1000"></property>
+        <property name="repeatInterval" value="2000"></property>
+    </bean>
+
+    <!--Triggle2-->
+    <bean name="myCronTriggle" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+
+        <property name="jobDetail" ref="firstJobDetail"></property>
+        <property name="cronExpression" value="0/5 * * * * ?"></property>
+
+    </bean>
+
+
+    <!--Schedule-->
+    <!--
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+
+        <property name="jobDetails">
+            <list>
+                <ref bean="simpleJobDetail"></ref>
+                <ref bean="firstJobDetail"></ref>
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="mySimpleTriggle"></ref>
+                <ref bean="myCronTriggle"></ref>
+            </list>
+        </property>
+
+    </bean>
+
+    -->
+</beans>

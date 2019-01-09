@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!-- shiro缓存，，，引入ehcache缓存，让并让它的管理器进行管理 -->
+    <!-- shiro封装ehcache管理 -->
+    <!-- securityManager引入 =shiro封装和realm(设置缓存哪部分) -->
+
+    <bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!--login地址在这里设置-->
+        <property name="loginUrl" value="/page/pre_authorcation/login.html"/>
+        <property name="successUrl" value="/index.html"/>
+        <property name="unauthorizedUrl" value="/unauthorized.html"/>
+        <property name="filterChainDefinitions">
+            <value>
+                <!--anon未认证可以访问 -->
+                /pre/** = anon
+                /page/pre_authorcation/** = anon
+                /css/** = anon
+                /images/** = anon
+                /js/** = anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myRealm"/>
+        <property name="cacheManager" ref="shiroCacheManager"/>
+    </bean>
+
+    <!-- 配置Realm -->
+    <bean id="myRealm" class="system.MyRealm">
+        <!-- 缓存区的名字 就是 ehcache.xml 自定义 cache的name -->
+        <!-- 授权区...配置缓存 -->
+        <property name="authorizationCacheName" value="learn"/>
+        <!-- 认证区。。。 -->
+        <property name="authenticationCacheName" value="learn"/>
+
+    </bean>
+
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- 开启shiro注解模式 -->
+    <bean
+            class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+            depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <bean
+            class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!--spring管理ehcache缓存,,工厂创建缓存对象 -->
+    <bean id="ehCacheManager"
+          class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:properties/shiroEhcache.xml"/>
+    </bean>
+
+    <!-- shiro封装cacheManager，，，Map缓存通用,,,,,shiro包 -->
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+
+
+</beans>

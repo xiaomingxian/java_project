@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WEBPACK</title>
+    <script src="../../js/vue/vue.js"></script>
+    <script src="../../js/webpack/test.js"></script>
+</head>
+<body>
+<div id="app">
+    <input v-model="num1">+
+    <input v-model="num2">={{result}}
+    <!--{{Number.parseInt(num1)+Number.parseInt(num2)}}-->
+    <!--监听事件-->
+    <button v-on:click='change()'>计算</button>
+
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            num1: 1,
+            num2: 1,
+            result: 0
+        },
+
+        methods: {
+            change: function () {
+                this.result = add(Number.parseInt(this.num1) + Number.parseInt(this.num2))
+                return this.result
+            }
+        }
+    })
+
+
+</script>
+
+</html>
