@@ -42,7 +42,6 @@ public class ShiroLogin {
         Subject subject = SecurityUtils.getSubject();
         AuthenticationToken token = new UsernamePasswordToken(name, MD5Util.getPwd(password));
 
-
         try {
 
             subject.login(token);

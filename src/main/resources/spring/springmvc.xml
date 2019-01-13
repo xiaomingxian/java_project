@@ -15,8 +15,9 @@
         <constructor-arg value="UTF-8"/>
     </bean>
 
-    <!-- 参数配置 -->
-    <context:property-placeholder location="classpath:properties/db.properties"/>
+
+
+    <context:component-scan base-package="controller"/>
 
 
     <!-- 注解驱动 -->

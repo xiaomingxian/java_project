@@ -9,6 +9,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
 
+    <!-- 参数配置 -->
     <context:property-placeholder location="classpath:properties/db.properties" ignore-unresolvable="true"/>
 
     <!-- sqlSessionFactory -->

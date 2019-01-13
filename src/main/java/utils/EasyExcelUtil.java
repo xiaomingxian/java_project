@@ -25,7 +25,8 @@ public class EasyExcelUtil {
     /**
      * StringList 解析监听器
      */
-    private static class StringExcelListener extends AnalysisEventListener {
+    private static class StringExcelListener extends AnalysisEventListener
+    {
         /**
          * 自定义用于暂时存储data
          * 可以通过实例获取该值

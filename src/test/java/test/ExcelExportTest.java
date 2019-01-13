@@ -18,13 +18,16 @@ import java.util.List;
 
 public class ExcelExportTest {
 
+    String macPath="/Users/xxm/develop/workspace/learn/src/test/java/excel";
+
     /**
      * 无表头
      */
     @Test
     public void noHead() {
         try {
-            FileOutputStream outputStream = new FileOutputStream("D:\\develop\\ideaworkspeace\\learn\\src\\test\\java\\excel\\withoutHead.xlsx");
+            FileOutputStream outputStream = new FileOutputStream(macPath+"\\withoutHead.xlsx");
+            //FileOutputStream outputStream = new FileOutputStream("D:\\develop\\ideaworkspeace\\learn\\src\\test\\java\\excel\\withoutHead.xlsx");
             //写出位置 -- 类型 -- 无表头
             ExcelWriter writer = new ExcelWriter(outputStream, ExcelTypeEnum.XLSX, false);
             //Sheet()
@@ -54,7 +57,9 @@ public class ExcelExportTest {
     public void haveHead() {
 
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("D:\\develop\\ideaworkspeace\\learn\\src\\test\\java\\excel\\haveHead.xlsx");
+
+            FileOutputStream fileOutputStream = new FileOutputStream(macPath+"/haveHead.xlsx");
+            //FileOutputStream fileOutputStream = new FileOutputStream("D:\\develop\\ideaworkspeace\\learn\\src\\test\\java\\excel\\haveHead.xlsx");
             ExcelWriter writer = new ExcelWriter(fileOutputStream, ExcelTypeEnum.XLSX);
 
             //Sheet()
@@ -85,7 +90,8 @@ public class ExcelExportTest {
     public void haveColumName() {
         FileOutputStream fileOutputStream = null;
         try {
-            fileOutputStream = new FileOutputStream("D:\\develop\\ideaworkspeace\\learn\\src\\test\\java\\excel\\haveCloumHead.xlsx");
+            fileOutputStream = new FileOutputStream(macPath+"\\haveCloumHead.xlsx");
+            //fileOutputStream = new FileOutputStream("D:\\develop\\ideaworkspeace\\learn\\src\\test\\java\\excel\\haveCloumHead.xlsx");
             ExcelWriter writer = new ExcelWriter(fileOutputStream, ExcelTypeEnum.XLSX);
 
             //Sheet()
@@ -137,7 +143,8 @@ public class ExcelExportTest {
 
 
         try {
-            FileOutputStream outputStream = new FileOutputStream("D:/develop/ideaworkspeace/learn/src/test/java/excel/pojoTest.xlsx");
+            FileOutputStream outputStream = new FileOutputStream(macPath+"/pojoTest.xlsx");
+            //FileOutputStream outputStream = new FileOutputStream("D:/develop/ideaworkspeace/learn/src/test/java/excel/pojoTest.xlsx");
             ExcelWriter writer = new ExcelWriter(outputStream, ExcelTypeEnum.XLSX);
 
             Sheet sheet = new Sheet(1, 0, Person.class);
@@ -180,7 +187,8 @@ public class ExcelExportTest {
     public void complexPojoTest() {
 
         try {
-            FileOutputStream outputStream = new FileOutputStream("D:/develop/ideaworkspeace/learn/src/test/java/excel/complexPojoTest.xlsx");
+            FileOutputStream outputStream = new FileOutputStream(macPath+"/complexPojoTest.xlsx");
+            //FileOutputStream outputStream = new FileOutputStream("D:/develop/ideaworkspeace/learn/src/test/java/excel/complexPojoTest.xlsx");
 
             ExcelWriter excelWriter = new ExcelWriter(outputStream, ExcelTypeEnum.XLSX);
 
@@ -217,7 +225,8 @@ public class ExcelExportTest {
 
 
         try {
-            FileOutputStream outputStream = new FileOutputStream("D:/develop/ideaworkspeace/learn/src/test/java/excel/exportMoreTable.xlsx");
+            FileOutputStream outputStream = new FileOutputStream(macPath+"/exportMoreTable.xlsx");
+            //FileOutputStream outputStream = new FileOutputStream("D:/develop/ideaworkspeace/learn/src/test/java/excel/exportMoreTable.xlsx");
 
             ExcelWriter excelWriter = new ExcelWriter(outputStream, ExcelTypeEnum.XLSX);
 

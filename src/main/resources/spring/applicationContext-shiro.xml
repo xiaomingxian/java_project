@@ -16,19 +16,18 @@
     <bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <!--login地址在这里设置-->
-        <property name="loginUrl" value="/page/pre_authorcation/login.html"/>
+        <property name="loginUrl" value="/page/pre_authorcation/login.ftl"/>
         <property name="successUrl" value="/index.html"/>
         <property name="unauthorizedUrl" value="/unauthorized.html"/>
         <property name="filterChainDefinitions">
             <value>
                 <!--anon未认证可以访问 -->
-                <!--/page/pre_authorcation/** = anon-->
-                <!--/pre/** = anon-->
-                <!--/css/** = anon-->
-                <!--/images/** = anon-->
-                <!--/js/** = anon-->
-                <!--/** = authc-->
-                /** = anon
+                /page/pre_authorcation/** = anon
+                /pre/** = anon
+                /css/** = anon
+                /images/** = anon
+                /js/** = anon
+                /** = authc
             </value>
         </property>
     </bean>

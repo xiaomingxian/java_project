@@ -20,6 +20,8 @@ import java.util.List;
 public class MyRealm extends AuthorizingRealm {
 
 
+
+
     @Autowired
     private UserService userService;
 
@@ -67,6 +69,8 @@ public class MyRealm extends AuthorizingRealm {
             UserExample.Criteria criteria = example.createCriteria();
             criteria.andUserNameEqualTo(token.getUsername());
             User user = userService.getAll(example).get(0);
+
+            System.out.println("-----"+user.getUserName()+"  "+user.getPassword());
             if (null != user) {
                 return new SimpleAuthenticationInfo(user.getUserName(), user.getPassword(), this.getClass().getSimpleName());
             }

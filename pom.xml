@@ -346,6 +346,7 @@
 
             <!--逆向工程-->
             <!--重复生成mapper:第一次生成之后得注释掉以下插件-->
+            <!--
                         <plugin>
                             <groupId>org.mybatis.generator</groupId>
                             <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -377,7 +378,7 @@
                                 </dependency>
                             </dependencies>
                         </plugin>
-
+                -->
         </plugins>
     </build>
 

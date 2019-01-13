@@ -8,7 +8,7 @@
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="create_time" jdbcType="DATE" property="createTime"/>
-        <result column="update_tima" jdbcType="DATE" property="updateTima"/>
+        <result column="update_time" jdbcType="DATE" property="updateTima"/>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -71,7 +71,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    id, user_name, password, phone, email, create_time, update_tima
+    id, user_name, password, phone, email, create_time, update_time
   </sql>
     <select id="selectByExample" parameterType="pojo.UserExample" resultMap="BaseResultMap">
         select
@@ -106,7 +106,7 @@
     <insert id="insert" parameterType="pojo.User">
     insert into user (id, user_name, password, 
       phone, email, create_time, 
-      update_tima)
+      update_time)
     values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
       #{updateTima,jdbcType=DATE})
@@ -133,7 +133,7 @@
                 create_time,
             </if>
             <if test="updateTima != null">
-                update_tima,
+                update_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -188,7 +188,7 @@
                 create_time = #{record.createTime,jdbcType=DATE},
             </if>
             <if test="record.updateTima != null">
-                update_tima = #{record.updateTima,jdbcType=DATE},
+                update_time = #{record.updateTima,jdbcType=DATE},
             </if>
         </set>
         <if test="_parameter != null">
@@ -203,7 +203,7 @@
         phone = #{record.phone,jdbcType=VARCHAR},
         email = #{record.email,jdbcType=VARCHAR},
         create_time = #{record.createTime,jdbcType=DATE},
-        update_tima = #{record.updateTima,jdbcType=DATE}
+        update_time = #{record.updateTima,jdbcType=DATE}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
@@ -227,7 +227,7 @@
                 create_time = #{createTime,jdbcType=DATE},
             </if>
             <if test="updateTima != null">
-                update_tima = #{updateTima,jdbcType=DATE},
+                update_time = #{updateTima,jdbcType=DATE},
             </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}
@@ -239,7 +239,7 @@
       phone = #{phone,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=DATE},
-      update_tima = #{updateTima,jdbcType=DATE}
+      update_time = #{updateTima,jdbcType=DATE}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
