@@ -26,9 +26,15 @@ public class ShiroLogin {
     @Autowired
     private UserService userService;
 
+
+    @RequestMapping("index")
+    public String index() {
+        return "/index";
+    }
+
+
     @RequestMapping("login")
     public String loginpage() {
-
 
         return "/page/pre_authorcation/login";
     }

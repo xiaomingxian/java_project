@@ -12,4 +12,6 @@ public interface TestMapper {
     int getCount(Test test);
 
     List<Test> selectByMyPageHelper(@Param("p") MyPageHelper<Test> testMyPageHelper);
+
+    void insert(Test test);
 }

@@ -47,5 +47,8 @@
 
     </select>
 
+    <insert id="insert">
+        insert into test values(#{id},#{info},#{createTime},#{status})
+    </insert>
 
 </mapper>
