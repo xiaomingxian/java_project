@@ -23,18 +23,27 @@
     </bean>
 
     <!-- 流程服务 -->
-    <bean id="repositoryService" factory-bean="processEngine"
-          factory-method="getRepositoryService"/>
-    <bean id="runtimeService" factory-bean="processEngine"
-          factory-method="getRuntimeService"/>
-    <bean id="taskService" factory-bean="processEngine"
-          factory-method="getTaskService"/>
-    <bean id="historyService" factory-bean="processEngine"
-          factory-method="getHistoryService"/>
-    <bean id="managementService" factory-bean="processEngine"
-          factory-method="getManagementService"/>
-    <bean id="IdentityService" factory-bean="processEngine"
-          factory-method="getIdentityService"/>
+    <!--管理流程-->
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+    <!--执行管理，包括启动、推进、删除流程实例等操作-->
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+    <!--任务管理 -->
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+    <!--历史管理(执行完的数据的管理) -->
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+    <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
+    <!-- 组织机构管理 -->
+    <bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService"/>
+    <!--一个可选服务，任务表单管理 -->
+    <bean id="formService" factory-bean="processEngine" factory-method="getFormService"/>
+
+
+    <!--databaseSchemaUpdate属性的取值：建表策略-->
+    <!--flase： 默认值。activiti在启动时，会对比数据库表中保存的版本，如果没有表或者版本不匹配，将抛出异常。-->
+    <!--true： activiti会对数据库中所有表进行更新操作。如果表不存在，则自动创建。-->
+    <!--create_drop： 在activiti启动时创建表，在关闭时删除表（必须手动关闭引擎，才能删除表）。-->
+    <!--drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）。-->
+
 
     <!--&lt;!&ndash;用于存放后面acitivi部署流程中，创建的相关联的一些表&ndash;&gt;-->
     <!--<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">-->
