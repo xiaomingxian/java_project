@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1547639077094" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="myProcess_1" isClosed="false" isExecutable="true" processType="None">
+    <startEvent id="qingjia" name="qingjia"/>
+    <userTask activiti:assignee="李老师" activiti:exclusive="true" id="班主任" name="班主任"/>
+    <sequenceFlow id="_4" sourceRef="qingjia" targetRef="班主任"/>
+    <userTask activiti:assignee="王主任" activiti:exclusive="true" id="教务处" name="教务处"/>
+    <sequenceFlow id="_6" sourceRef="班主任" targetRef="教务处"/>
+    <endEvent id="_7" name="EndEvent"/>
+    <sequenceFlow id="_8" sourceRef="教务处" targetRef="_7"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="myProcess_1">
+      <bpmndi:BPMNShape bpmnElement="qingjia" id="Shape-qingjia">
+        <omgdc:Bounds height="32.0" width="32.0" x="175.0" y="15.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="班主任" id="Shape-班主任">
+        <omgdc:Bounds height="55.0" width="85.0" x="160.0" y="95.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="教务处" id="Shape-教务处">
+        <omgdc:Bounds height="55.0" width="85.0" x="155.0" y="255.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_7" id="Shape-_7">
+        <omgdc:Bounds height="32.0" width="32.0" x="185.0" y="405.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_4" id="BPMNEdge__4" sourceElement="qingjia" targetElement="班主任">
+        <omgdi:waypoint x="191.0" y="47.0"/>
+        <omgdi:waypoint x="191.0" y="95.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="班主任" targetElement="教务处">
+        <omgdi:waypoint x="200.0" y="150.0"/>
+        <omgdi:waypoint x="200.0" y="255.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="教务处" targetElement="_7">
+        <omgdi:waypoint x="201.0" y="310.0"/>
+        <omgdi:waypoint x="201.0" y="405.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

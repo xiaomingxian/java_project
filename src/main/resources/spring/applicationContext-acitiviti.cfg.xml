@@ -3,16 +3,49 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <!--用于存放后面acitivi部署流程中，创建的相关联的一些表-->
-    <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
-        <property name="jdbcDriver" value="com.mysql.jdbc.Driver"></property>
-        <property name="jdbcUrl"
-                  value="jdbc:mysql://localhost:3306/activiti?useUnicode=true&amp;characterEncoding=utf8"></property>
-        <property name="jdbcUsername" value="root"></property>
-        <property name="jdbcPassword" value="abc"></property>
-        <!--
-            创建表的策略
-         -->
-        <property name="databaseSchemaUpdate" value="true"></property>
+    <import resource="applicationContext-dao.xml"/>
+    <import resource="applicationContext-tx.xml"/>
+
+    <!-- 流程配置 -->
+    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="databaseSchemaUpdate" value="true"/>
+        <property name="jobExecutorActivate" value="true"/>
+        <!-- 以下2个是为了防止生成流程图片时出现乱码 -->
+        <property name="activityFontName" value="宋体"/>
+        <property name="labelFontName" value="宋体"/>
     </bean>
+
+    <!-- 流程引擎 -->
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+    </bean>
+
+    <!-- 流程服务 -->
+    <bean id="repositoryService" factory-bean="processEngine"
+          factory-method="getRepositoryService"/>
+    <bean id="runtimeService" factory-bean="processEngine"
+          factory-method="getRuntimeService"/>
+    <bean id="taskService" factory-bean="processEngine"
+          factory-method="getTaskService"/>
+    <bean id="historyService" factory-bean="processEngine"
+          factory-method="getHistoryService"/>
+    <bean id="managementService" factory-bean="processEngine"
+          factory-method="getManagementService"/>
+    <bean id="IdentityService" factory-bean="processEngine"
+          factory-method="getIdentityService"/>
+
+    <!--&lt;!&ndash;用于存放后面acitivi部署流程中，创建的相关联的一些表&ndash;&gt;-->
+    <!--<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">-->
+    <!--<property name="jdbcDriver" value="com.mysql.jdbc.Driver"></property>-->
+    <!--<property name="jdbcUrl"-->
+    <!--value="jdbc:mysql://localhost:3306/activiti?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=true"></property>-->
+    <!--<property name="jdbcUsername" value="root"></property>-->
+    <!--<property name="jdbcPassword" value="abc"></property>-->
+    <!--&lt;!&ndash;-->
+    <!--创建表的策略-->
+    <!--&ndash;&gt;-->
+    <!--<property name="databaseSchemaUpdate" value="true"></property>-->
+    <!--</bean>-->
 </beans>

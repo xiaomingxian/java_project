@@ -2,28 +2,28 @@
 package activiti;
 
 import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
-/**
+/**‚
  * @author scw
  * @create 2018-01-15 11:04
  * @desc 用于进行演示Activiti的首例程序，即描述如何在代码中实现学生进行请假申请，班主任审核，教务处审核
  **/
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/applicationContext-*.xml"})
+@ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
 public class ActivitiTest {
+
 
 
     /**
      * 1、部署流程
+     *
      * 2、启动流程实例
      * 3、请假人发出请假申请
      * 4、班主任查看任务
@@ -42,8 +42,8 @@ public class ActivitiTest {
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         processEngine.getRepositoryService()
                 .createDeployment()
-                .addClasspathResource("test.bpmn")
-                .addClasspathResource("test.png")
+                .addClasspathResource("bpmn/shenqing.bpmn")
+                .addClasspathResource("bpmn/shenqing.png")
                 .deploy();
     }
     /**
@@ -53,7 +53,7 @@ public class ActivitiTest {
     public void testStartProcessInstance(){
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         processEngine.getRuntimeService()
-                .startProcessInstanceById("shenqing:1:4");  //这个是查看数据库中act_re_procdef表
+                .startProcessInstanceById("myProcess_1:1:4");  //这个是查看数据库中act_re_procdef表
     }
     /**
      * 完成请假申请
@@ -62,7 +62,7 @@ public class ActivitiTest {
     public void testQingjia(){
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         processEngine.getTaskService()
-                .complete("104"); //查看act_ru_task表
+                .complete("7504"); //查看act_ru_task表
     }
 
     /**
@@ -74,7 +74,7 @@ public class ActivitiTest {
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         List<Task> tasks = processEngine.getTaskService()
                 .createTaskQuery()
-                .taskAssignee("小毛")
+                .taskAssignee("王主任")
                 .list();
         for (Task task : tasks) {
             System.out.println(task.getName());
@@ -88,7 +88,7 @@ public class ActivitiTest {
     public void testFinishTask_manager(){
         ProcessEngine engine = ProcessEngines.getDefaultProcessEngine();
         engine.getTaskService()
-                .complete("202"); //查看act_ru_task数据表
+                .complete("10002"); //查看act_ru_task数据表
     }
 
     /**
@@ -98,6 +98,6 @@ public class ActivitiTest {
     public void testFinishTask_Boss(){
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         processEngine.getTaskService()
-                .complete("302");  //查看act_ru_task数据表
+                .complete("10002");  //查看act_ru_task数据表
     }
 }
