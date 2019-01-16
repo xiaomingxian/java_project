@@ -9,17 +9,20 @@
 <body>
 
 <div id='app'>
+    <!--view[html:{{}} or v-model] and model[data{...}] -->
     <!--解决闪烁问题，当数值还没加载的时候-->
     解决闪烁<br>
     <span v-text='name'></span>
 
     <br><br>
 
-    {{name}}
-
+    <!--{{* name}}<br>-->
+    {{name}}<br>
+    <input v-model="name">
     <br><br>
 
     双向绑定测试：<br>
+
     <input v-model="num1">+
     <input v-model="num2">={{result}}
     <!--{{Number.parseInt(num1)+Number.parseInt(num2)}}-->
@@ -32,6 +35,7 @@
 
     <br><br>
     <ul>
+        <!--:key制定谁是索引-->
         <li v-for='(itim,index) in list' :key="index" v-if="index %2 ==0">索引:{{index}}--值:{{itim}}</li>
         <li v-for='(itim,index) in json'>索引:{{index}}--值:{{itim}}</li>
         <li v-for='(itim,index) in jsonList' :key="itim.name">

@@ -54,9 +54,9 @@
         </javaClientGenerator>
 
         <!-- 指定数据库表，要生成哪些表，就写哪些表，要和数据库中对应，不能写错！ -->
-        <!--<table tableName="message_logs_fact"></table>-->
-        <!--<table tableName="h_fake_basestation_history"></table>-->
-        <!--<table tableName="district_config"></table>-->
+        <table tableName="district_send_count"></table>
+        <table tableName="user_send_count"></table>
+        <table tableName="total_send_count"></table>
         <!-- 有些表的字段需要指定java类型 <table schema="" tableName=""> <columnOverride column=""
         javaType="" /> </table> -->
 
