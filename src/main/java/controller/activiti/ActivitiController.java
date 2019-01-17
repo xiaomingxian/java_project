@@ -2,6 +2,7 @@ package controller.activiti;
 
 
 import dao.RoleMapper;
+import dao.UserMapper;
 import dao.activiti.ActReProcdefMapper;
 import dao.activiti.ActRuTaskMapper;
 import org.activiti.engine.ProcessEngine;
@@ -104,6 +105,9 @@ public class ActivitiController {
 
     }
 
+
+    @Resource
+    private UserMapper userMapper;
     /**
      * 审批
      */
@@ -118,22 +122,17 @@ public class ActivitiController {
             //查询用户角色与任务角色表进行匹配
             Subject subject = SecurityUtils.getSubject();
             Object principal = subject.getPrincipal();
-
-            //封装查询条件
-            UserExample example = new UserExample();
-            UserExample.Criteria criteria = example.createCriteria();
-            criteria.andUserNameEqualTo(principal.toString());
-            User user = userService.getAll(example).get(0);
-
-
-
+            System.out.println("----->" + principal.toString());
+            UserExample userExample = new UserExample();
+            userExample.createCriteria().andUserNameEqualTo(principal.toString());
+            List<User> users = userMapper.selectByExample(userExample);
             //获取角色
-            List<Role> roles = roleMapper.getRoles(user);
+            List<Role> roles = roleMapper.getRoles(users.get(0));
 
             //查询流程审批角色
             ActRuTaskExample actRuTaskExample = new ActRuTaskExample();
             ActRuTaskExample.Criteria criteria = actRuTaskExample.createCriteria().andIdEqualTo(task_id);
-            List<ActRuTask> actRuTasks = actRuTaskMapper.selectByExample(new ActRuTaskExample());
+            List<ActRuTask> actRuTasks = actRuTaskMapper.selectByExample(actRuTaskExample);
             for (ActRuTask actRuTask : actRuTasks) {
                 for (Role role : roles) {
                     String[] assigns = actRuTask.getAssignee().split(",");

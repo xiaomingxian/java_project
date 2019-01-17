@@ -32,8 +32,31 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
+        <!--windows-->
+        <!--&lt;!&ndash; targetProject:生成model类的位置，重要！！ &ndash;&gt;-->
+        <!--<javaModelGenerator targetPackage="pojo.activiti" targetProject=".\src\main\java">-->
+        <!--&lt;!&ndash; enableSubPackages:是否让schema作为包的后缀 &ndash;&gt;-->
+        <!--<property name="enableSubPackages" value="false"/>-->
+        <!--&lt;!&ndash; 从数据库返回的值被清理前后的空格 &ndash;&gt;-->
+        <!--<property name="trimStrings" value="true"/>-->
+        <!--</javaModelGenerator>-->
+
+        <!--&lt;!&ndash; targetProject:mapper映射xml文件生成的位置，重要！！ &ndash;&gt;-->
+        <!--<sqlMapGenerator targetPackage="main.resources.db_mapper.activiti"-->
+        <!--targetProject=".\src">-->
+        <!--<property name="enableSubPackages" value="false"/>-->
+        <!--</sqlMapGenerator>-->
+
+        <!--&lt;!&ndash; targetPackage：mapper接口生成的位置，重要！！ &ndash;&gt;-->
+        <!--<javaClientGenerator type="XMLMAPPER"-->
+        <!--targetPackage="dao.activiti"-->
+        <!--targetProject=".\src\main\java">-->
+        <!--<property name="enableSubPackages" value="false"/>-->
+        <!--</javaClientGenerator>-->
+
+        <!--.............mac.............-->
         <!-- targetProject:生成model类的位置，重要！！ -->
-        <javaModelGenerator targetPackage="pojo.activiti" targetProject=".\src\main\java">
+        <javaModelGenerator targetPackage="pojo.activiti" targetProject="./src/main/java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
             <!-- 从数据库返回的值被清理前后的空格 -->
@@ -41,17 +64,19 @@
         </javaModelGenerator>
 
         <!-- targetProject:mapper映射xml文件生成的位置，重要！！ -->
-        <sqlMapGenerator targetPackage="main.resources.db_mapper.activiti"
-                         targetProject=".\src">
+        <sqlMapGenerator targetPackage="main.resources.db_mapper"
+                         targetProject="./src">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- targetPackage：mapper接口生成的位置，重要！！ -->
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="dao.activiti"
-                             targetProject=".\src\main\java">
+                             targetProject="./src/main/java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
+
+
 
         <!-- 指定数据库表，要生成哪些表，就写哪些表，要和数据库中对应，不能写错！ -->
         <table tableName="act_re_procdef"></table>
@@ -60,6 +85,8 @@
         <!-- 有些表的字段需要指定java类型 <table schema="" tableName=""> <columnOverride column=""
         javaType="" /> </table> -->
 
+
+        <!--配置路径说明windows下是.\  mac下是./-->
 
     </context>
 </generatorConfiguration>
