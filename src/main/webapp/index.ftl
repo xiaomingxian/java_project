@@ -27,14 +27,15 @@
     <br>
     <br>
     <br>
-    <center><h4>Tincymce</h4>
-        <form action="http://localhost:8081/learn/tincymce/insert.do" method="post">
-            <textarea name="value"></textarea>
-            <input type="submit" value="提交">
-        </form>
+    <center><a href="http://localhost:8081/learn/activiti/getPage.do">任务发布</a></center>
+    <#--<center><h4>Tincymce</h4>-->
+    <#--<form action="http://localhost:8081/learn/tincymce/insert.do" method="post">-->
+    <#--<textarea name="value"></textarea>-->
+    <#--<input type="submit" value="提交">-->
+    <#--</form>-->
 
 
-    </center>
+    <#--</center>-->
 </body>
-<script>tinymce.init({selector: 'textarea',language: "zh_CN"});</script>
+<#--<script>tinymce.init({selector: 'textarea',language: "zh_CN"});</script>-->
 </html>

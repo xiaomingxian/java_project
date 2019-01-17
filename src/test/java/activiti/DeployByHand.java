@@ -5,7 +5,6 @@ import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
-import org.junit.Test;
 
 import java.io.InputStream;
 import java.util.zip.ZipInputStream;
@@ -26,12 +25,12 @@ public class DeployByHand {
                         "spring/applicationContext-acitiviti.cfg.xml", "processEngineConfiguration");
 
 
-        processEngineConfiguration.buildProcessEngine()
+        //processEngineConfiguration.buildProcessEngine()
 
 
         RepositoryService repositoryService = DeployByHand.processEngine.getRepositoryService();
         Deployment deployment = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/shenqing.bpmn").deploy();
+                .addClasspathResource("bpmn/shenqing.xml").deploy();
     }
     /**
      * 将多个流程文件打包部署，一次可以部署多个流程

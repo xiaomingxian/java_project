@@ -16,8 +16,8 @@
         <!--</jdbcConnection>-->
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.2.207:3306/eipp_web" userId="root"
-                        password="123456">
+                        connectionURL="jdbc:mysql://localhost/learn" userId="root"
+                        password="abc">
         </jdbcConnection>
 
         <!--oracle配置-->
@@ -33,7 +33,7 @@
         </javaTypeResolver>
 
         <!-- targetProject:生成model类的位置，重要！！ -->
-        <javaModelGenerator targetPackage="pojo.hainan" targetProject=".\src\main\java">
+        <javaModelGenerator targetPackage="pojo.activiti" targetProject=".\src\main\java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
             <!-- 从数据库返回的值被清理前后的空格 -->
@@ -41,22 +41,22 @@
         </javaModelGenerator>
 
         <!-- targetProject:mapper映射xml文件生成的位置，重要！！ -->
-        <sqlMapGenerator targetPackage="main.resources.db_mapper.hainan"
+        <sqlMapGenerator targetPackage="main.resources.db_mapper.activiti"
                          targetProject=".\src">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- targetPackage：mapper接口生成的位置，重要！！ -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="dao.hainan"
+                             targetPackage="dao.activiti"
                              targetProject=".\src\main\java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 指定数据库表，要生成哪些表，就写哪些表，要和数据库中对应，不能写错！ -->
-        <table tableName="district_send_count"></table>
-        <table tableName="user_send_count"></table>
-        <table tableName="total_send_count"></table>
+        <table tableName="act_re_procdef"></table>
+        <table tableName="act_ru_task"></table>
+        <!--<table tableName="total_send_count"></table>-->
         <!-- 有些表的字段需要指定java类型 <table schema="" tableName=""> <columnOverride column=""
         javaType="" /> </table> -->
 
