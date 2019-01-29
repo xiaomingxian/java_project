@@ -21,7 +21,7 @@
     <!--getCount-->
     <select id="getCount" resultType="java.lang.Integer">
         select
-        count(*)
+        count(id)
         from test
         <where>
             <if test="createTime !=null">

@@ -46,8 +46,8 @@ public class ActivitiTest {
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         Deployment deploy = processEngine.getRepositoryService()
                 .createDeployment()
-                .addClasspathResource("bpmn/task_public.bpmn")
-                .addClasspathResource("bpmn/task_public.png")
+                .addClasspathResource("bpmn/CountSalary.zip")
+                //.addClasspathResource("bpmn/task_public.png")
                 .deploy();
 
         System.out.println(deploy.getId());
@@ -62,6 +62,23 @@ public class ActivitiTest {
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         processEngine.getRuntimeService()
                 .startProcessInstanceById("myProcess_1:1:10004");  //这个是查看数据库中act_re_procdef表
+    }
+
+
+    /**
+     * 获取运行
+     */
+    @Test
+    public void getRunTasks() {
+        //ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        //List<Task> tasks = processEngine.getTaskService().createTaskQuery().taskCandidateGroup("sales").list();
+        //
+        //for (Task task : tasks) {
+        //
+        //    System.out.println("Following task is available for sales group: " + task.getName());
+        //
+        //
+        //}
     }
 
     /**

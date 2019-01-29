@@ -7,6 +7,9 @@ import pojo.Test;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("code")
@@ -24,6 +27,17 @@ public class CodeDemo {
         test.setStatus(1);
         testMapper.insert(test);
         return data;
+    }
+
+    @RequestMapping("bigData")
+    public Map getBigData() {
+        HashMap<Object, Object> map = new HashMap<>();
+        int count = testMapper.getCount(null);
+        List<Test> all = testMapper.getAll();
+        map.put("count", count);
+        map.put("data", all);
+
+        return map;
     }
 
 }
