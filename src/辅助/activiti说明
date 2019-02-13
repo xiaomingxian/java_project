@@ -1,0 +1,28 @@
+act_re_procdef 流程定义:id hellowrd1:4 helloword为流程名 1为版本【第几次部署版本就为几】  deployId为部署表中的主键
+
+
+单线流程下：proInstance与excution是一样的  --- 如果是多线流程并且有汇合点proInstance数量为1 excution数量为多  --不汇合的情况下数量都为一
+
+流程一启动：
+    act_ru_execution，【执行实例】增加一条流程实例
+    act_ru_identitylink  增加一条等待办理的人信息
+    act_ru_task    流程一启动会到第一个节点，此表也增加一条数据
+
+完成一个节点:
+    act_ru_execution，act_id【活动id】会改变  数量不会变
+
+
+流程结束:
+    这几张ru表中都没数据
+
+历史表:
+    act_hi_procinst:历史流程实例
+    act_hi_taskinst:历史任务实例   duration[持续时间]
+    act_hi_actinst:历史活动节点
+    act_hi_varinst:历史流程变量
+    act_hi_identitylink:历史办理人
+    act_hi_comment:历史批注
+    act_hi_attachment:附件表
+
+--------------------------管理流程定义[增(部署流程)删改查]-----------
+act_ge_bytearray，act_re_deployment，act_re_procdef

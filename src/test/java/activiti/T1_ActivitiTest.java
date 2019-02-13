@@ -3,10 +3,13 @@ package activiti;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -21,8 +24,9 @@ import java.util.List;
  **/
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
-public class ActivitiTest {
-
+public class T1_ActivitiTest {
+    @Autowired
+    private ProcessEngine processEngine;
 
     /**
      * 1、部署流程
@@ -47,6 +51,7 @@ public class ActivitiTest {
         Deployment deploy = processEngine.getRepositoryService()
                 .createDeployment()
                 .addClasspathResource("bpmn/CountSalary.zip")
+                //.addClasspathResource("bpmn/task_public.bpmn")
                 //.addClasspathResource("bpmn/task_public.png")
                 .deploy();
 
@@ -58,27 +63,38 @@ public class ActivitiTest {
      */
     @Test
     public void testStartProcessInstance() {
-        //启动一次act_ru_task会增加一条数据
+        //启动一次act_ru_task会增加一条数据--excution也会 ru_index..也会
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         processEngine.getRuntimeService()
-                .startProcessInstanceById("myProcess_1:1:10004");  //这个是查看数据库中act_re_procdef表
+                .startProcessInstanceById("task_public:2:25004");  //这个是查看数据库中act_re_procdef表
     }
 
-
     /**
-     * 获取运行
+     * 查询任务---根据办理人查询
      */
     @Test
-    public void getRunTasks() {
-        //ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
-        //List<Task> tasks = processEngine.getTaskService().createTaskQuery().taskCandidateGroup("sales").list();
-        //
-        //for (Task task : tasks) {
-        //
-        //    System.out.println("Following task is available for sales group: " + task.getName());
-        //
-        //
-        //}
+    public void getTask() {
+        TaskService taskService = processEngine.getTaskService();
+        String assign = "root,admin,tom";
+        List<Task> list = taskService.createTaskQuery().taskAssignee(assign).list();
+        System.out.println("--------查询任务--------");
+        for (Task task : list) {
+            System.out.println(
+                    "  任务id:" + task.getId() + "  " +
+                            "  " + task.getAssignee() + "  " +
+                            "  " + task.getName() + "  " +
+                            "  流程定义id:" + task.getProcessDefinitionId() + "  " +
+                            "  流程实例id:" + task.getProcessInstanceId() +
+                            "  执行实例id:" + task.getExecutionId() +
+                            "  执行实例id:" + task.getTaskDefinitionKey()
+            );
+
+            //完成节点任务
+            if (StringUtils.isNotBlank(task.getId())) {
+                taskService.complete(task.getId());
+            }
+
+        }
     }
 
     /**
@@ -86,9 +102,10 @@ public class ActivitiTest {
      */
     @Test
     public void testQingjia() {
+        //方式二
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         processEngine.getTaskService()
-                .complete("12504"); //查看act_ru_task表
+                .complete("12504"); //查看act_ru_task表---参数为上一步查询到的任务id
         //会删除ACT_RU_TASK对应的id
     }
 
