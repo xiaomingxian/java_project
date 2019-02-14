@@ -26,7 +26,18 @@ public class T10_PersonalTask {
     //    3.
     @Test
     public void method2() {
+        //    开启流程设置下一个办理人  eg:设置当前用户为办理人
+        //    执行任务再设置下一个办理人 eg:根据当前用户获取他的上级作为办理人
 
+
+    }
+
+    /**
+     * 创建监听类
+     */
+    @Test
+    public  void  method3(){
+    //
 
     }
 
