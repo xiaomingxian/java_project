@@ -106,10 +106,11 @@ public class T2_ProcessManeger {
     @Test
     public void deleteProcfef() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        repositoryService.deleteDeployment("12501");
+        //repositoryService.deleteDeployment("12501");
         //如果已经开启流程 ---其他的ru表中会有关联数据删除会失败--指定true会级联删除所有有关的数据
-        // repositoryService.deleteDeployment("10000",true);//如果为false等同于以上
+        repositoryService.deleteDeployment("90001", true);//如果为false等同于以上
         //repositoryService.deleteDeploymentCascade("100000");//等同于以上--true--Cascade级联
+        System.out.println("删除成功");
     }
     /**
      * 修改流程定义【本质是重新部署】

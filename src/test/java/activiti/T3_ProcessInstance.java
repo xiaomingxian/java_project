@@ -1,9 +1,13 @@
 package activiti;
 
 
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
@@ -12,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,6 +115,82 @@ public class T3_ProcessInstance {
      */
     @Test
     public void isComplete() {
+        //1.已知任务id
+        Task task = processEngine.getTaskService().createTaskQuery()
+                .taskId("17502").singleResult();
+        //String executionId = task.getExecutionId();//这条查询不合理---一个流程可能有多个分支
+        String processInstanceId = task.getProcessInstanceId();
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+        ProcessInstance processInstance1 = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processInstanceId).singleResult();
+        if (null == processInstance1) {
+            System.out.println("---->流程结束");
+        } else {
+            System.out.println("---->流程未结束");
+        }
+
+        // 2.   已知流程id
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId("32501").singleResult();
+        if (null == processInstance) {
+            System.out.println("---->流程结束");
+        } else {
+            System.out.println("---->流程未结束");
+        }
     }
+
+    /**
+     * 查询流程实例【已开始未结束的任务(正在执行)】
+     */
+    @Test
+    public void queryProcessInstances() {
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+        List<ProcessInstance> list = runtimeService.createProcessInstanceQuery()
+                .list();
+        for (ProcessInstance processInstance : list) {
+            System.out.println(processInstance);
+        }
+    }
+
+    /**
+     * 查询历史任务执行记录
+     */
+    @Test
+    public void queryHistoryTask() {
+        HistoryService historyService = processEngine.getHistoryService();
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery();
+        List<HistoricTaskInstance> list = historicTaskInstanceQuery.list();
+        int i = 0;
+        for (HistoricTaskInstance historicTaskInstance : list) {
+            System.out.println(historicTaskInstance);
+            i++;
+        }
+        System.out.println("数量:" + i);
+    }
+
+    /**
+     * 查询历史流程实例
+     */
+    @Test
+    public void queryHistoryProcessInstances() {
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricProcessInstance> list = historyService.createHistoricProcessInstanceQuery()
+                .list();
+        for (HistoricProcessInstance historicProcessInstance : list) {
+            System.out.println(
+                    "流程实例Id:" + historicProcessInstance.getId() +
+                            "流程部署Id:" + historicProcessInstance.getDeploymentId() +
+                            "流程定义Id:" + historicProcessInstance.getProcessDefinitionId() +
+                            "业务Id:" + historicProcessInstance.getBusinessKey() +
+                            "流程实例Key:" + historicProcessInstance.getProcessDefinitionKey() +
+                            "发起流程的用户Id:" + historicProcessInstance.getStartUserId() +
+                            "流程开始时间:" + historicProcessInstance.getStartTime() +
+                            "流程结束时间:" + historicProcessInstance.getEndTime() +
+                            "流程持续时间【毫秒】:" + historicProcessInstance.getDurationInMillis()
+            );
+
+        }
+    }
+
 
 }
