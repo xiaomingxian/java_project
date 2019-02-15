@@ -64,7 +64,7 @@
         </javaModelGenerator>
 
         <!-- targetProject:mapper映射xml文件生成的位置，重要！！ -->
-        <sqlMapGenerator targetPackage="main.resources.db_mapper"
+        <sqlMapGenerator targetPackage="main.resources.db_mapper.activiti"
                          targetProject="./src">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -79,8 +79,8 @@
 
 
         <!-- 指定数据库表，要生成哪些表，就写哪些表，要和数据库中对应，不能写错！ -->
-        <table tableName="act_re_procdef"></table>
-        <table tableName="act_ru_task"></table>
+        <table tableName="..."></table>
+        <!--<table tableName="act_ru_task"></table>-->
         <!--<table tableName="total_send_count"></table>-->
         <!-- 有些表的字段需要指定java类型 <table schema="" tableName=""> <columnOverride column=""
         javaType="" /> </table> -->
