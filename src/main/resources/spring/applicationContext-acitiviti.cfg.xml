@@ -9,6 +9,7 @@
     <!-- 流程配置 -->
     <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
         <property name="dataSource" ref="dataSource"/>
+        <!--事务交给spring去管理-->
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchemaUpdate" value="true"/>
         <!--<property name="databaseSchemaUpdate" value="false"/>-->
@@ -18,7 +19,6 @@
         <!-- 以下2个是为了防止生成流程图片时出现乱码 -->
         <property name="activityFontName" value="宋体"/>
         <property name="labelFontName" value="宋体"/>
-
     </bean>
 
     <!-- 流程引擎 -->
@@ -49,17 +49,6 @@
     <!--create_drop： 在activiti启动时创建表，在关闭时删除表（必须手动关闭引擎，才能删除表）。-->
     <!--drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）。-->
 
-
-    <!--&lt;!&ndash;用于存放后面acitivi部署流程中，创建的相关联的一些表&ndash;&gt;-->
-    <!--<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">-->
-    <!--<property name="jdbcDriver" value="com.mysql.jdbc.Driver"></property>-->
-    <!--<property name="jdbcUrl"-->
-    <!--value="jdbc:mysql://localhost:3306/activiti?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=true"></property>-->
-    <!--<property name="jdbcUsername" value="root"></property>-->
-    <!--<property name="jdbcPassword" value="abc"></property>-->
-    <!--&lt;!&ndash;-->
-    <!--创建表的策略-->
-    <!--&ndash;&gt;-->
-    <!--<property name="databaseSchemaUpdate" value="true"></property>-->
-    <!--</bean>-->
 </beans>
+
+
