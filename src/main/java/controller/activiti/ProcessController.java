@@ -19,6 +19,8 @@ public class ProcessController {
 
     /**
      * 查询流程【图】
+     * 流程定义
+     * 已经开启的流程
      */
 
     /**
