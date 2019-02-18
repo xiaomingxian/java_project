@@ -3,6 +3,7 @@ package activiti;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,9 +38,15 @@ public class T2_ProcessManeger {
     @Test
     public void deploy() {
         //路径最前面加/表示从classpath中读取文件 --不加/是从当前目录读取
-        ZipInputStream zipInputStream = new ZipInputStream(this.getClass().getResourceAsStream("/bpmn/CountSalary.zip"));
-        //为啥名称没有写入
-        processEngine.getRepositoryService().createDeployment().name("Zip形式部署测试").addZipInputStream(zipInputStream);
+        //文件是从classes中读取得先编译进去
+        InputStream resourceAsStream = this.getClass().getResourceAsStream("/bpmn_work/LeaveBill.zip");
+        ZipInputStream zipInputStream = new ZipInputStream(resourceAsStream);
+        //
+        Deployment deployment = processEngine.getRepositoryService().createDeployment()
+                .name("Zip形式部署测试")//写入部署名称
+                .addZipInputStream(zipInputStream)
+                .deploy();
+        //processEngine.getRepositoryService().createDeployment().addZipInputStream(zipInputStream).addString("名称", "textContetx");
 
     }
 
@@ -54,7 +61,7 @@ public class T2_ProcessManeger {
     public void queryDeploymentQuery() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         List<Deployment> deployments = repositoryService.createDeploymentQuery()
-                //.deploymentNameLike("Zip形式部署测试") //有多种条件查询
+                .deploymentNameLike("%Zip形式部署%") //有多种条件查询
                 .orderByDeploymentId().desc()//默认是升序 asc
                 //.listPage(1,10)//封装了分页
                 //.singleResult()//
@@ -106,10 +113,11 @@ public class T2_ProcessManeger {
     @Test
     public void deleteProcfef() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        //repositoryService.deleteDeployment("12501");
+        String deployId = "192501";
+        //repositoryService.deleteDeployment(deployId);
         //如果已经开启流程 ---其他的ru表中会有关联数据删除会失败--指定true会级联删除所有有关的数据
-        repositoryService.deleteDeployment("125001", true);//如果为false等同于以上
-        //repositoryService.deleteDeploymentCascade("100000");//等同于以上--true--Cascade级联
+        repositoryService.deleteDeployment(deployId, true);//如果为false等同于以上
+        //repositoryService.deleteDeploymentCascade(deployId);//等同于以上--true--Cascade级联
         System.out.println("删除成功");
     }
     /**
@@ -127,7 +135,8 @@ public class T2_ProcessManeger {
     public void queryPng() {
 
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        InputStream inputStream = repositoryService.getProcessDiagram("task_public:2:25004");
+        String defId = "task_public:2:25004";
+        InputStream inputStream = repositoryService.getProcessDiagram(defId);
 
         File file = new File("E:/public_test.png");
         try {
@@ -151,7 +160,8 @@ public class T2_ProcessManeger {
     @Test
     public void getPngByDeployId() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId("25001").singleResult();
+        String deployId = "25001";
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployId).singleResult();
         String id = processDefinition.getId();
         //    查询图片
         InputStream inputStream = repositoryService.getProcessDiagram(id);
@@ -211,7 +221,5 @@ public class T2_ProcessManeger {
         System.out.println(list);
         //根据上一条中的map思想进行过滤
         //留下最后一条数据其他数据全删除【根据发布id】
-
-
     }
 }
