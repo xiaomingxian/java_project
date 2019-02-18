@@ -22,6 +22,7 @@
     <userTask activiti:assignee="张三" activiti:exclusive="true" id="_15" name="开始报销"/>
     <sequenceFlow id="_16" sourceRef="_2" targetRef="_15"/>
     <sequenceFlow id="_17" sourceRef="_15" targetRef="_7"/>
+    <sequenceFlow id="_17" sourceRef="_15" targetRef="_7"/>
   </process>
   <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
     <bpmndi:BPMNPlane bpmnElement="ExclusiveGateWay">

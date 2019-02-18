@@ -4,21 +4,18 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +24,33 @@ import java.util.Map;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
 public class T12_yewuguanlian {
+
+    /**
+     * 线程局部变量测试
+     */
+    public static void main(String[] args) {
+        ThreadLocal<Object> threadLocal = new ThreadLocal<>();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("设置线程变量");
+                threadLocal.set("1111");
+                System.out.println(threadLocal.get());
+
+            }
+
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Object o = threadLocal.get();
+                System.out.println("线程内容：" + o);
+            }
+        }).start();
+
+
+    }
 
 
     @Autowired
@@ -98,7 +122,11 @@ public class T12_yewuguanlian {
         List<Comment> processInstanceComments = taskService.getProcessInstanceComments(taskId, processInstanceId);
         System.out.println("批注数量：" + processInstanceComments.size());
         for (Comment comment : processInstanceComments) {
-            System.out.println(comment);
+            System.out.println(
+                    "批注时间：" + comment.getTime() +
+                            "批注内容：" + comment.getFullMessage() +
+                            "批注人：" + comment.getUserId()
+            );
 
         }
 
@@ -109,7 +137,7 @@ public class T12_yewuguanlian {
      * 查询自己的名下的任务进行办理
      */
     @Test
-    public void myPass() {
+    public void doTask() {
 
         //根据BusinseeKey查询到task    自己完成任务[提交任务]   下一个任务的人由监听器指定
         String userName = "root2";//用户从session中获取
@@ -119,7 +147,8 @@ public class T12_yewuguanlian {
         map.put("key", isPass);
         //根据用户名获取任务
         TaskService taskService = processEngine.getTaskService();
-        //添加批注信息
+        //添加批注信息--放在了当前线程中，查看源码可知
+        Authentication.setAuthenticatedUserId(userName);
         //设置批注人
         taskService.addComment("任务id", "流程实例id", "批注信息");
         List<Task> list = taskService.createTaskQuery()
@@ -132,12 +161,35 @@ public class T12_yewuguanlian {
         }
         taskService.complete(task.getId(), map);
         // 启动成功后更改业务表状态   根据 businessKey 更改
+        //    。。。
+        //    判断流程是否结束----即判断流程实例是否存在
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
 
+
+        if (null != processInstance) {
+            //查询输出连线判断是否结束
+            //从流程实例中获取活动节点---根据活动节点去流程定义中查询输出
+            if (isPass.equals("提交")) {
+                System.out.println("流程未结束，状态未进行中");
+            } else {
+                System.out.println("流程结束，修改业务表记录状态");
+            }
+        } else {
+            System.out.println("流程结束，修改状态");
+        }
     }
     /**
-     * 办理任务
-     * 根据当前用户查询到任务 ---》再根据bussinessKey查询到业务信息 ---》同意与否与流程连线上的变量有关【可以查询到】
-     * ---》批注信息的查询
+     * 查询代办任务流程图
+     * 根据任务ID得到流程实例
+     * 根据流程实例中的部署ID得到流程定义
+     * 根据流程定义id得到图片输出流
+     * 查询活动节点得到坐标  在页面上标注
+     * eg:<div style="postion: absoulte;left: 175px;width: 10px"
      */
+    @Test
+    public void getProcessPic() {
 
+
+    }
 }
