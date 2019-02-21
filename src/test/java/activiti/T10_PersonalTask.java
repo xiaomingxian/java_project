@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -86,12 +87,15 @@ public class T10_PersonalTask {
 
         //查询办理任务
         TaskService taskService = processEngine.getTaskService();
-        Task task = taskService.createTaskQuery()
-                .processDefinitionKey("Listener")
-                .taskAssignee("张三")
-                .singleResult();
+        //Task task = taskService.createTaskQuery()
+        List<Task> tasks = taskService.createTaskQuery()
+                //.processDefinitionKey("Listener")
+                .taskAssignee("王五")
+                //.singleResult();
+                .listPage(0, 10);
+        System.out.println(tasks);
         //taskService.setAssignee(task.getId(),"assignName");//既没有设置流程变量-又没有设置监听器就可以使用这种方式  待确认【没有指定办理人与监听器应该就不会有task】
-        taskService.complete(task.getId());
+        //taskService.complete(task.getId());
 
     }
 

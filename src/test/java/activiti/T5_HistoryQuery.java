@@ -64,23 +64,35 @@ public class T5_HistoryQuery {
     /**
      * act_hi_taskinst
      * 历史任务查询
+     * 再关联业务查询
      */
     @Test
     public void queryHiTask() {
+        //
+        String assign = "root2";
         HistoryService historyService = processEngine.getHistoryService();
+        String businessKey = "1";
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
+                .taskAssignee(assign)
+                .processInstanceBusinessKey(businessKey)
                 //.unfinished()//未完成的任务查询
                 //.finished()//已完成的任务记录
                 //.processFinished()//已完成的实例
                 //.processUnfinished()//未完成的实例
                 //.deploymentId("1111")
                 //.processDefinitionKeyLike("%AAA%")//这里得手动加%%
-                .list();
-
+                .orderByTaskCreateTime().desc()
+                .listPage(0, 1);
+        System.out.println("--->" + list.get(0).getAssignee() + "  " + list.get(0).getTime());
         for (HistoricTaskInstance historicTaskInstance : list) {
-            System.out.println(
-                    historicTaskInstance
-            );
+            String processInstanceId = historicTaskInstance.getProcessInstanceId();
+
+
+            List<HistoricProcessInstance> list1 = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceId(processInstanceId)
+                    .list();
+            HistoricProcessInstance historicProcessInstance = list1.get(0);
+            System.out.println("业务Id:" + historicProcessInstance.getBusinessKey());
 
         }
     }

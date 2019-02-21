@@ -50,7 +50,7 @@ public class T11_GroupTask {
     public void start() {
 
         RuntimeService runtimeService = processEngine.getRuntimeService();
-        String key = "Group2";
+        String key = "GroupTask";
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
         System.out.println("--->流程开启成功：" + processInstance.getId());
 
@@ -117,8 +117,7 @@ public class T11_GroupTask {
         List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskkId);
         System.out.println("---->参与成员：");
         for (IdentityLink identityLink : identityLinksForTask) {
-            System.out.println(identityLink);
-
+            System.out.println(identityLink.getUserId());
         }
     }
 
@@ -165,7 +164,8 @@ public class T11_GroupTask {
     public void claim() {
         TaskService taskService = processEngine.getTaskService();
         String taskId = "162504";
-        String assignee = "经理";//assign可以任意指定，不必是候选组里的成员
+        //String assignee = "经理";//assign可以任意指定，不必是候选组里的成员
+        String assignee = "自定义用户";//assign可以任意指定，不必是候选组里的成员
         taskService.claim(taskId, assignee);
 
         List<Task> tasks = taskService.createTaskQuery()

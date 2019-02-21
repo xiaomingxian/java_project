@@ -13,7 +13,8 @@
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchemaUpdate" value="true"/>
         <!--<property name="databaseSchemaUpdate" value="false"/>-->
-        <property name="jobExecutorActivate" value="true"/>
+        <!--定时任务？-->
+        <!--<property name="jobExecutorActivate" value="true"/>-->
         <!--自动部署流程-->
         <!--<property name="deploymentResources" value="bpmn/**"/>-->
         <!-- 以下2个是为了防止生成流程图片时出现乱码 -->

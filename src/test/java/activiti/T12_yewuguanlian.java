@@ -8,6 +8,7 @@ import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -129,8 +130,6 @@ public class T12_yewuguanlian {
             );
 
         }
-
-
     }
 
     /**
@@ -143,14 +142,13 @@ public class T12_yewuguanlian {
         String userName = "root2";//用户从session中获取
         String businessKey = "1";//从前台传入
         HashMap<String, Object> map = new HashMap<>();
-        String isPass = "提交";
+        String isPass = "提交";//从前台传入
         map.put("key", isPass);
         //根据用户名获取任务
         TaskService taskService = processEngine.getTaskService();
         //添加批注信息--放在了当前线程中，查看源码可知
         Authentication.setAuthenticatedUserId(userName);
         //设置批注人
-        taskService.addComment("任务id", "流程实例id", "批注信息");
         List<Task> list = taskService.createTaskQuery()
                 .taskAssignee(userName)
                 .processInstanceBusinessKey(businessKey)
@@ -159,14 +157,17 @@ public class T12_yewuguanlian {
         if (null != list && list.size() > 0) {
             task = list.get(0);
         }
-        taskService.complete(task.getId(), map);
-        // 启动成功后更改业务表状态   根据 businessKey 更改
-        //    。。。
-        //    判断流程是否结束----即判断流程实例是否存在
+        //    判断流程是否结束----
         RuntimeService runtimeService = processEngine.getRuntimeService();
-        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+        //taskService.addComment("任务id", "流程实例id", "批注信息");
+        String comment = "批注信息";
+        taskService.addComment(task.getId(), processInstance.getId(), comment);
+        taskService.complete(task.getId(), map);
 
-
+        // 启动成功后更改业务表状态   根据 businessKey 更改
         if (null != processInstance) {
             //查询输出连线判断是否结束
             //从流程实例中获取活动节点---根据活动节点去流程定义中查询输出
@@ -179,6 +180,7 @@ public class T12_yewuguanlian {
             System.out.println("流程结束，修改状态");
         }
     }
+
     /**
      * 查询代办任务流程图
      * 根据任务ID得到流程实例
@@ -189,7 +191,33 @@ public class T12_yewuguanlian {
      */
     @Test
     public void getProcessPic() {
+        String taskId = "197505";
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        //    节点坐标的获取：获取到流程实例-得到节点坐标-通过定义实体来获取相关坐标
+        String processInstanceId = task.getProcessInstanceId();
+        Execution execution = processEngine.getRuntimeService().createExecutionQuery().processInstanceId(processInstanceId).singleResult();
+        //活动节点
+        String activityId = execution.getActivityId();
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+        ProcessInstance processInstance = processEngine.getRuntimeService().createProcessInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .singleResult();
+        String processDefinitionId = processInstance.getProcessDefinitionId();
+        //通过流程定义id获取流程定义实体
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processDefinitionId);
+        ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
+        int height = activity.getHeight();
+        int width = activity.getWidth();
+        int x = activity.getX();
+        int y = activity.getY();
 
+        System.out.println(
+                "长：" + height +
+                        "宽：" + width +
+                        "x：" + x +
+                        "y：" + y
+        );
 
     }
 }

@@ -124,6 +124,7 @@ public class T3_ProcessInstance {
         ProcessInstance processInstance1 = runtimeService.createProcessInstanceQuery()
                 .processInstanceId(processInstanceId).singleResult();
         if (null == processInstance1) {
+
             System.out.println("---->流程结束");
         } else {
             System.out.println("---->流程未结束");
