@@ -4,10 +4,17 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.RuntimeServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.impl.interceptor.Command;
+import org.activiti.engine.impl.interceptor.CommandContext;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
@@ -56,6 +63,17 @@ public class T12_yewuguanlian {
 
     @Autowired
     private ProcessEngine processEngine;
+
+
+    @Autowired
+    TaskService taskService;
+
+    @Autowired
+    private RuntimeService runtimeService;
+
+    @Autowired
+    private RepositoryService repositoryService;
+
 
     @Test
     public void start() {
@@ -219,5 +237,71 @@ public class T12_yewuguanlian {
                         "y：" + y
         );
 
+    }
+
+    /**
+     * 动态增加节点
+     *
+     * @param taskId
+     * @param newActivityId
+     */
+    @Test
+    public void addActivity() {
+        String taskId = "";
+        String newActivityId = "new_act_Id";
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        ProcessInstance instance = runtimeService
+                .createProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
+                .getDeployedProcessDefinition(task.getProcessDefinitionId());
+        List activities = ((ProcessDefinitionImpl) definition).getActivities();
+        // 取得当前活动节点
+        ActivityImpl currActivity = ((ProcessDefinitionImpl) definition).findActivity(task.getTaskDefinitionKey());
+
+        //创建新活动
+        ActivityImpl clone = definition.createActivity(newActivityId);
+
+        //根据taskId获取节点实例
+        //List<ActivityImpl> list = getNextActivity(taskId);
+        List<ActivityImpl> list = null;
+        //清除原先的路径
+        List<PvmTransition> cacheTran = currActivity.getOutgoingTransitions();
+        currActivity.getOutgoingTransitions().clear();
+        //创建新路径
+        TransitionImpl tran = currActivity.createOutgoingTransition();
+        tran.setDestination(clone);
+
+        for (ActivityImpl ActivityImpl : list) {
+            TransitionImpl tran1 = clone.createOutgoingTransition();
+            tran1.setDestination(ActivityImpl);
+        }
+        runtimeService.startProcessInstanceById(definition.getId());
+
+        final ExecutionEntity execution = (ExecutionEntity) runtimeService.createExecutionQuery()
+                .executionId(task.getExecutionId()).singleResult();
+
+
+        //包装一个Command对象
+        ((RuntimeServiceImpl) runtimeService).getCommandExecutor().execute(
+                new Command<Void>() {
+                    @Override
+                    public Void execute(CommandContext commandContext) {
+                        //创建新任务
+                        execution.setActivity(clone);
+                        // execution.executeActivity(clone);
+
+                        //删除当前的任务
+                        //不能删除当前正在执行的任务，所以要先清除掉关联
+                        // currentTaskEntity.setExecutionId(null);
+
+                        // taskService.saveTask(currentTaskEntity);
+
+                        // taskService.deleteTask(currentTaskEntity.getId(), true);
+
+                        return null;
+                    }
+                });
     }
 }
