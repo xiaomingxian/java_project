@@ -77,7 +77,7 @@ public class T3_ProcessInstance {
         for (Task task : list) {
             System.out.println(
                     "任务id:" + task.getId() +
-                            " 运行实例id:" + task.getExecutionId() +
+                      " 运行实例id:" + task.getExecutionId() +
                             " 流程定义id:" + task.getTaskDefinitionKey() +
                             " 流程实例id:" + task.getTaskDefinitionKey() +
                             " 任务定义key:" + task.getTaskDefinitionKey() +

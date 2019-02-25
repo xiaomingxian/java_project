@@ -2,6 +2,7 @@ package controller.activiti;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +39,10 @@ public class ProcessController {
     private ProcessEngine processEngine;
     @Autowired
     private RepositoryService repositoryService;
+    @Autowired
+    private RuntimeService runtimeService;
+    @Autowired
+    private TaskService taskService;
 
 
     /**
@@ -61,7 +67,7 @@ public class ProcessController {
     /**
      * 查询流程图
      */
-    @RequestMapping("queryPic")
+    @RequestMapping("queryXY")
     public Map queryXY(String taskId) {
 
         HashMap map = new HashMap();
@@ -134,6 +140,28 @@ public class ProcessController {
         //InputStream resourceAsStream = repositoryService.getResourceAsStream(deployId, resourceName);
         //------------------------------------------------------------------------------
         //将流转为图片流，输出
+        BufferedImage read = ImageIO.read(processDiagram);
+        ServletOutputStream outputStream = httpServletResponse.getOutputStream();
+        ImageIO.write(read, "JPG", outputStream);
+        //    关闭流
+        processDiagram.close();
+        outputStream.close();
+    }
+
+
+    @RequestMapping("queryImgByTaskkId")
+    public void queryImgByTaskkId(String taskId, HttpServletResponse httpServletResponse) throws IOException {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+        //根据发布Id获取流程定义id
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .deploymentId(processInstance.getDeploymentId())
+                .singleResult();
+
+        InputStream processDiagram = repositoryService.getProcessDiagram(processDefinition.getId());
+
         BufferedImage read = ImageIO.read(processDiagram);
         ServletOutputStream outputStream = httpServletResponse.getOutputStream();
         ImageIO.write(read, "JPG", outputStream);

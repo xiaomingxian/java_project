@@ -61,16 +61,15 @@ public class T2_ProcessManeger {
     public void queryDeploymentQuery() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         List<Deployment> deployments = repositoryService.createDeploymentQuery()
-                .deploymentNameLike("%Zip形式部署%") //有多种条件查询
-                .orderByDeploymentId().desc()//默认是升序 asc
+                //.deploymentNameLike("%Zip形式部署%") //有多种条件查询
+                //.orderByDeploymentId().desc()//默认是升序 asc
                 //.listPage(1,10)//封装了分页
                 //.singleResult()//
                 //.count()//查询数量
                 .list();
         System.out.println("-----流程数量:" + deployments.size());
         for (Deployment deployment : deployments) {
-            System.out.println("id:" + deployment.getId() + "名称:" + deployment.getName() + "时间：" + deployment.getDeploymentTime());
-
+            System.out.println("id:" + deployment.getId() + "名称:" + deployment.getName() + "时间：" + deployment.getDeploymentTime().toLocaleString());
         }
     }
 

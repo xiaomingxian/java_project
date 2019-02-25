@@ -1,9 +1,7 @@
 package activiti;
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.RuntimeServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
@@ -133,12 +131,22 @@ public class T12_yewuguanlian {
     public void getComments() {
         TaskService taskService = processEngine.getTaskService();
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        String taskId = "197505";
+        String taskId = "162504";
         String processInstanceId = null;
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         processInstanceId = task.getProcessInstanceId();
 
-        List<Comment> processInstanceComments = taskService.getProcessInstanceComments(taskId, processInstanceId);
+        //List<Comment> processInstanceComments = taskService.getProcessInstanceComments(taskId, processInstanceId);
+        //List<Comment> processInstanceComments = taskService.getProcessInstanceComments("197505", "197501");
+
+
+        List htiList = processEngine.getHistoryService().createHistoricTaskInstanceQuery()//历史任务表查询
+                .processInstanceId(processInstanceId)//使用流程实例ID查询
+                .list();
+        HistoricTaskInstance o = (HistoricTaskInstance) htiList.get(0);
+        String id = o.getId();
+        List<Comment> processInstanceComments = taskService.getTaskComments("197505");
+
         System.out.println("批注数量：" + processInstanceComments.size());
         for (Comment comment : processInstanceComments) {
             System.out.println(
@@ -149,6 +157,7 @@ public class T12_yewuguanlian {
 
         }
     }
+
 
     /**
      * 查询自己的名下的任务进行办理
@@ -241,9 +250,6 @@ public class T12_yewuguanlian {
 
     /**
      * 动态增加节点
-     *
-     * @param taskId
-     * @param newActivityId
      */
     @Test
     public void addActivity() {

@@ -34,8 +34,6 @@ public class T10_PersonalTask {
                 .addClasspathResource("bpmn/Personal_Listener.png")
                 .deploy();
         System.out.println("---->发布成功|name:" + deploy.getName() + " " + deploy.getId());
-
-
     }
 
 
