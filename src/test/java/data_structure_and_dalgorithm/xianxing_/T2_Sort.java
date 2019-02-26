@@ -158,7 +158,7 @@ public class T2_Sort {
     }
 
     /**
-     * 希尔排序
+     * 希尔排序【是插入排序的一种】
      * 在插入排序的基础上加上 步长
      */
     @Test
@@ -184,5 +184,109 @@ public class T2_Sort {
 
         System.out.println(Arrays.toString(array));
     }
+
+    /**
+     * 选择排序
+     */
+    @Test
+    public void choice() {
+
+        int[] array = {2, 1, 6, 10, 8, 4, 7, 9};
+
+        //第一轮循环外层，第二层循环内层
+        for (int i = 0; i < array.length; i++) {
+
+            for (int j = i + 1; j < array.length; j++) {
+
+                if (array[i] > array[j]) {
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+        }
+
+        System.out.println(Arrays.toString(array));
+    }
+
+
+    /**
+     * 归并排序测试
+     * 完全二叉树特
+     * Array.sort() 用的是TimeSort
+     * <p>
+     * 每次合并操作的平均时间复杂度为O(n)，而完全二叉树的深度为|log2n|。总的平均时间复杂度为O(nlogn)。而且，归并排序的最好，最坏，平均时间复杂度均为O(nlogn)。
+     */
+    @Test
+    public void gb() {
+
+        int[] array = {1, 3, 5, 7, 9, 11, 13, 14, 15, 2, 4, 6, 8, 10};
+        //起点   中间点【其实是两个数组的分界线】   最后索引
+        sort(array,0,array.length-1);
+        //gui(array, 0, 8, array.length - 1);
+
+
+        System.out.println(Arrays.toString(array));
+
+
+    }
+
+    /**
+     * 使得集合变得有序
+     */
+    private void sort(int[] arr, int start, int end) {
+        int mid = (start + end) / 2;
+        if (start < end) {
+            sort(arr, start, mid);
+            sort(arr, mid + 1, end);
+            gui(arr, start, mid, end);
+        }
+    }
+
+    /**
+     * 两个有序的数组进行排序
+     * xiao          zhong      da
+     * 起点【前半段】   起点【后半段】
+     * 创建一个临时数组
+     * 同时遍历两段数组--判断谁小就把谁放在前面
+     * 返回临时数组
+     *
+     * @param array
+     */
+    private  void gui(int[] array, int low, int mid, int hight) {
+        int[] temp = new int[array.length];
+        int i = low;
+        int j = mid + 1;
+        int x = 0;
+        while (i <= mid && j <= hight) {
+            if (array[i] > array[j]) {
+                temp[x] = array[j];
+                j++;
+
+            } else {
+                temp[x] = array[i];
+                i++;
+            }
+            x++;
+        }
+        //    将剩余的元素放在一边
+        while (i <= mid && x < temp.length) {
+            temp[x] = array[i];
+            i++;
+            x++;
+        }
+        while (j <= hight && x < temp.length) {
+            temp[x] = array[j];
+            j++;
+            x++;
+        }
+        // 将排好序的数组元素放到原数组中
+        x=0;
+        if(low<hight){
+            array[low++]=temp[x++];
+        }
+
+    }
+
 
 }
