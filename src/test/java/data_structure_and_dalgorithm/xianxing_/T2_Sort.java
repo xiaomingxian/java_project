@@ -76,12 +76,10 @@ public class T2_Sort {
             int after = end - 1;
             while (before < after) {
 
-
                 while (before < after && array[before] < base) {
                     before++;
                     count++;
                 }
-
 
                 while (before < after && array[after] > base) {
                     after--;
@@ -97,6 +95,7 @@ public class T2_Sort {
                 }
             }
             //    将分成两段的数字进行递归
+            //    ---start++,after-- 当相等时跳出以上循环，此时的before或者after是中间位置【即小于基数的部分与大于基数部分的分界线】
             kuai(array, start, before, count);
             kuai(array, before + 1, end, count);
             count++;
@@ -171,7 +170,7 @@ public class T2_Sort {
 
             //  遍历本组中[以步长为单位前后移动，包含的数据都为本组数据]的所有元素
             for (int j = i; j < array.length; j++) {
-                //    进行比较--和前面的比较，和后面的比较
+                //    进行比较--
                 for (int k = j - i; k >= 0; k -= i) {
                     if (array[k] > array[k + i]) {
                         int temp = array[k];
@@ -183,6 +182,23 @@ public class T2_Sort {
         }
 
         System.out.println(Arrays.toString(array));
+    }
+
+    @Test
+    public void  xier2(){
+
+        int[] array = {2, 1, 6, 10, 8, 4, 7, 9};
+
+    //    遍历步长
+        for (int b=array.length/2;b>0;b/=2){
+            for (int i=b;i<array.length;i+=b){
+
+            }
+        }
+
+        System.out.println(Arrays.toString(array));
+
+
     }
 
     /**
