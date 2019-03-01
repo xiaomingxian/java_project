@@ -1,0 +1,4 @@
+linux联网问题： NAT模式， vi /etc/sysconfig/network-scripts/ifconfig-eth0 ==>ONBOOT=yes
+mv fileName newName[or dirName]  move的缩写：重命名或者移动
+rz上传   需要安装
+source命令也称为“点命令”，也就是一个点符号（.）,是bash的内部命令。 功能：使Shell读入指定的Shell程序文件并依次执行文件中的所有语句
