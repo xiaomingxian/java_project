@@ -184,20 +184,30 @@ public class T2_Sort {
         System.out.println(Arrays.toString(array));
     }
 
+    /**
+     * 加上步长的插入排序
+     * 以步长所在数为基准向前【步长为-增量】进行比较
+     */
     @Test
     public void  xier2(){
 
         int[] array = {2, 1, 6, 10, 8, 4, 7, 9};
 
-    //    遍历步长
-        for (int b=array.length/2;b>0;b/=2){
-            for (int i=b;i<array.length;i+=b){
-
+        //    遍历步长
+        for (int b = array.length / 2; b > 0; b /= 2) {
+            //    　遍历步长基准数--第一个步长基准数向后推
+            for (int i = b; i < array.length; i++) {
+                //    以步长为基准向前比较【插入排序】 j>=0[j是前一个数所在位置，可以为0索引]
+                for (int j = i - b; j >= 0; j -= b) {
+                    if (array[j] > array[j + b]) {
+                        int temp = array[j];
+                        array[j] = array[j + b];
+                        array[j + b] = temp;
+                    }
+                }
             }
         }
-
         System.out.println(Arrays.toString(array));
-
 
     }
 
@@ -232,6 +242,9 @@ public class T2_Sort {
      * Array.sort() 用的是TimeSort
      * <p>
      * 每次合并操作的平均时间复杂度为O(n)，而完全二叉树的深度为|log2n|。总的平均时间复杂度为O(nlogn)。而且，归并排序的最好，最坏，平均时间复杂度均为O(nlogn)。
+     *
+     *
+     * 思想：
      */
     @Test
     public void gb() {
