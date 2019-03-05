@@ -4,7 +4,7 @@
   "msg": "查询成功",
   "data": [
     {
-      "id": "HK1550720190221142225",
+      "id": "分支合并test",
       "sendTime": "2019-02-21 14:22:25",
       "sendReason": "dsfdvg",
       "sendContent": "内容1",
@@ -28,6 +28,7 @@
     },
     {
       "id": "HK1551020190225100217",
+      "xxxxxxxxxxx": "HK1551020190225100217",
       "sendTime": "2019-02-25 10:02:17",
       "sendReason": "fgbhg",
       "sendContent": "内容1",
@@ -47,8 +48,15 @@
       "lastTime": null,
       "sendLongitudeLatitude": "",
       "starttime": null,
-      "endtime": null
+      "endtime": null,
+      "endtime": "对同一个地方修改222222222222",
+      "endtime": null,
+      "endtime": "同一个地方的修改",
+      "endtime": "新的分支。。。。。。。。。。。。。"
     }
   ],
   "count": 2
 }
+
+
+
