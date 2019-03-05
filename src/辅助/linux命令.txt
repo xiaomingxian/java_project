@@ -2,3 +2,25 @@ linux联网问题： NAT模式， vi /etc/sysconfig/network-scripts/ifconfig-eth
 mv fileName newName[or dirName]  move的缩写：重命名或者移动
 rz上传   需要安装
 source命令也称为“点命令”，也就是一个点符号（.）,是bash的内部命令。 功能：使Shell读入指定的Shell程序文件并依次执行文件中的所有语句
+
+    grep -rn '内容' 文件名  r递归查找 n显示行号
+    grep -rn '.' 文件名  r递归查找 n显示行号     查看所有
+    cat -n 123.txt
+    sed -n '5,10p' input_file这样你就可以只查看文件的第5行到第10行。
+
+
+    vi:
+        esc :set nu
+        esc :set nonu
+        搜索内容：/xxx
+
+查看监听端口:
+    netstat -anptu | grep ftp
+
+
+查看目录权限:  ll -d 目录
+drwxr-xr-x. 2 ftp root 4096 Mar  2 03:47 /var/ftp/my_pub/
+
+********************** 用户相关 ******************
+/etc/group文件包含所有组
+/etc/shadow和/etc/passwd系统存在的所有用户名

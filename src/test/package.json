@@ -4,7 +4,7 @@
   "msg": "查询成功",
   "data": [
     {
-      "id": "HK1550720190221142225",
+      "id": "分支合并test",
       "sendTime": "2019-02-21 14:22:25",
       "sendReason": "dsfdvg",
       "sendContent": "内容1",
@@ -47,8 +47,11 @@
       "lastTime": null,
       "sendLongitudeLatitude": "",
       "starttime": null,
+      "endtime": null,
+      "endtime": null,
       "endtime": null
     }
   ],
   "count": 2
 }
+
