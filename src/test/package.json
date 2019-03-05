@@ -28,6 +28,7 @@
     },
     {
       "id": "HK1551020190225100217",
+      "xxxxxxxxxxx": "HK1551020190225100217",
       "sendTime": "2019-02-25 10:02:17",
       "sendReason": "fgbhg",
       "sendContent": "内容1",
@@ -48,10 +49,11 @@
       "sendLongitudeLatitude": "",
       "starttime": null,
       "endtime": null,
-      "endtime": null,
-      "endtime": null
+      "endtime": "新的分支。。。。。。。。。。。。。"
     }
   ],
   "count": 2
 }
+
+
 
