@@ -249,12 +249,9 @@ public class T2_Sort {
     @Test
     public void gb() {
 
-        int[] array = {1, 3, 5, 7, 9, 11, 13, 14, 15, 2, 4, 6, 8, 10};
+        int[] array = {1, 3, 5, 7, 9, 11, 13, 14, 15, 2, 4, 6, 8, 10, 10};
         //起点   中间点【其实是两个数组的分界线】   最后索引
         sort(array,0,array.length-1);
-        //gui(array, 0, 8, array.length - 1);
-
-
         System.out.println(Arrays.toString(array));
 
 
@@ -262,12 +259,16 @@ public class T2_Sort {
 
     /**
      * 使得集合变得有序
+     *
      */
     private void sort(int[] arr, int start, int end) {
-        int mid = (start + end) / 2;
+        //当只有一个元素时结束递归
         if (start < end) {
+            //递归到最小单位进行排序
+            int mid = (start + end) / 2;
             sort(arr, start, mid);
             sort(arr, mid + 1, end);
+            //有序数组归并排序
             gui(arr, start, mid, end);
         }
     }
@@ -311,7 +312,7 @@ public class T2_Sort {
         }
         // 将排好序的数组元素放到原数组中
         x=0;
-        if(low<hight){
+        while (low <= hight) {
             array[low++]=temp[x++];
         }
 
