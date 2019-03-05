@@ -28,6 +28,7 @@
     },
     {
       "id": "HK1551020190225100217",
+      "xxxxxxxxxxx": "HK1551020190225100217",
       "sendTime": "2019-02-25 10:02:17",
       "sendReason": "fgbhg",
       "sendContent": "内容1",
@@ -49,9 +50,13 @@
       "starttime": null,
       "endtime": null,
       "endtime": "对同一个地方修改222222222222",
-      "endtime": null
+      "endtime": null,
+      "endtime": "同一个地方的修改",
+      "endtime": "新的分支。。。。。。。。。。。。。"
     }
   ],
   "count": 2
 }
+
+
 
