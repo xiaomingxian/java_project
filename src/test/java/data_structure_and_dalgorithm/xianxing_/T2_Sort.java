@@ -3,6 +3,8 @@ package data_structure_and_dalgorithm.xianxing_;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * 常用的8种排序算法
@@ -284,6 +286,7 @@ public class T2_Sort {
      * @param array
      */
     private  void gui(int[] array, int low, int mid, int hight) {
+        //数组的创建可以提前以减少开销
         int[] temp = new int[array.length];
         int i = low;
         int j = mid + 1;
@@ -316,6 +319,77 @@ public class T2_Sort {
             array[low++]=temp[x++];
         }
 
+    }
+
+    /**
+     * 基数排序
+     * ---＞二维数组
+     */
+    @Test
+    public void jishu() {
+
+        int[] array = {92, 971, 6, 8010, 7768, 498, 7, 9};
+
+        int length = 0;
+        //找出最大长度的数字
+        for (int i = 0; i < array.length; i++) {
+            String yuan = array[i] + "";
+            int l = yuan.length();
+            if (l > length) {
+                length = l;
+            }
+        }
+        int[][] sort = new int[10][array.length];
+        HashMap<Integer, Integer> index = new HashMap<>();
+        index.put(0, 0);
+        index.put(1, 0);
+        index.put(2, 0);
+        index.put(3, 0);
+        index.put(4, 0);
+        index.put(5, 0);
+        index.put(6, 0);
+        index.put(7, 0);
+        index.put(8, 0);
+        index.put(9, 0);
+        for (int i = 0, chu = 10; i < length; i++, chu *= 10) {
+            //根据i求出相应位上的数字
+            for (int j = 0; j < array.length; j++) {
+
+                int chushu = 10;
+                //对应位上的数字是几--计算方式 xxx/10^i%10
+                for (int xx = 1; xx < i; xx++) {
+                    chushu *= 10;
+                }
+                int weizhi = array[j] / chushu % 10;
+
+                Integer i2 = index.get(weizhi);
+                sort[weizhi][i2] = array[j];
+                i2++;
+                index.put(weizhi, i2);
+            }
+            //    一轮完后将数字拿出来放入原数组
+            int yuan_i = 0;
+            for (int j = 0; j < 10; j++) {
+                for (int in = 0; in < index.get(j); in++) {
+                    array[yuan_i] = sort[j][in];
+                    yuan_i++;
+                }
+            }
+            System.out.println("----" + Arrays.toString(array));
+            //    一轮排序完成后，将记录指针归位
+            Set<Integer> keys = index.keySet();
+            for (Integer k : keys) {
+                index.put(k, 0);
+            }
+        }
+
+
+        System.out.println(Arrays.toString(array));
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(6 % 100);
     }
 
 
