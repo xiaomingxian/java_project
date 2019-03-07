@@ -329,6 +329,7 @@ public class T2_Sort {
     public void jishu() {
 
         int[] array = {92, 971, 6, 8010, 7768, 498, 7, 9};
+        //int[] array = {2, 5, 6, 1, 7, 6, 7, 9};
 
         int length = 0;
         //找出最大长度的数字
@@ -355,9 +356,9 @@ public class T2_Sort {
             //根据i求出相应位上的数字
             for (int j = 0; j < array.length; j++) {
 
-                int chushu = 10;
+                int chushu = 1;
                 //对应位上的数字是几--计算方式 xxx/10^i%10
-                for (int xx = 1; xx < i; xx++) {
+                for (int xx = 0; xx < i; xx++) {
                     chushu *= 10;
                 }
                 int weizhi = array[j] / chushu % 10;
