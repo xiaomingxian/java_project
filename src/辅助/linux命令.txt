@@ -1,3 +1,7 @@
+
+下载工具  wget
+---------------------------
+
 linux联网问题： NAT模式， vi /etc/sysconfig/network-scripts/ifconfig-eth0 ==>ONBOOT=yes
 mv fileName newName[or dirName]  move的缩写：重命名或者移动
 rz上传   需要安装
