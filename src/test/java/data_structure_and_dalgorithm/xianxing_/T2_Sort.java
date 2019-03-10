@@ -323,7 +323,8 @@ public class T2_Sort {
 
     /**
      * 基数排序
-     * ---＞二维数组
+     * ---＞【方法1】二维数组
+     * ---＞【方法2】数组【队列】
      */
     @Test
     public void jishu() {
@@ -383,8 +384,6 @@ public class T2_Sort {
                 index.put(k, 0);
             }
         }
-
-
         System.out.println(Arrays.toString(array));
 
     }
