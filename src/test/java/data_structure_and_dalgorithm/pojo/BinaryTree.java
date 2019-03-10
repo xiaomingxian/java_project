@@ -15,7 +15,7 @@ public class BinaryTree {
      */
     public void frontBinary(TreeNode root) {
         System.out.println(root);
-        if (root.getLeftNode() != null) {
+        if ( null!=root.getLeftNode()) {
             //
             frontBinary(root.getLeftNode());
         }
@@ -23,6 +23,7 @@ public class BinaryTree {
             frontBinary(root.getRightNode());
         }
     }
+
 
     public TreeNode getRoot() {
         return root;
@@ -60,4 +61,29 @@ public class BinaryTree {
         }
         System.out.println(root);
     }
+
+    /**
+     * 先序查找
+     *
+     * @param i
+     * @return
+     */
+    public TreeNode frontSearch(TreeNode root, int i) {
+        TreeNode treeNode = null;
+        if (root.getValue() == i) {
+            return root;
+        }
+        if (null != root.getLeftNode()) {
+            treeNode = frontSearch(root.getLeftNode(), i);
+        }
+        if (treeNode != null) {
+            return treeNode;
+        }
+        if (null != root.getRightNode()) {
+            treeNode = frontSearch(root.getRightNode(), i);
+        }
+        return treeNode;
+    }
+
+
 }
