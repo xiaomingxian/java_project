@@ -1,8 +1,11 @@
 package data_structure_and_dalgorithm.xianxing_;
 
+import data_structure_and_dalgorithm.pojo.BinaryArray;
 import data_structure_and_dalgorithm.pojo.BinaryTree;
 import data_structure_and_dalgorithm.pojo.TreeNode;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 public class T3_Tree {
 
@@ -75,5 +78,67 @@ public class T3_Tree {
 
     }
 
+    //    ------------------------------------ 顺序存储二叉树  ------------------------
+
+    /**
+     * 前序遍历
+     */
+    @Test
+    public void shunxuShow() {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7};
+        BinaryArray binaryArray = new BinaryArray(arr);
+        binaryArray.showAll(2);
+    }
+
+    //    -------------------------- 堆排序  ---------------------
+
+    /**
+     * 将数组排序为大顶堆
+     */
+    @Test
+    public void bigHeadHeap() {
+        int[] arr = {1, 4, 7, 2, 6, 3, 0};
+        //    从最后一个非叶子节点-->跟节点
+        int end = (arr.length - 1) / 2;
+        for (int start = end; start >= 0; start--) {
+            bigHeadSort(arr, arr.length, start);
+        }
+
+        System.out.println(Arrays.toString(arr));
+
+    }
+
+    /**
+     * @param arr
+     * @param size  数组长度用于判断越界
+     * @param index 被比较的节点【父节点】
+     */
+    public void bigHeadSort(int[] arr, int size, int index) {
+        //    左节点
+        int left = index * 2 + 1;
+        //    右节点
+        int right = index * 2 + 2;
+        //    最大值临时记录为父节点
+        int max = index;
+        //    判断左节点是否越界和比较大小
+        if (left < size && arr[left] > arr[max]) {
+            max = left;
+        }
+        //    判断左节点是否越界和比较大小
+        if (right < size && arr[right] > arr[max]) {
+            max = right;
+        }
+        //   比较出最大值后进行交换
+        if (max != index) {
+            //    最大值与父节交换
+            int temp = arr[index];
+            arr[index] = arr[max];
+            arr[max] = temp;
+            //    比较出最大值后再将  最小的最为跟节点与下一节点进行比较
+            bigHeadSort(arr, size, max);
+
+        }
+
+    }
 
 }

@@ -41,7 +41,7 @@ public class TreeNode {
      */
     public void delete(int i) {
         TreeNode parentNode = this;
-      
+
         //   先判断左，右
         if (null != parentNode.getLeftNode() && parentNode.getLeftNode().getValue() == i) {
             parentNode.leftNode = null;
