@@ -105,6 +105,16 @@ public class T3_Tree {
         }
 
         System.out.println(Arrays.toString(arr));
+        //   进行排序操作
+        for (int i = arr.length - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            //    再把之前的变为大顶堆---为啥是0--因为以下部分已经是大顶堆了，只有0索引是变化的？但是为用最后的非叶子节点不行？
+            bigHeadSort(arr, i, 0);
+        }
+        System.out.println("排序后：" + Arrays.toString(arr));
+
 
     }
 
