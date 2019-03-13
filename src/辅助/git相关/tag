@@ -1,0 +1,17 @@
+git tag:查看所有
+
+git tag -a 版本号 commitID -m '说明信息'
+
+git show tag name
+
+
+git push origin tagName
+
+git push orogin -tags
+
+git push origin :<branchName>   :删除远程分支【将空分支推送到远程】
+
+git push origin --delete tag <tagname>  ：删除远程tag
+
+-------------------------------   分支  --------------------
+git push origin --delete <branchName>  ：删除远程分支
