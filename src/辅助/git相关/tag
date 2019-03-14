@@ -7,7 +7,7 @@ git show tag name
 
 git push origin tagName
 
-git push orogin -tags
+git push origin -tags
 
 git push origin :<branchName>   :删除远程分支【将空分支推送到远程】
 
@@ -15,3 +15,9 @@ git push origin --delete tag <tagname>  ：删除远程tag
 
 -------------------------------   分支  --------------------
 git push origin --delete <branchName>  ：删除远程分支
+
+推送分支[指定分支，与tag区分]
+refs/heads/my_rg_web3.2:
+
+
+
