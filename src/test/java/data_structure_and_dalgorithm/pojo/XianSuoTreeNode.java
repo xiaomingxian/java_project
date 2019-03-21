@@ -2,7 +2,6 @@ package data_structure_and_dalgorithm.pojo;
 
 public class XianSuoTreeNode extends TreeNode {
     //增加左右节点的类型描述---默认值为0表示为左子节点或右子节点
-    //
     int leftType;
     int rightType;
 
@@ -25,6 +24,8 @@ public class XianSuoTreeNode extends TreeNode {
     public XianSuoTreeNode(Integer value) {
         super(value);
     }
+
+
 
 
 }

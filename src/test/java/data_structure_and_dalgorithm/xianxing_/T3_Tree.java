@@ -3,6 +3,7 @@ package data_structure_and_dalgorithm.xianxing_;
 import data_structure_and_dalgorithm.pojo.BinaryArray;
 import data_structure_and_dalgorithm.pojo.BinaryTree;
 import data_structure_and_dalgorithm.pojo.TreeNode;
+import data_structure_and_dalgorithm.pojo.XianSuoTreeNode;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -148,7 +149,43 @@ public class T3_Tree {
             bigHeadSort(arr, size, max);
 
         }
+    }
 
+    /**
+     * 二叉树 线索化
+     */
+    @Test
+    public void  xianSuoShu(){
+        XianSuoTreeNode root = new XianSuoTreeNode(0);
+        XianSuoTreeNode l1 = new XianSuoTreeNode(1);
+        XianSuoTreeNode l2 = new XianSuoTreeNode(2);
+        XianSuoTreeNode l3 = new XianSuoTreeNode(3);
+        XianSuoTreeNode l4 = new XianSuoTreeNode(4);
+        XianSuoTreeNode r1 = new XianSuoTreeNode(5);
+        XianSuoTreeNode r2 = new XianSuoTreeNode(6);
+        XianSuoTreeNode r3 = new XianSuoTreeNode(7);
+        XianSuoTreeNode r4 = new XianSuoTreeNode(8);
+        root.setLeftNode(l1);
+        root.setRightNode(r1);
+
+        r1.setLeftNode(l4);
+        r1.setRightNode(r4);
+
+        l1.setLeftNode(l2);
+        l1.setRightNode(r2);
+
+        l2.setLeftNode(l3);
+        l2.setRightNode(r3);
+
+
+        BinaryTree binaryTree = new BinaryTree(root);
+
+        binaryTree.toBeXianSuoShu();
+        //
+        System.out.println(l3.getLeftType()+"----"+l3.getLeftNode());
+        System.out.println(r3.getRightType()+"----"+r3.getRightNode());
+        System.out.println(r4.getLeftType()+"----"+r4.getLeftNode());
+        System.out.println(r4.getRightType()+"----"+r4.getRightNode());
     }
 
 }

@@ -86,4 +86,56 @@ public class BinaryTree {
     }
 
 
+    public void toBeXianSuoShu() {
+        try {
+            getXianSuoShu(root);
+
+        } catch (Exception e) {
+            System.out.println("当前树不可线索化");
+
+        }
+    }
+
+
+    //记录前一个节点
+    private TreeNode pre;
+
+    //使得树成为线索二叉树[中序]  ----  左 中 右
+    public void getXianSuoShu(TreeNode treeNode) {
+        if (null == treeNode) {
+            return;
+        }
+
+        //对左树[节点]线索化
+        getXianSuoShu(treeNode.getLeftNode());
+        //对中间树线索化【对自己线索化】
+        //处理前驱节点---如果没有左节点--就指向前驱节点
+        if (null == treeNode.getLeftNode()) {
+            XianSuoTreeNode xiansuo = (XianSuoTreeNode) treeNode;
+            xiansuo.setLeftNode(pre);
+            xiansuo.setLeftType(1);
+        }
+        //处理上一节点的后驱节点
+        if (null != pre && pre.getRightNode() == null) {
+            XianSuoTreeNode xiansuo = (XianSuoTreeNode) pre;
+            xiansuo.setRightType(1);
+            xiansuo.setRightNode(treeNode);
+        }
+
+        //将当前节点赋值给上一节点
+        pre = treeNode;
+
+        //    对右树线索化
+        getXianSuoShu(treeNode.getRightNode());
+
+    }
+
+
+    public static void main(String[] args) {
+        if (TreeNode.class.equals(XianSuoTreeNode.class)) {
+            System.out.println("-------");
+        }
+        System.out.println("xxxxxxx");
+    }
+
 }
