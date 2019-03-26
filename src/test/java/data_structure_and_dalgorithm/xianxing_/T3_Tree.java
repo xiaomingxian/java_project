@@ -186,6 +186,21 @@ public class T3_Tree {
         System.out.println(r3.getRightType()+"----"+r3.getRightNode());
         System.out.println(r4.getLeftType()+"----"+r4.getLeftNode());
         System.out.println(r4.getRightType()+"----"+r4.getRightNode());
+
+        //    遍历线索二叉树
+        binaryTree.xiansuoShow();
+    }
+
+    /**
+     * 赫夫曼树【树的带权路径最小---权越小的离跟节点越远】
+     */
+    @Test
+    public void hefuman() {
+        int[] x = {1, 9, 20, 45, 29, 33, 2, 44, 5, 8, 19};
+        //    每次排序找出最小值作为叶子节点--跟节点为两数之和
+        //    跟节点作为比较元素参与比较【递归】
+        
+
     }
 
 }

@@ -100,6 +100,11 @@ public class BinaryTree {
     //记录前一个节点
     private TreeNode pre;
 
+    /**
+     * 二叉树线索化
+     *
+     * @param treeNode
+     */
     //使得树成为线索二叉树[中序]  ----  左 中 右
     public void getXianSuoShu(TreeNode treeNode) {
         if (null == treeNode) {
@@ -131,11 +136,27 @@ public class BinaryTree {
     }
 
 
-    public static void main(String[] args) {
-        if (TreeNode.class.equals(XianSuoTreeNode.class)) {
-            System.out.println("-------");
+    /**
+     * 线索化二叉树遍历
+     * 找到最左节点开始遍历，
+     */
+    public void xiansuoShow() {
+        XianSuoTreeNode xianSuoTreeNode = (XianSuoTreeNode) root;
+        while (xianSuoTreeNode != null) {
+            //    找到最左节点 type==0说明存在左子节点--当type!=0时说明没有左子节点，即到了最左
+            while (xianSuoTreeNode.leftType == 0) {
+                xianSuoTreeNode = (XianSuoTreeNode) xianSuoTreeNode.getLeftNode();
+            }
+            //    开始向右遍历--先打印当前节点
+            System.out.println(xianSuoTreeNode);
+            while (xianSuoTreeNode.rightType == 1) {//说明到了最后一个节点
+                System.out.println(xianSuoTreeNode.getRightNode());
+                //这一步是为了跳出循环
+                xianSuoTreeNode = (XianSuoTreeNode) xianSuoTreeNode.getRightNode();
+            }
+            //System.out.println("--------->"+xianSuoTreeNode);
+            //    将右节点或者后继节点记录起来继续循环
+            xianSuoTreeNode = (XianSuoTreeNode) xianSuoTreeNode.getRightNode();
         }
-        System.out.println("xxxxxxx");
     }
-
 }
