@@ -6,7 +6,9 @@ import data_structure_and_dalgorithm.pojo.TreeNode;
 import data_structure_and_dalgorithm.pojo.XianSuoTreeNode;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class T3_Tree {
 
@@ -195,12 +197,40 @@ public class T3_Tree {
      * 赫夫曼树【树的带权路径最小---权越小的离跟节点越远】
      */
     @Test
-    public void hefuman() {
-        int[] x = {1, 9, 20, 45, 29, 33, 2, 44, 5, 8, 19};
-        //    每次排序找出最小值作为叶子节点--跟节点为两数之和
-        //    跟节点作为比较元素参与比较【递归】
-        
+    public void hefumanTest() {
+        int[] x = {3, 7, 8, 29, 5, 11, 23, 14};
+        createHeFuMan(x);
 
+
+    }
+
+    public void createHeFuMan(int[] arr) {
+        //    先以没个元素为跟节点创建一个单节点树【为了与其他节点连接起来(通过左右节点)】
+        ArrayList<TreeNode> treeNodes = new ArrayList<>();
+        for (int i : arr) {
+            TreeNode treeNode = new TreeNode(i);
+            treeNodes.add(treeNode);
+        }
+        //    以最小的两个节点为叶子节点-创建一个树，然后从原始数组中移除这2个元素，再将父节[子节点权值之和]点作为比较元素添加原始数组中
+        //    元素不断移除-知道最后数量为1时候就不比较
+        while (treeNodes.size() > 1) {
+            //集合有序化
+            Collections.sort(treeNodes);
+            //得到2个最小节点
+            TreeNode left = treeNodes.get(treeNodes.size() - 2);
+            TreeNode right = treeNodes.get(treeNodes.size() - 1);
+            //    组成新节点
+            TreeNode parent = new TreeNode(left.getValue() + right.getValue());
+            parent.setLeftNode(left);
+            parent.setRightNode(right);
+            //    将最小节点从原始集合中移除
+            treeNodes.remove(left);
+            treeNodes.remove(right);
+            //    将新节点添加至原始集合
+            treeNodes.add(parent);
+        }
+
+        System.out.println(treeNodes);
     }
 
 }

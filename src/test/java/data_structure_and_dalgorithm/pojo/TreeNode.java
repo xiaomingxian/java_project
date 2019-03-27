@@ -1,6 +1,6 @@
 package data_structure_and_dalgorithm.pojo;
 
-public class TreeNode {
+public class TreeNode implements Comparable<TreeNode>{
 
     private Integer value;
 
@@ -68,5 +68,9 @@ public class TreeNode {
     }
 
 
+    @Override
+    public int compareTo(TreeNode o) {
 
+        return this.value- o.value;
+    }
 }
