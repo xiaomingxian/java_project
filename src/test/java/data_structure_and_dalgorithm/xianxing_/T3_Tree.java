@@ -1,14 +1,11 @@
 package data_structure_and_dalgorithm.xianxing_;
 
-import data_structure_and_dalgorithm.pojo.BinaryArray;
-import data_structure_and_dalgorithm.pojo.BinaryTree;
-import data_structure_and_dalgorithm.pojo.TreeNode;
-import data_structure_and_dalgorithm.pojo.XianSuoTreeNode;
+import data_structure_and_dalgorithm.pojo.*;
+import jnr.ffi.annotations.In;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
+
 
 public class T3_Tree {
 
@@ -200,8 +197,6 @@ public class T3_Tree {
     public void hefumanTest() {
         int[] x = {3, 7, 8, 29, 5, 11, 23, 14};
         createHeFuMan(x);
-
-
     }
 
     public void createHeFuMan(int[] arr) {
@@ -231,6 +226,46 @@ public class T3_Tree {
         }
 
         System.out.println(treeNodes);
+    }
+
+    @Test
+    public void HeFuManEnCode() {
+        String msg = "can you can a can as can canner can a can";
+        byte[] bytes = msg.getBytes();
+        myEncode(bytes);
+    }
+
+    private void myEncode(byte[] bytes) {
+        //统计每个字符【对应的 ACSCII码】出现的次数
+        Map map = myMount(bytes);
+        //进行赫夫曼树化
+        HefumanTreeNode hefumanTreeNode= hefuman(map);
+
+
+    }
+
+    private HefumanTreeNode hefuman(Map<Byte,Integer> map) {
+        //将每一个ASCII码 建成一个独立的树【为了后面与其他ASCII码关联】
+        ArrayList<HefumanTreeNode> hefumanTreeNodes = new ArrayList<>();
+        for(Map.Entry<Byte,Integer> e:map.entrySet()){
+
+        }
+
+
+        return null;
+    }
+
+    private Map myMount(byte[] bytes) {
+        HashMap<Byte, Integer> map = new HashMap<>();
+        for (byte b : bytes) {
+            Integer integer = map.get(b);
+            if (integer == null) {
+                map.put(b, 1);
+            } else {
+                map.put(b, integer + 1);
+            }
+        }
+        return map;
     }
 
 }
