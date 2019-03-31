@@ -10,3 +10,4 @@ win10  无密码
 提示类信息 command y
 get/set/toString...   control enter
 删除行    command delete
+整行移动  shift+command 上下

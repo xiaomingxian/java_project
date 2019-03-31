@@ -1,7 +1,6 @@
 package data_structure_and_dalgorithm.xianxing_;
 
 import data_structure_and_dalgorithm.pojo.*;
-import jnr.ffi.annotations.In;
 import org.junit.Test;
 
 import java.util.*;
@@ -230,16 +229,59 @@ public class T3_Tree {
 
     @Test
     public void HeFuManEnCode() {
-        String msg = "can you can a can as can canner can a can";
+        String msg = "can you can a can as a can canner can a can.";
         byte[] bytes = msg.getBytes();
         myEncode(bytes);
     }
+
+    //编码表---byte,路径
+    Map mapTable = new HashMap<Byte, String>();
 
     private void myEncode(byte[] bytes) {
         //统计每个字符【对应的 ACSCII码】出现的次数
         Map map = myMount(bytes);
         //进行赫夫曼树化
         HefumanTreeNode hefumanTreeNode= hefuman(map);
+        //创建赫夫曼编码表
+        getCodeTable(hefumanTreeNode);
+        System.out.println(mapTable);
+
+
+    }
+
+    //全局变量记录上次的路径//stringbuilder线程不安全-单线程中效率高
+    StringBuilder sb = new StringBuilder();
+
+    private Map getCodeTable(HefumanTreeNode hefumanTreeNode) {
+
+        //所有元素都在叶子节点上
+        putByteAndPath(hefumanTreeNode.getLeft(), "0", sb);
+        putByteAndPath(hefumanTreeNode.getRight(), "1", sb);
+        return mapTable;
+    }
+
+    private void putByteAndPath(HefumanTreeNode node, String s, StringBuilder sb) {
+        StringBuilder sb2 = new StringBuilder(sb);
+        //    如果节点为空-说明他还不是叶子节点-就继续向下走【同一方向】
+        if (node.getB_value() == null) {
+            putByteAndPath(node.getLeft(), "0", sb2.append(0));
+            putByteAndPath(node.getRight(), "1", sb2.append(1));
+            //if ("0".equals(s)) {
+            //    putByteAndPath(node.getLeft(), "0", sb.append(0));
+            //    this.sb.append("0");
+            //} else {
+            //    putByteAndPath(node.getRight(), "1", sb.append(1));
+            //    this.sb.append("1");
+            //}
+        } else {
+            if("0".equals(s)){
+
+                mapTable.put(node.getB_value(), sb2.append(0));
+            }else {
+                mapTable.put(node.getB_value(), sb2.append(1));
+
+            }
+        }
 
 
     }
@@ -248,11 +290,23 @@ public class T3_Tree {
         //将每一个ASCII码 建成一个独立的树【为了后面与其他ASCII码关联】
         ArrayList<HefumanTreeNode> hefumanTreeNodes = new ArrayList<>();
         for(Map.Entry<Byte,Integer> e:map.entrySet()){
-
+            HefumanTreeNode hefumanTreeNode = new HefumanTreeNode(e.getKey(), e.getValue());
+            hefumanTreeNodes.add(hefumanTreeNode);
         }
-
-
-        return null;
+        //按照次数进行排序
+        while (hefumanTreeNodes.size() > 1) {
+            Collections.sort(hefumanTreeNodes);
+            HefumanTreeNode right = hefumanTreeNodes.get(hefumanTreeNodes.size() - 1);
+            HefumanTreeNode left = hefumanTreeNodes.get(hefumanTreeNodes.size() - 2);
+            HefumanTreeNode parent = new HefumanTreeNode(null, right.getValue() + left.getValue());
+            parent.setLeft(left);
+            parent.setRight(right);
+            hefumanTreeNodes.remove(right);
+            hefumanTreeNodes.remove(left);
+            hefumanTreeNodes.add(parent);
+        }
+        HefumanTreeNode hefumanTreeNode = hefumanTreeNodes.get(0);
+        return hefumanTreeNode;
     }
 
     private Map myMount(byte[] bytes) {

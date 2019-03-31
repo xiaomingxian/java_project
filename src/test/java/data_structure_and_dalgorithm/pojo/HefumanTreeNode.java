@@ -8,6 +8,11 @@ public class HefumanTreeNode implements Comparable<HefumanTreeNode>{
     private HefumanTreeNode left;
     private HefumanTreeNode right;
 
+    @Override
+    public String toString() {
+        return "byte:"+b_value+"次数："+value;
+    }
+
     public HefumanTreeNode(Byte b_value, Integer value) {
         this.b_value = b_value;
         this.value = value;
@@ -50,6 +55,6 @@ public class HefumanTreeNode implements Comparable<HefumanTreeNode>{
     @Override
     public int compareTo(HefumanTreeNode o) {
         //以出现的次数进行排序
-        return this.value-o.value;
+        return o.value-this.value;
     }
 }
