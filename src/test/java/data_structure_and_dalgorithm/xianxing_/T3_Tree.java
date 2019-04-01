@@ -1,6 +1,7 @@
 package data_structure_and_dalgorithm.xianxing_;
 
 import data_structure_and_dalgorithm.pojo.*;
+import org.apache.commons.lang.text.StrBuilder;
 import org.junit.Test;
 
 import java.util.*;
@@ -227,10 +228,17 @@ public class T3_Tree {
         System.out.println(treeNodes);
     }
 
+    /**
+     * 赫夫曼编码
+     */
     @Test
     public void HeFuManEnCode() {
         String msg = "can you can a can as a can canner can a can.";
         byte[] bytes = msg.getBytes();
+        for (int i = 0; i < bytes.length; i++) {
+            System.out.print(msg.substring(i, i + 1) + ":" + bytes[i] + ",");
+        }
+        System.out.println();
         myEncode(bytes);
     }
 
@@ -245,42 +253,63 @@ public class T3_Tree {
         //创建赫夫曼编码表
         getCodeTable(hefumanTreeNode);
         System.out.println(mapTable);
-
+        //    进行编码
+        StringBuilder code = toZip(bytes, mapTable);
+        //转为二进制？十进制？--为何
+        StrBuilder sb = to10JinZhi(code);
+        System.out.println(sb);
 
     }
 
+    private StrBuilder to10JinZhi(StringBuilder code) {
+        StrBuilder sb = new StrBuilder();
+        //    8位一byte,进行截取
+        for (int i = 0; i < code.length(); i += 8) {
+            int lastIndex = i + 8;
+            if (lastIndex >= code.length()) {
+                lastIndex = code.length();
+            }
+            String s = (code + "").substring(i, lastIndex);
+            //    转为十进制
+            int i1 = Integer.parseInt(s, 2);//2为二进制
+            sb.append(i1);
+        }
+        return sb;
+    }
+
+    private StringBuilder toZip(byte[] bytes, Map mapTable) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            StringBuilder o = (StringBuilder) mapTable.get(b);
+            sb.append(o);
+        }
+        return sb;
+    }
+
     //全局变量记录上次的路径//stringbuilder线程不安全-单线程中效率高
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sbParent = new StringBuilder();
 
     private Map getCodeTable(HefumanTreeNode hefumanTreeNode) {
 
         //所有元素都在叶子节点上
-        putByteAndPath(hefumanTreeNode.getLeft(), "0", sb);
-        putByteAndPath(hefumanTreeNode.getRight(), "1", sb);
+        putByteAndPath(hefumanTreeNode.getLeft(), "0", sbParent);
+        putByteAndPath(hefumanTreeNode.getRight(), "1", sbParent);
         return mapTable;
     }
 
     private void putByteAndPath(HefumanTreeNode node, String s, StringBuilder sb) {
+        //父节点记录
         StringBuilder sb2 = new StringBuilder(sb);
+
+        sb2.append(s);
         //    如果节点为空-说明他还不是叶子节点-就继续向下走【同一方向】
         if (node.getB_value() == null) {
-            putByteAndPath(node.getLeft(), "0", sb2.append(0));
-            putByteAndPath(node.getRight(), "1", sb2.append(1));
-            //if ("0".equals(s)) {
-            //    putByteAndPath(node.getLeft(), "0", sb.append(0));
-            //    this.sb.append("0");
-            //} else {
-            //    putByteAndPath(node.getRight(), "1", sb.append(1));
-            //    this.sb.append("1");
-            //}
+            putByteAndPath(node.getLeft(), "0", sb2);
+            putByteAndPath(node.getRight(), "1", sb2);
         } else {
-            if("0".equals(s)){
 
-                mapTable.put(node.getB_value(), sb2.append(0));
-            }else {
-                mapTable.put(node.getB_value(), sb2.append(1));
+            mapTable.put(node.getB_value(), sb2);
 
-            }
         }
 
 
