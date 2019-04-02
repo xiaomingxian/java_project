@@ -1,7 +1,6 @@
 package data_structure_and_dalgorithm.xianxing_;
 
 import data_structure_and_dalgorithm.pojo.*;
-import org.apache.commons.lang.text.StrBuilder;
 import org.junit.Test;
 
 import java.util.*;
@@ -229,8 +228,11 @@ public class T3_Tree {
     }
 
     /**
-     * 赫夫曼编码
+     * ----------------------------------------------赫夫曼编码,解码------------------------------------------------------------
      */
+    //编码表---byte,路径
+    Map mapTable = new HashMap<Byte, String>();
+
     @Test
     public void HeFuManEnCode() {
         String msg = "can you can a can as a can canner can a can.";
@@ -238,14 +240,46 @@ public class T3_Tree {
         for (int i = 0; i < bytes.length; i++) {
             System.out.print(msg.substring(i, i + 1) + ":" + bytes[i] + ",");
         }
-        System.out.println();
-        myEncode(bytes);
+        byte[] bytes1 = myEncode(bytes);
+        System.out.println(Arrays.toString(bytes1));
+        String res = decodeHe(mapTable, bytes1);
     }
 
-    //编码表---byte,路径
-    Map mapTable = new HashMap<Byte, String>();
+    private String decodeHe(Map mapTable, byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        //先将加密结果转化为二进制--计算机使用的是二进制的补码--正数不够用0补齐 【正数的原反补相同】--负数用1补齐
+        for (byte b : bytes) {
 
-    private void myEncode(byte[] bytes) {
+            //if (b < 0) {
+            //    //    截取后八位---因为不够会用1补齐，取byte8位所以要截取后八位
+            //    String s = Integer.toBinaryString(b);
+            //    String substring = s.substring(s.length() - 8);
+            //    sb.append(substring);
+            //} else {
+            //    if (bytes[bytes.length - 1] == b) {
+            //        sb.append("0"+b);
+            //    } else {
+            //        //    正数不够八位用0补齐
+            //        String s = Integer.toBinaryString(b);
+            //        if (s.length() < 8) {
+            //            String pre = "";
+            //            for (int i = 0; i < 8 - s.length(); i++) {
+            //                pre += "0";
+            //            }
+            //            String zhengshu = pre + s;
+            //            sb.append(zhengshu);
+            //        }
+            //    }
+            //
+            //}
+        }
+        System.out.println("解码转二进制：" + sb);
+
+        return "";
+    }
+
+
+    private byte[] myEncode(byte[] bytes) {
         //统计每个字符【对应的 ACSCII码】出现的次数
         Map map = myMount(bytes);
         //进行赫夫曼树化
@@ -256,13 +290,17 @@ public class T3_Tree {
         //    进行编码
         StringBuilder code = toZip(bytes, mapTable);
         //转为二进制？十进制？--为何
-        StrBuilder sb = to10JinZhi(code);
-        System.out.println(sb);
+        byte[] bytes1 = to10JinZhi(code);
+        return bytes1;
 
     }
 
-    private StrBuilder to10JinZhi(StringBuilder code) {
-        StrBuilder sb = new StrBuilder();
+    private byte[] to10JinZhi(StringBuilder code) {
+        //返回byte数组，需要计算byte数组长度
+        int len = code.length() % 8 == 0 ? code.length() / 8 : code.length() / 8 + 1;
+        byte[] by = new byte[len];
+        //记录索引
+        int index = 0;
         //    8位一byte,进行截取
         for (int i = 0; i < code.length(); i += 8) {
             int lastIndex = i + 8;
@@ -271,10 +309,11 @@ public class T3_Tree {
             }
             String s = (code + "").substring(i, lastIndex);
             //    转为十进制
-            int i1 = Integer.parseInt(s, 2);//2为二进制
-            sb.append(i1);
+            byte i1 = (byte) Integer.parseInt(s, 2);//2为二进制
+            by[index] = i1;
+            index++;
         }
-        return sb;
+        return by;
     }
 
     private StringBuilder toZip(byte[] bytes, Map mapTable) {
@@ -283,6 +322,7 @@ public class T3_Tree {
             StringBuilder o = (StringBuilder) mapTable.get(b);
             sb.append(o);
         }
+        System.out.println("编码且未压缩：" + sb);
         return sb;
     }
 
@@ -350,5 +390,7 @@ public class T3_Tree {
         }
         return map;
     }
-
+/**
+ * ----------------------------------------------------------赫夫曼编码解码结束---------------------------------------------------------------
+ */
 }
