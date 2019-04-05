@@ -1,3 +1,18 @@
+#------------- 环境变量配置 ------------
+open -e .bash_profile
+    eg:
+        JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
+        PATH=$JAVA_HOME/bin:$PATH:.
+        CLASSPATH=$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar:.
+        export JAVA_HOME
+        export PATH
+        export CLASSPATH
+编译：source .bash_profile
+
+    python 工具的使用
+        此处默认的python2.7未修改
+        eg:python3.7 pip insatll scrapy
+           或者pip3.7 insatll ...
 #------------- 虚拟机 ------------
 centuos Paralels xiaoming.xian
 win10  无密码

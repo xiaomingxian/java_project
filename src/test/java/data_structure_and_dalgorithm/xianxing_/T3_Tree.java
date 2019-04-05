@@ -229,6 +229,7 @@ public class T3_Tree {
 
     /**
      * ----------------------------------------------赫夫曼编码,解码------------------------------------------------------------
+     * 解压验证未通过：0的原因
      */
     //编码表---byte,路径
     Map mapTable = new HashMap<Byte, String>();
@@ -248,17 +249,38 @@ public class T3_Tree {
     private String decodeHe(Map mapTable, byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         //先将加密结果转化为二进制--计算机使用的是二进制的补码--正数不够用0补齐 【正数的原反补相同】--负数用1补齐
-        for (byte b : bytes) {
-
+        for (int i = 0; i < bytes.length; i++) {
+            //method1:
+            //判断是否是最后一个--是就不取补码
+            byte b = bytes[i];
+            if (i == bytes.length - 1) {
+                String s = Integer.toBinaryString(b);
+                sb.append(s);
+            } else {
+                //小于0前面用0补齐---大于0截取后八位
+                int temp = b;
+                //补码操作----结果正数9位数【为何，去掉最高位正常】------负数为为32位截取后八位
+                temp |= 256;
+                //截取后八位
+                String s = Integer.toBinaryString(temp);
+                if (b < 0) {
+                    //System.out.println("--->" + s + "  " + s.length());
+                    //s = s.substring(s.length() - 8);
+                } else {
+                    //System.out.println("===>" + b + "  " + s);
+                    //s=s.substring(s.length()-8);
+                }
+                s = s.substring(s.length() - 8);
+                //System.out.println("====>"+s);
+                sb.append(s);
+            }
+            //method2
             //if (b < 0) {
             //    //    截取后八位---因为不够会用1补齐，取byte8位所以要截取后八位
             //    String s = Integer.toBinaryString(b);
             //    String substring = s.substring(s.length() - 8);
             //    sb.append(substring);
             //} else {
-            //    if (bytes[bytes.length - 1] == b) {
-            //        sb.append("0"+b);
-            //    } else {
             //        //    正数不够八位用0补齐
             //        String s = Integer.toBinaryString(b);
             //        if (s.length() < 8) {
@@ -269,7 +291,6 @@ public class T3_Tree {
             //            String zhengshu = pre + s;
             //            sb.append(zhengshu);
             //        }
-            //    }
             //
             //}
         }
@@ -393,4 +414,19 @@ public class T3_Tree {
 /**
  * ----------------------------------------------------------赫夫曼编码解码结束---------------------------------------------------------------
  */
+
+
+    /**
+     * BST 搜索二叉树
+     */
+    @Test
+    public void BSTTest() {
+        int[] arr = {7, 3, 10, 12, 5, 1, 9};
+        BSTree bsTree = new BSTree();
+        for (int i : arr) {
+            BSTNode bstNode = new BSTNode(i);
+            bsTree.add(bstNode);
+        }
+        bsTree.midShow();
+    }
 }
