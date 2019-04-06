@@ -42,6 +42,95 @@ public class BSTNode {
         midShow(node.right);
     }
 
+    /**
+     * serach
+     *
+     * @return
+     */
+    public BSTNode search(Integer value) {
+        BSTNode i = null;
+        if (this.value == value) {
+            i = this;
+        } else if (value < this.value) {
+            //    查询左树
+            if (left == null) {
+                return null;
+            } else {
+                i = left.search(value);
+            }
+        } else {
+            //    查询右树
+            if (right == null) {
+                return null;
+            } else {
+                i = right.search(value);
+            }
+        }
+
+        return i;
+
+    }
+
+    /**
+     * 查找父节点--从跟节点开始遍历查找
+     */
+    public BSTNode searchParent(Integer value) {
+        //因为用的是跟节点调用
+        if (this.value == value) {
+            return this;
+        }
+        if ((this.right != null && this.right.value == value) || (this.left != null && this.left.value == value)) {
+            return this;
+        } else if (value < this.value) {
+            if (this.left != null) {
+                return this.left.searchParent(value);
+            } else {
+                return null;
+            }
+        } else if (value > this.value) {
+            if (this.right != null) {
+                return this.right.searchParent(value);
+            } else {
+                return null;
+            }
+
+        }
+        //当前节点可能是跟节点
+        return null;
+    }
+
+    /**
+     * 查找最左节点
+     *
+     * @return
+     */
+    public BSTNode leftNode(BSTNode bstNode) {
+
+        BSTNode left = bstNode.getLeft();
+        if (left == null) {
+            return bstNode;
+        } else {
+            return leftNode(left);
+        }
+    }
+
+    /**
+     * 查找最右节点
+     *
+     * @return
+     */
+    public BSTNode rightNode(BSTNode bstNode) {
+
+        BSTNode left = bstNode.getRight();
+        if (left == null) {
+            return bstNode;
+        } else {
+            return rightNode(left);
+        }
+    }
+
+
+
     @Override
     public String toString() {
         return value + ",";

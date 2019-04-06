@@ -411,9 +411,9 @@ public class T3_Tree {
         }
         return map;
     }
-/**
- * ----------------------------------------------------------赫夫曼编码解码结束---------------------------------------------------------------
- */
+    /**
+     * ----------------------------------------------------------赫夫曼编码解码结束---------------------------------------------------------------
+     */
 
 
     /**
@@ -421,6 +421,7 @@ public class T3_Tree {
      */
     @Test
     public void BSTTest() {
+        //创建
         int[] arr = {7, 3, 10, 12, 5, 1, 9};
         BSTree bsTree = new BSTree();
         for (int i : arr) {
@@ -428,5 +429,24 @@ public class T3_Tree {
             bsTree.add(bstNode);
         }
         bsTree.midShow();
+
+        System.out.println("----查找------");
+        BSTNode search = bsTree.search(12);
+        System.out.println(search);
+        System.out.println("-------删除叶子节点-------");
+        bsTree.delYeZi(1);
+        bsTree.midShow();
+        System.out.println("-------删除只有一个子节点的节点-------");
+        bsTree.delNodeHaveOne(3);
+        bsTree.midShow();
+        System.out.println("-----删除有两个子节点的节点---------");
+        //    思路1：找到左树的最大节点[要删除的节点的前驱节点]删除它并-替换要删除的节点
+        //    思路2：找到右树的最小节点[要删除的节点的后驱节点]删除它并-替换要删除的节点
+        //bsTree.delNodeHaveTwo(7);//跟节点
+        bsTree.delNodeHaveTwo(10);//非跟节点
+        //bsTree.delNodeHaveTwo(12);//不满足要求
+        bsTree.midShow();
+
+
     }
 }
