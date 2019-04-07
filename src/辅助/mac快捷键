@@ -26,3 +26,4 @@ win10  无密码
 get/set/toString...   control enter
 删除行    command delete
 整行移动  shift+command 上下
+格式化  可整理jar包

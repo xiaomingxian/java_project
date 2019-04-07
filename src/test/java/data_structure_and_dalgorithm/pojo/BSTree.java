@@ -142,9 +142,15 @@ public class BSTree {
             left = null;
             //查找前驱节点
             BSTNode rightNode = currentNode.rightNode(currentNode.getLeft());
-            //    删除此节点
+            //    删除此节点---如果此节点有左子节点
             BSTNode bstNode1 = rightNode.searchParent(rightNode.getValue());
-            bstNode1.setRight(null);
+            if(bstNode1.getLeft()!=null){
+
+                delNodeHaveOne(rightNode.getValue());
+            }else {
+
+                bstNode1.setRight(null);
+            }
             //    查找当前当前节点是否有父节点
             BSTNode parentNode = root.searchParent(currentNode.getValue());
             //前驱节点替换当前节点并添加子节点

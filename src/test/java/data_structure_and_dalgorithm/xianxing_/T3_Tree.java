@@ -442,10 +442,26 @@ public class T3_Tree {
         System.out.println("-----删除有两个子节点的节点---------");
         //    思路1：找到左树的最大节点[要删除的节点的前驱节点]删除它并-替换要删除的节点
         //    思路2：找到右树的最小节点[要删除的节点的后驱节点]删除它并-替换要删除的节点
-        //bsTree.delNodeHaveTwo(7);//跟节点
-        bsTree.delNodeHaveTwo(10);//非跟节点
+        bsTree.delNodeHaveTwo(7);//跟节点
+        //bsTree.delNodeHaveTwo(10);//非跟节点
         //bsTree.delNodeHaveTwo(12);//不满足要求
         bsTree.midShow();
+    }
+
+    /**
+     * AVL树
+     */
+    @Test
+    public void AvlTest() {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8};
+        AVLTree tree = new AVLTree();
+        for (int i : arr) {
+            AVLNode son = new AVLNode(i);
+            tree.add(son);
+        }
+        //获取树高度
+        int height = tree.getRoot().height();
+        System.out.println(height);
 
 
     }
