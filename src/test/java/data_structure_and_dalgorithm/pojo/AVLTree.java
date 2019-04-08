@@ -20,6 +20,13 @@ public class AVLTree {
         }
     }
 
+    /**
+     * 中序遍历
+     */
+    public void midShow() {
+        root.midShow(root);
+    }
+
     public AVLNode getRoot() {
         return root;
     }

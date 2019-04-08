@@ -22,6 +22,14 @@ public class AVLNode {
         return Math.max(left == null ? 0 : left.height(), right == null ? 0 : right.height()) + 1;
     }
 
+    public int leftH() {
+      return   this.left == null ? 1 : left.height();
+    }
+
+    public int rightH() {
+        return   this.right == null ? 1 : right.height();
+    }
+
     /**
      * 添加节点
      *
@@ -42,10 +50,10 @@ public class AVLNode {
             }
         }
         //判断是否平衡
-        if (left.height() - right.height() > 1) {
+        if (leftH() - rightH() > 1) {
             //    进行左旋转
             roll(this, 0);
-        } else if (right.height() - left.height() > 1) {
+        } else if ( rightH() - leftH() > 1) {
             //进行右旋转
             roll(this, 1);
         }
@@ -57,25 +65,52 @@ public class AVLNode {
             //左子节点的右子节点无论是不是null 都将它作为 current的左子节点
             //将当前节点的值变为左子节点的值，将左子节点的左子节点变为当前节点的左子节点【因为当前节点的值与左子节点的值相同了】
             //当前节点的右子节点
-            AVLNode right = current.right;
+            AVLNode avlNode = new AVLNode(current.value);
+            avlNode.setLeft(current.getLeft());
+            avlNode.setRight(current.getRight());
             //当前节点的左子节点
             AVLNode left = current.left;
             //左子节点的右子节点
             AVLNode right1 = left.getRight();
             //左子节点的左子节点
-            AVLNode left1 = left.getLeft().getLeft();
+            AVLNode left1 = left.getLeft();
 
             //将左子节点值赋给当前节点
             current.setValue(left.getValue());
             current.setLeft(left1);
-            right.setLeft(right1);
-            current.setRight(right);
+            avlNode.setLeft(right1);
+            current.setRight(avlNode);
 
         } else {
-            //    右旋转
-            
+            //    右旋转---将当前节点的左子节点移动到右子节点的左子节点上--原来右子节点的左子节点作为移过来的节点的右子节点--当前节点的值为右子节点的值-删除右子节点
+            //    当前节点的左子节点
+            AVLNode avlNode = new AVLNode(current.value);
+            avlNode.setLeft(current.getLeft());
+            avlNode.setRight(current.getRight());
+            //     当前节点的右子节点
+            AVLNode current1 = current.right;
+
+            //    当前节点的右子节点的左子节点
+            AVLNode left1 = current1.left;
+            //    右子节点的右子节点
+            AVLNode right1 = current1.getRight();
+
+            avlNode.setRight(left1);
+            current.setValue(current1.value);
+            current.setRight(right1);
+            current.setLeft(avlNode);
+
         }
 
+    }
+
+    public void midShow(AVLNode node) {
+        if (node == null) {
+            return;
+        }
+        midShow(node.left);
+        System.out.println(node.value);
+        midShow(node.right);
     }
 
 
