@@ -449,16 +449,18 @@ public class T3_Tree {
     }
 
     /**
-     * AVL树
+     * AVL树---单旋转
      */
     @Test
     public void AvlTest() {
         //右旋转测试
         //int[] arr = {1, 2, 3, 4, 5, 6, 7, 8};
         //左旋转测试
-        int[] arr = {8, 7, 6, 5, 4, 3, 2, 1};
+        //int[] arr = {8, 7, 6, 5, 4, 3, 2, 1};
         //左旋转测试
         //int[] arr = {8,9,6,7,5,4};
+        //双旋转
+        int[] arr = {8, 9, 5, 4, 6, 7};
         AVLTree tree = new AVLTree();
         for (int i : arr) {
             AVLNode son = new AVLNode(i);
@@ -466,9 +468,8 @@ public class T3_Tree {
         }
         //获取树高度
         int height = tree.getRoot().height();
-        System.out.println("--->" + height);
+        System.out.println("--->" + tree.getRoot().getValue() + " 高度:" + height);
         tree.midShow();
-
-
     }
+
 }

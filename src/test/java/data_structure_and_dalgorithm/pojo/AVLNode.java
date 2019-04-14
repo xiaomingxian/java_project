@@ -51,11 +51,22 @@ public class AVLNode {
         }
         //判断是否平衡
         if (leftH() - rightH() > 1) {
-            //    进行左旋转
+            //判断左子树的左边与右边的高度差-双旋转
+            if (left.leftH() < left.rightH()) {
+                //右旋转---将跟树接在右树的左子节点上
+                left.roll(left, 1);
+            }
+            //    进行左旋转---只进行这一步就是单旋转
             roll(this, 0);
+
         } else if ( rightH() - leftH() > 1) {
+            if (right.rightH() < right.leftH()) {
+                //左旋转--将跟树接在左树的右子节点上
+                right.roll(right, 0);
+            }
             //进行右旋转
             roll(this, 1);
+
         }
     }
 
