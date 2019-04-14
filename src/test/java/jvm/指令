@@ -1,0 +1,3 @@
+堆内存快照设置：-XX:+HeapDumpOnOutOfMemoryError
+    -Xmx3550m：设置JVM最大可用内存为3550M。
+    -Xms3550m：设置JVM促使内存为3550m。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。
