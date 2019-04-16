@@ -104,7 +104,31 @@
         <property name="enableTransactionSupport" value="true"></property>
     </bean>
 
-
+    <!-- 消息接受类 -->
+    <bean id="redisTestMessageListener" class="controller.redis.RedisCustomer"></bean>
+    <bean id="redisContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+        <property name="connectionFactory" ref="JedisConnectionFactory"/>
+        <property name="taskExecutor">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+                <property name="poolSize" value="2"></property>
+            </bean>
+        </property>
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="redisTestMessageListener">
+                    <list>
+                        <!-- 普通订阅，订阅具体的频道   -->
+                        <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                            <constructor-arg value="msg"/>
+                        </bean>
+                        <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                            <constructor-arg value="mec"/>
+                        </bean>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
     <!--自定义redis工具类,在需要缓存的地方注入此类  -->
     <!--<bean id="redisUtil" class="com.ryx.global.util.RedisUtil">
         <property name="redisTemplate" ref="redisTemplate" />

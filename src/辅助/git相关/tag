@@ -2,7 +2,8 @@ git tag:查看所有
 
 git tag -a 版本号 commitID -m '说明信息'
 
-git show tag name
+git show tag的name
+    eg:git show  web3.1.2t2
 
 
 git push origin tagName
@@ -18,6 +19,11 @@ git push origin --delete <branchName>  ：删除远程分支
 
 推送分支[指定分支，与tag区分]
 refs/heads/my_rg_web3.2:
+
+
+git push <远程主机名> <本地分支名>:<远程分支名>
+
+git push origin web3.1.2t2:web3.1.2t2
 
 
 

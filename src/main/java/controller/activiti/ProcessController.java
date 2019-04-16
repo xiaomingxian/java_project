@@ -13,6 +13,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +51,7 @@ public class ProcessController {
      * 名称读取上传文件的名称
      */
     @RequestMapping("deploy")
-    public void deploy(MultipartFile multipartFile) throws IOException {
+    public void deploy(@RequestParam(value="file",required=false) MultipartFile multipartFile) throws IOException {
         InputStream inputStream = multipartFile.getInputStream();
 
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
