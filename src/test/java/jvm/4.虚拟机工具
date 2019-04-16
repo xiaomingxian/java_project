@@ -1,0 +1,5 @@
+jps -l 全包名
+jps -p 进程id
+jps -m 运行时参数
+jps -v jvm参数
+jps -mlv 综合三个参数
