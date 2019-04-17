@@ -3,3 +3,23 @@ jps -p 进程id
 jps -m 运行时参数
 jps -v jvm参数
 jps -mlv 综合三个参数
+
+jstat 依赖于 jps
+    作用：类装载，内存，垃圾收集，jit编译信息
+    元空间：与永久代类似，都是对JVM中方法区的实现，
+        区别：元空间不在虚拟机中，而是使用本地内存，因此默认情况下，元空间仅受本地内存大小限制
+
+
+jinfo：查看和调整虚拟机参数
+    eg:jinfo -flag UseG1GC 813  -XX:-UseG1GC  没有用G1收集器
+
+jmap :堆相关
+    eg:转储堆快照信息
+
+jhat:JVM heap Analysis Tool  CPU占有率高
+    jhat 堆转储文件  提供内置http服务器 访问 localhost:7000[默认端口]  eg:oql查询对象 通过语句
+
+jstack:jstack是java虚拟机自带的一种堆栈跟踪工具
+    eg:线程跟踪
+
+jConsole:内存监控，线程监控...
