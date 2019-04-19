@@ -1,5 +1,11 @@
 
-下载工具  wget
+下载工具  wget,yum
+    yum:
+        通过yum默认安装的路径为
+        （注：cd /usr/lib/jvm）
+        查找jdk版本：yum search jdk  / yum -y list java*
+上传工具：
+        yum install lrzsz
 ---------------------------
 
 linux联网问题： NAT模式， vi /etc/sysconfig/network-scripts/ifconfig-eth0 ==>ONBOOT=yes

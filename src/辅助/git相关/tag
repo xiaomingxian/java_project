@@ -1,6 +1,7 @@
 git tag:查看所有
 
 git tag -a 版本号 commitID -m '说明信息'
+    eg:git tag -a t1_new 547bb1cb61568eae9fdbec969660bf7928d3bfee -m t1_rename
 
 git show tag的name
     eg:git show  web3.1.2t2
@@ -24,6 +25,14 @@ refs/heads/my_rg_web3.2:
 git push <远程主机名> <本地分支名>:<远程分支名>
 
 git push origin web3.1.2t2:web3.1.2t2
+------------------------------ 重命名tag --------------------
+git push origin --delete tag <branchName>  ：删除远程tag
+
+git tag --delete t1 :删除本地tag
+
+git tag -a t1_new 547bb1cb61568eae9fdbec969660bf7928d3bfee -m t1_rename    [commitId来源--> git show tagname]
+
+git push origin tagName  :推送到远程
 
 
 
