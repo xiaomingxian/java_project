@@ -1,0 +1,27 @@
+数组+链表
+
+数组初始大小：
+    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+数组最大值：
+    static final int MAXIMUM_CAPACITY = 1 << 30;
+加载因子[负载因子]
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    构造方法中可以指定负载因子
+链表转红黑树的临界值 [最大]
+    static final int TREEIFY_THRESHOLD = 8;
+红黑树转链表的临界值 [最小]
+    static final int UNTREEIFY_THRESHOLD = 6;
+
+链表中的节点  内部类
+    static class Node<K,V> implements Map.Entry<K,V> {
+            final int hash;
+            final K key;
+            V value;
+            Node<K,V> next; //说明是单向链表
+            ...
+
+数组下标的计算
+    key  的哈希值%16
+
+
+扩容后大小：是扩容前的2倍？
