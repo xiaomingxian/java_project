@@ -1,0 +1,5 @@
+volatile
+wait notify  必须在锁内使用 锁.wait()  锁.notify()
+门闩    CountDownLatch c = new CountDownLatch(1);//参数为闩数量
+
+

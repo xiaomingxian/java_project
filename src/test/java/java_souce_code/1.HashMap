@@ -7,7 +7,7 @@
 加载因子[负载因子]
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
     构造方法中可以指定负载因子
-链表转红黑树的临界值 [最大]
+链表转红黑树的临界值 [最大]jdk1.8
     static final int TREEIFY_THRESHOLD = 8;
 红黑树转链表的临界值 [最小]
     static final int UNTREEIFY_THRESHOLD = 6;
@@ -21,7 +21,7 @@
             ...
 
 数组下标的计算
-    key  的哈希值%16
+    key的哈希值%(数组长度-1)==>key的哈希值&(数组长度-1)
 
 
 扩容后大小：是扩容前的2倍？

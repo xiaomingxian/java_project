@@ -7,6 +7,7 @@ sychronized(this) 锁定的是当前对象，而不是代码块  如果有另一
 脏读               读到在写还没有完成的数据   读未加锁 而写加锁但未完成
 sychronized 锁可重入  同一类中 或者 子类同步方法调用父类的同步方法
 锁遇到异常会被释放   其他线程得到的是执行到一半的代码
+sychronized  锁的信息记录在引用指向的地址上 而不是引用上
 ---------------------------  volatile
 Java 中的线程通信  使用共享内存
 所有线程共享主内存
@@ -20,3 +21,31 @@ sychronized 与 volatile：
     vo..只保证了可见性，不能保证多个线程修改vo..修饰的变量 所带来的不一致问题，效率高
 
 简单的数字运算：Atomic... 原子性操作
+    两个原子性操作还会存在原子性问题--发生在两个原子性之间
+     if (cou.get()<100)
+                    cou.incrementAndGet();
+     不符合原子性的结果eg:      --->变量最终值：1001
+     atomic是否保证可见性：是 已验证
+----------------------------------wait() notify() sleep()
+只有wait() 会释放锁
+----------------------------------门闩 不会锁定任何对象 效率最高
+
+题：往一个容器中添加元素，当元素数量等于5时进行提示    多线程实现，添加与获取数量放在两个线程上
+实现：T10readCount
+    volatile
+    wait notify  必须在锁内使用 锁.wait()  锁.notify()
+    门闩    CountDownLatch c = new CountDownLatch(1);//参数为闩数量
+----------------------------  手工锁
+    ReentrantLock lock = new ReentrantLock();
+    1.模拟sychrnized
+    2.尝试连接
+    3.公平锁
+         //公平锁--谁等的时间长就谁优先得到锁
+         ReentrantLock lock = new ReentrantLock(true);
+
+----------------------  生产者消费者  T11_ProducAndCou
+----------------------  ThreadLocal
+
+
+
+
