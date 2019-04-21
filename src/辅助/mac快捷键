@@ -27,3 +27,7 @@ get/set/toString...   control enter
 删除行    command delete
 整行移动  shift+command 上下
 格式化  可整理jar包
+
+--------------------------- 命令
+lsof -i tcp:6379 查看进程
+kill pid         杀进程

@@ -46,6 +46,51 @@ sychronized 与 volatile：
 ----------------------  生产者消费者  T11_ProducAndCou
 ----------------------  ThreadLocal
 
+=====================================================  JUC =============================================
+单例模式四种方式
+线程安全：容器是安全了或者不安全类都存在的问题  vector每个方法都加了锁
+        判断与读写分离存在线程安全问题  在判断与操作之间  会存在线程抢资源   解决方案：判读与操作放在同步代码块中[加锁]
+
+------------------------ map/set -------------------------
+map与set原理一样不过是 map是kv set是k
+
+无并发场景：hashmap  hashset
+并发较低：  Collections.sychronizedXXX()  hashtable
+并发较高：  concurrentHashMap  ConcurrentSet
+并发高且排序： ConcurrentSkipListMap  ConcurrentSkipListSet
+写时复制：Copy-On-Write 读可能不会立即读到最新的数据-->最终一致性。:https://www.cnblogs.com/hapjin/p/4840107.html
+
+
+
+//创建同步集合的一种方式---并发低的时候使用
+Collection<Object> objects = Collections.synchronizedCollection(new ArrayList<>());
+
+//hashmap hashtable concurrenthashmap区别
+//hashmap[key,value可以为null] hashtable[操作时需要锁定整个对象，key,value不能为null，为了线程安全？]
+//concurrenthashmap[分段锁默认16，segement在实现上继承了ReetrantLock,操作时只需锁定某一段，有些方法需要跨段，比如size()和containsValue()，它们可能需要锁定整个表而而不仅仅是某个段，这需要按顺序锁定所有段，操作完毕后，又按顺序释放所有段的锁]
+//1.7与1.8的区别
+https://blog.csdn.net/hellodake/article/details/82386027
+https://www.cnblogs.com/heyonggang/p/9112731.html
+ConcurrentSkipListMap   高并发环境下并且需要排序 不安全的map对应treemap
+
+------------------------ queue java.util.queue ---------------------
+1.并发的加锁的
+    concurrentLinkedQueue[无界队列，直到内存消耗完]  offer加数据，有返回值判断是否添加成功  size poll获取值并取出  peak只获取值
+    ConcurrentLinkedDeque[双向]
+    concurrentArrayQueue   有大小限制
+2.阻塞式 blockqueue
+    LinkedBlockingQueue[无界队列,直到内存消耗完]
+        put 如果容器满了，就会等待
+        take 如果容器空了，就会等待
+    ArrayBlockingQueue[有界]
+        put 无限阻塞
+        add 容器满了再添加会报错
+        offer 容器满了会返回boolean是否添加成功，还有一个重载方法，设置延时
+    DelayQueue：是一个无界的BlockingQueue，用于放置实现了Delayed接口的对象，其中的对象只能在其到期时才能从队列中取走。
+        这种队列是有序的，即队头对象的延迟到期时间最长。注意：不能将null元素放置到这种队列中。
+    CopyOnWriteArrayList 写少读多
+    LinkedTransferQueue 的特殊方法 transfer 如果有消费者将信息直接交给消费者，如果没有就阻塞
+    SynchronousQueue 容量为0 特殊的LinkedTransferQueue    得有消费者 put 将信息交给消费者  调用add refers 报错
 
 
 
