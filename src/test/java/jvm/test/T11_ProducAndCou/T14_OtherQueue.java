@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class T14_OtherQueue {
     /**
      *  未验证
+     *  取出顺序根据Compareto决定
      */
 
     static DelayQueue queue = new DelayQueue();

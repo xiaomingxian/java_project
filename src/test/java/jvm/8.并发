@@ -88,9 +88,36 @@ ConcurrentSkipListMap   高并发环境下并且需要排序 不安全的map对�
         offer 容器满了会返回boolean是否添加成功，还有一个重载方法，设置延时
     DelayQueue：是一个无界的BlockingQueue，用于放置实现了Delayed接口的对象，其中的对象只能在其到期时才能从队列中取走。
         这种队列是有序的，即队头对象的延迟到期时间最长。注意：不能将null元素放置到这种队列中。
-    CopyOnWriteArrayList 写少读多
+    CopyOnWriteArrayList 写少读多  读不需加锁无变化
     LinkedTransferQueue 的特殊方法 transfer 如果有消费者将信息直接交给消费者，如果没有就阻塞
     SynchronousQueue 容量为0 特殊的LinkedTransferQueue    得有消费者 put 将信息交给消费者  调用add refers 报错
+         /**
+             * 先启动消费者--生产数据时如果有消费者就直接将数据给消费者
+             * 如果先启动生产者 但是没有消费者 transfer 就会阻塞
+             * add put transfer正常
+             */
+======================================================================================================
+================================   线程池对以上的封装     ===============================================
+================================    T13_ThreadPool     ===============================================
+Executor
+    顶层接口
+ExcutorService「跑在后台等着执行任务」
+    public interface ExecutorService extends Executor {
+        ...
+        submit(Runable r)
+        submit(Callable r)
+
+    }
+
+Callable  有返回值，可抛异常[区别于Runable]
+Executor[Executor的工具类，全是静态方法]
+
+
+线程池维护着两个队列：未使用的线程，已结束的线程
+    要从线程池中拿线程，如果线程池中都在被使用，那么会阻塞在 线程池维护的一个BlockQueue中
+
+FutureTask<Integer> task = new FutureTask<>(new Callable<Integer>() {
+    task.get()//阻塞等结果
 
 
 

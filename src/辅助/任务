@@ -18,7 +18,6 @@ springmvc原理
 
 springboot原理
 
-
 git tag       ok
 
 Mogodb        little
@@ -27,5 +26,8 @@ session共享  单点登录CAS
 
 redis锁
 
-
 mysql锁
+
+并发编程        70%
+
+
