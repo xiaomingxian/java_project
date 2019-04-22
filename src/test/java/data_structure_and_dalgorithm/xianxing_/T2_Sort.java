@@ -60,7 +60,6 @@ public class T2_Sort {
         int kuai = kuai(array, 0, array.length, 0);
         System.out.println(kuai);
         System.out.println(Arrays.toString(array));
-
     }
 
     /**
@@ -82,11 +81,9 @@ public class T2_Sort {
                     before++;
                     count++;
                 }
-
                 while (before < after && array[after] > base) {
                     after--;
                     count++;
-
                 }
                 //    前面两个while跳出说明左边的数字比基数大，右边的数字比基数小
                 if (before < after) {
@@ -101,7 +98,6 @@ public class T2_Sort {
             kuai(array, start, before, count);
             kuai(array, before + 1, end, count);
             count++;
-
         }
         return count;
 

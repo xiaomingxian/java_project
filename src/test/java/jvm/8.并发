@@ -119,5 +119,31 @@ Executor[Executor的工具类，全是静态方法]
 FutureTask<Integer> task = new FutureTask<>(new Callable<Integer>() {
     task.get()//阻塞等结果
 
+=================================== 线程池的6种  容器全是BlockQueue
+demo:多线程并行计算[线程池]
+//四种线程池+2 总共6种
+https://www.cnblogs.com/zhujiabin/p/5404771.html
+    ...
+    newScheduledThreadPool线程可复用[容器DelayQueue] 与 Timer不一样它是每次都是一个新线程
+    newWorkStealingPool     场景：任务分配的不均匀  底层是：ForkJoinPool
+    ForkJoinPool            分而治之
 
+ThreadPoolExecutor大多数线程池背后都是这个类 [获取实例]  ForkJoinPool除外[它直接继承了 AbstractExecutorService]
+    eg:
+    public static ExecutorService newCachedThreadPool() {
+            return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                          60L, TimeUnit.SECONDS,
+                                          new SynchronousQueue<Runnable>());
+        }
+    自定义线程：
+                            起始线程   最大线程       存活时间   单位             容器BlockQueue[具体类]
+        new ThreadPoolExecutor(0, Integer.MAX_VALUE,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>());
+
+
+======================================= jdk8 stream
+stream
+ParallelStream 多线程流
+
+
+netty 在nio的基础上进行封装
 
