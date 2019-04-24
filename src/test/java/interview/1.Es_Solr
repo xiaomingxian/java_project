@@ -1,0 +1,8 @@
+都是高性能的搜索服务器[原因：都是基于分词技术的倒排索引进行查询]
+区别：
+    1.实时建立索引的时候,solr会产生io阻塞,而es不会，es查询性能高于solr
+    2.动态添加索引的时候，solr的效率会变得低下，而es不会
+    3.solr借助zookeeper进行分布式管理，es自身带有分布式系统管理功能
+        solr本质上是个动态web项目，solr一般部署在web服务器上[eg:tomcat 启动tomcat需要配置tomcat与solr的关联]
+    4.solr支持更多的数据结构[xml.json,cvs等]，es仅支持json
+    5.solr传统项目,es新兴实时搜索[对已有数据查询使用solr效率更高，]

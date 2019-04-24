@@ -68,6 +68,7 @@ Collection<Object> objects = Collections.synchronizedCollection(new ArrayList<>(
 //hashmap hashtable concurrenthashmap区别
 //hashmap[key,value可以为null] hashtable[操作时需要锁定整个对象，key,value不能为null，为了线程安全？]
 //concurrenthashmap[分段锁默认16，segement在实现上继承了ReetrantLock,操作时只需锁定某一段，有些方法需要跨段，比如size()和containsValue()，它们可能需要锁定整个表而而不仅仅是某个段，这需要按顺序锁定所有段，操作完毕后，又按顺序释放所有段的锁]
+                        1.8后采用cas无锁算法
 //1.7与1.8的区别
 https://blog.csdn.net/hellodake/article/details/82386027
 https://www.cnblogs.com/heyonggang/p/9112731.html

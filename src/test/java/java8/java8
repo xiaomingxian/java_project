@@ -1,0 +1,6 @@
+hashmap底层的加入红黑树，concurrenthashmap将原来的锁分段变为cas无锁技术
+lambda：java8/test/T1_Lambda
+lambda需要函数式接口的支持：接口中只有一个抽象方法 -->注解：@FunctionalInterface
+java内置4大核心函数式接口：java8/test/T2_FourInterface
+    还有更细节的子接口
+
