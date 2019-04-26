@@ -13,6 +13,13 @@ import java.util.function.Supplier;
 public class T2_FourInterface {
 
     /**
+     * 四大核心函数式接口
+     */
+
+
+
+
+    /**
      * consumer
      * 生产类型--有去无回
      */
