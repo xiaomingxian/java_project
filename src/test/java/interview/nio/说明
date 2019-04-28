@@ -11,4 +11,5 @@ NIO:
 
 Charset编码解码
 
+FileIO  不能切换非阻塞IO   非阻塞针对于网络IO
 网络通信[非阻塞，传统io为阻塞]
