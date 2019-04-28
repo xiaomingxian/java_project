@@ -6,10 +6,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
 
 public class T2_Channel {
     /**
@@ -135,6 +142,40 @@ public class T2_Channel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Charset编码解码
+     */
+    @Test
+    public void bianmajiema() throws Exception {
+        SortedMap<String, Charset> cs = Charset.availableCharsets();
+        Set<Map.Entry<String, Charset>> entries = cs.entrySet();
+        for (Map.Entry<String, Charset> m : entries) {
+            //System.out.println(m.getKey()+"---"+m.getValue());
+        }
+
+        String s = "阿电磁辐射的城市";
+        Charset gbk = Charset.forName("GBK");
+        //    获取编码器
+        CharsetEncoder en = gbk.newEncoder();
+        //    获取解码器
+        CharsetDecoder de = gbk.newDecoder();
+
+
+        //
+        CharBuffer charBuffer = CharBuffer.allocate(1024);
+        charBuffer.put(s);
+        // 得读取后进行编码
+        charBuffer.flip();
+        ByteBuffer encode = en.encode(charBuffer);
+        System.out.println(encode);
+        //    解码
+        charBuffer.flip();
+        CharBuffer decode = de.decode(encode);
+        System.out.println(decode.toString());
+
 
     }
+
 }
