@@ -34,3 +34,10 @@ drwxr-xr-x. 2 ftp root 4096 Mar  2 03:47 /var/ftp/my_pub/
 ********************** 用户相关 ******************
 /etc/group文件包含所有组
 /etc/shadow和/etc/passwd系统存在的所有用户名
+
+********************** tomcat相关 ******************
+1、先切换到：cd usr/local/tomcat5/logs
+
+2、tail -f catalina.out
+
+3、这样运行时就可以实时查看运行日志了

@@ -1,10 +1,8 @@
 package jvm.test;
 
 import jvm.pojo.JconsolePojo;
-import sun.jvm.hotspot.tools.ObjectHistogram;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
 
 public class T1_JconsoleTest {
     //  增大对象所占内存到128k  public防止垃圾回收器回收？why   理论上堆内存一直上升

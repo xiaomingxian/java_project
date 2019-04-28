@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.transaction.BeforeTransaction;
 
 /**
- * author:仙晓明
+ * author:
  */
 @Aspect
 @Component("LogAdvice")

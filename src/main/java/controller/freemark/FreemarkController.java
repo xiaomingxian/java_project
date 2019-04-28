@@ -14,7 +14,6 @@ public class FreemarkController {
     public ModelAndView getPage() {
         ModelAndView mv = new ModelAndView("getPage");
         return mv;
-
     }
 
 }

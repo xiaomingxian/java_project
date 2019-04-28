@@ -1,0 +1,9 @@
+可视化界面：http://localhost:8161/admin/
+linux 下启动： ./activemq status
+
+JMS消息格式
+    MapMessage -- key-value键值对
+    TextMessage -- 字符串对象
+    ObjcetMessage -- 一个序列化的Java对象
+    ByteMessage -- 一个未解释字节的数据流
+    StreamMessage -- Java原始值的数据流
