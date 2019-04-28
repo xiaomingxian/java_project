@@ -20,16 +20,18 @@ public class JmsController {
     @Resource(name = "jmsTopicTemplate")
     private JmsTemplate jmsTopicTemplate;
 
+    //线程池
+    private ExecutorService pool = Executors.newFixedThreadPool(10);
 
     @GetMapping("queueProduce")
     public String queueProduce() {
-        ExecutorService pool = Executors.newFixedThreadPool(10);
+
         for (int i = 0; i < 20; i++) {
             pool.submit(() -> {
                 HashMap<String, String> map = new HashMap<>();
                 String name = Thread.currentThread().getName();
                 map.put(name, "queue:" + name);
-                jmsQueueTemplate.convertAndSend("test.queue", map);
+                jmsQueueTemplate.convertAndSend("test.queue", map.toString());
             });
         }
         return "queue msg create success";
@@ -37,13 +39,12 @@ public class JmsController {
 
     @GetMapping("topicProduce")
     public String topicProduce() {
-        ExecutorService pool = Executors.newFixedThreadPool(10);
         for (int i = 0; i < 20; i++) {
             pool.submit(() -> {
                 HashMap<String, String> map = new HashMap<>();
                 String name = Thread.currentThread().getName();
                 map.put(name, "queue:" + name);
-                jmsQueueTemplate.convertAndSend("test.topic", map);
+                jmsQueueTemplate.convertAndSend("test.topic", map.toString());
             });
         }
         return "topic msg create success";

@@ -33,24 +33,42 @@
         <property name="sessionCacheSize" value="100"/>
     </bean>
 
-    <!-- Spring JmsTemplate 的消息生产者 start -->
-    <!-- 定义JmsTemplate的Queue类型 -->
+
+    <!--........................................................ Spring JmsTemplate 的消息生产者 start  .................................-->
+    <!-- 定义消息队列（Queue） -->
+    <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <!-- 设置消息队列的名字 -->
+        <constructor-arg>
+            <value>test.queue</value>
+        </constructor-arg>
+    </bean>
     <bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
         <!-- 这个connectionFactory对应的是我们定义的Spring提供的那个ConnectionFactory对象 -->
         <constructor-arg ref="connectionFactory"/>
-        <!-- 非pub/sub模型（发布/订阅），即队列模式 -->
+        <property name="defaultDestination" ref="queueDestination"/>
+        <property name="receiveTimeout" value="10000"/>
+        <!-- true是topic，false是queue，默认是false，此处显示写出false -->        <!-- 非pub/sub模型（发布/订阅），即队列模式 -->
         <property name="pubSubDomain" value="false"/>
     </bean>
 
     <!-- 定义JmsTemplate的Topic类型 -->
+    <!-- 定义消息队列（topic） -->
+    <bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <!-- 设置消息队列的名字 -->
+        <constructor-arg>
+            <value>test.topic</value>
+        </constructor-arg>
+    </bean>
     <bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
         <!-- 这个connectionFactory对应的是我们定义的Spring提供的那个ConnectionFactory对象 -->
         <constructor-arg ref="connectionFactory"/>
         <!-- pub/sub模型（发布/订阅） -->
         <property name="pubSubDomain" value="true"/>
+        <property name="receiveTimeout" value="10000"/>
+        <property name="defaultDestination" ref="topicDestination"/>
     </bean>
 
-    <!-- 监听器 start -->
+    <!-- ..................................................................监听器[消费者] start .......................................................... -->
     <!--Spring JmsTemplate 的消息生产者 end-->
     <!-- 消息消费者 start-->
     <!-- 定义Queue监听器 -->
@@ -74,6 +92,5 @@
     </jms:listener-container>
 
     <!-- 监听器 end -->
-
 
 </beans>
