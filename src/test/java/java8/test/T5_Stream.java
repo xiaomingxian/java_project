@@ -4,9 +4,8 @@ import org.junit.Test;
 import pojo.Person;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class T5_Stream {
@@ -16,8 +15,9 @@ public class T5_Stream {
     static {
         list = Arrays.asList(
                 new Person("tom", "1"),
-                new Person("jerry", "1"),
+                new Person("jerry", "0"),
                 new Person("cindy", "0"),
+                new Person("alice", "0"),
                 new Person("alice", "0"),
                 new Person("alice", "0"),
                 new Person("alice", "0")
@@ -96,5 +96,137 @@ public class T5_Stream {
             list.add(c);
         }
         return list.stream();
+    }
+
+    /**
+     * 排序
+     */
+    @Test
+    public void muSort() {
+        list.stream().sorted(
+                (x, y) -> {
+                    return x.getName().compareTo(y.getName());
+                }
+        ).forEach(System.out::println);
+    }
+
+    /**
+     * 查找与匹配
+     */
+    @Test
+    public void findAndMatch() {
+        //匹配所有
+        boolean b = list.stream().allMatch((x) -> x.getSex().equals("1"));
+        System.out.println(b);
+        //匹配一个至少
+        boolean b1 = list.stream().anyMatch((x) -> x.getSex().equals("1"));
+        System.out.println(b1);
+        //没有匹配元素
+        boolean b2 = list.stream().noneMatch((x) -> x.equals("2"));
+        System.out.println(b2);
+
+        System.out.println("------------------------------");
+        //    查找
+        Optional<Person> first = list.stream().filter((x) -> x.getSex().equals("3")).findFirst();
+        //System.out.println(first.get());
+        first.orElse(new Person("unknow", "3"));//空值替代--未验证成功
+
+        //    随便找一个    parallelStream并行查找
+        Optional<Person> any = list.parallelStream().findAny();
+        System.out.println(any.get());
+
+        //    返回总个数
+        long count = list.parallelStream().count();
+        System.out.println(count);
+
+
+        //    最大值
+        Optional<Person> max = list.stream().max((x, y) -> {
+            return -x.getName().compareTo(y.getName());
+        });
+
+        //提取出某一个字段
+        Optional<String> max1 = list.stream().map(Person::getName).max(String::compareTo);
+        System.out.println(max1.get());
+
+        System.out.println(max.get());
+        //    最小值
+        Optional<Person> min = list.stream().min((x, y) -> {
+            return -x.getName().compareTo(y.getName());
+        });
+        System.out.println(min.get());
+
+    }
+
+    /**
+     * 规约
+     * 可以将流中的元素反复结合起来，得到一个新值
+     */
+    @Test
+    public void guiY() {
+        List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+
+        Integer reduce = list1.stream().reduce(2, (x, y) -> x + y);//起始值  (起始之，集合中的值)->运算方式--->运算出的值再次作为起始值
+        System.out.println(reduce);
+
+        Optional<String> reduce1 = list.stream().map(Person::getName).reduce(String::join);
+        System.out.println(reduce1.get());
+    }
+
+    /**
+     * 收集：提取某个字段放到容器中
+     */
+    @Test
+    public void coll() {
+        //Collectors是一个工具类
+        List<String> l = list.stream().map(Person::getName).collect(Collectors.toList());
+        System.out.println(l);
+        //l.forEach(System.out::println);
+
+        //收集到set去重
+        Set<String> collect = list.stream().map(Person::getName).collect(Collectors.toSet());
+        System.out.println(collect);
+        //其他容器
+        Set<String> other = list.stream().map(Person::getName).collect(Collectors.toCollection(HashSet::new));
+        System.out.println(other);
+
+        //    其他api
+        List<Integer> in = Arrays.asList(1, 2, 3, 4, 5, 6);
+        Long collect1 = in.stream().collect(Collectors.counting());
+        System.out.println("总数：" + collect1);
+
+        Double collect2 = in.stream().collect(Collectors.averagingDouble(Integer::intValue));
+        System.out.println("平均值：" + collect2);
+
+        Long collect3 = in.stream().collect(Collectors.summingLong(Integer::intValue));
+        System.out.println("求和：" + collect3);
+        //分组
+        Map<String, List<Person>> collect4 = list.stream().collect(Collectors.groupingBy(Person::getSex));
+        System.out.println(collect4);
+
+        //多条件分组
+        Map<String, Map<String, List<Person>>> collect5 = list.stream().collect(Collectors.groupingBy(Person::getSex, Collectors.groupingBy(Person::getName)));
+        System.out.println(collect5);
+
+        //分区
+        Map<Boolean, List<Integer>> collect6 = in.stream().collect(Collectors.partitioningBy((x) -> x > 3));
+        System.out.println("分区：" + collect6);
+
+        Map<Boolean, List<Person>> collect7 = list.stream().collect(Collectors.partitioningBy((x) -> x.getSex().equals(0)));
+        System.out.println("对象分区：" + collect7);
+
+        //数值计算综合
+        DoubleSummaryStatistics collect8 = in.stream().collect(Collectors.summarizingDouble(Integer::intValue));
+        System.out.println("---------综合数值计算----------");
+        System.out.println(collect8.getMax());
+        System.out.println(collect8.getAverage());
+        System.out.println(collect8.getCount());
+
+        //字符串拼接
+        List<String> ss = Arrays.asList("s", "c", "x");
+        String collect9 = ss.stream().collect(Collectors.joining(",", "-", "="));//分隔符，前缀，后缀
+        System.out.println(collect9);
+
+
     }
 }

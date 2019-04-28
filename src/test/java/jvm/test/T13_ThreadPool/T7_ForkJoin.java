@@ -18,7 +18,7 @@ public class T7_ForkJoin {
 
     }
 
-    static class MyTask extends RecursiveAction {
+    static class MyTask extends RecursiveAction {//        RecursiveTask---有返回值
         int i = 100;
 
         public MyTask() {
@@ -40,6 +40,7 @@ public class T7_ForkJoin {
                 MyTask myTask = new MyTask(i);//也是递归
                 //子任务---开辟了新线程
                 myTask.fork();
+
             }
 
 
