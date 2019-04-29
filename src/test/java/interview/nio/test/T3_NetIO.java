@@ -28,13 +28,31 @@ public class T3_NetIO {
             //清空缓存
             buffer.clear();
         }
-        //    关闭通道
+        //此处阻塞------传统解决阻塞的方式 shutdownOutput 告诉服务端 输出完了
+        //也可以使用非阻塞
         fileChannel.close();
+        socketChannel.shutdownOutput();
+
+        //接受服务端响应
+        int len = 0;
+        while ((len = socketChannel.read(buffer)) != -1) {
+            buffer.flip();
+            //System.out.println(new String(buffer.array(), 0, len));
+            System.out.println(new String(buffer.array(), 0, buffer.limit()));
+            buffer.clear();
+        }
+
+        //    关闭通道
         socketChannel.close();
 
 
     }
 
+    /**
+     * 服务端
+     *
+     * @throws Exception
+     */
     @Test
     public void server() throws Exception {
         //服务端socket通道
@@ -46,11 +64,17 @@ public class T3_NetIO {
         SocketChannel accept = open.accept();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         while (accept.read(buffer) != -1) {
-        //切换为读取模式
+            //切换为读取模式
             buffer.flip();
             open1.write(buffer);
             buffer.clear();
         }
+        //响应客户端
+        buffer.put("--->服务端数据接受成功".getBytes());
+        buffer.flip();
+        accept.write(buffer);
+
+
         open1.close();
         open.close();
     }
