@@ -1,0 +1,5 @@
+linux 安装  https://www.cnblogs.com/lizichao1991/p/7809156.html
+后台启动：
+    ./elasticsearch -d
+
+

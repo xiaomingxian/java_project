@@ -2,13 +2,15 @@ pageHaple   ok
 
 shiro授权    ok
 
-activiti    ok
+activiti    ok 常规功能
 
 rpc案例
 
-微服务案例   ok
+微服务案例   ok 仅仅案例
+微服务原理   未开始
 
-ftp案例
+
+ftp案例     使用 ok  权限搭建未完成
 
 ftps案例
 
@@ -28,6 +30,8 @@ redis锁
 
 mysql锁
 
-并发编程        70%
+并发编程       ok
+
+activemq      ok
 
 

@@ -1,11 +1,29 @@
 
 下载工具  wget,yum
+    wget默认安装在当前目录下
+        反爬虫造成 正在连接 download.redis.io|109.74.203.151|:80... 失败：拒绝连接。
+        解决 -e robots=off 就可以了
     yum:
         通过yum默认安装的路径为
         （注：cd /usr/lib/jvm）
         查找jdk版本：yum search jdk  / yum -y list java*
 上传工具：
         yum install lrzsz
+************************************** 通用  ***************************************************
+<1>.查看进程
+    ps -aux | grep tomcat
+    或者 ps -aux | grep pid
+
+
+<2>.kill 命令用于终止进程
+    例如： kill -9 [PID]
+    -9 表示强迫进程立即停止
+    通常用 ps 查看进程 PID ，用 kill 命令终止进程
+
+
+文件夹复制 -r
+    cp service/ /root/dev/es/elasticsearch-7.0.0/bin/service -r
+
 ---------------------------
 
 linux联网问题： NAT模式， vi /etc/sysconfig/network-scripts/ifconfig-eth0 ==>ONBOOT=yes

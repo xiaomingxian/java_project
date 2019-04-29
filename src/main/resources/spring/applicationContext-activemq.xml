@@ -90,7 +90,6 @@
         <jms:listener destination="test.topic" ref="topicReceiver1"/>
         <jms:listener destination="test.topic" ref="topicReceiver2"/>
     </jms:listener-container>
-
     <!-- 监听器 end -->
 
 </beans>
