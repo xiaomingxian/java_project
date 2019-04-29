@@ -44,3 +44,6 @@ drwxr-xr-x. 2 ftp root 4096 Mar  2 03:47 /var/ftp/my_pub/
 
 ********************** tomcat相关 ******************
 vim 字符串匹配：？xxx  或者 /xxx
+
+动态查看日志
+tail -f 日志文件

@@ -73,7 +73,7 @@
     <!-- 消息消费者 start-->
     <!-- 定义Queue监听器 -->
     <bean id="queueReceiver1" class="controller.activemq.listener.QueueListener"/>
-    <bean id="queueReceiver2" class="controller.activemq.listener.QueueListener"/>
+    <bean id="queueReceiver2" class="controller.activemq.listener.QueueListener2"/>
     <jms:listener-container destination-type="queue" container-type="default" connection-factory="connectionFactory"
                             acknowledge="auto">
         <jms:listener destination="test.queue" ref="queueReceiver1"/>

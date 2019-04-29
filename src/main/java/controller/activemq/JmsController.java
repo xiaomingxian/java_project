@@ -44,7 +44,7 @@ public class JmsController {
                 HashMap<String, String> map = new HashMap<>();
                 String name = Thread.currentThread().getName();
                 map.put(name, "queue:" + name);
-                jmsQueueTemplate.convertAndSend("test.topic", map.toString());
+                jmsTopicTemplate.convertAndSend("test.topic", map.toString());
             });
         }
         return "topic msg create success";
