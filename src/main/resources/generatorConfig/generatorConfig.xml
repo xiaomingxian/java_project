@@ -56,7 +56,7 @@
 
         <!--.............mac.............-->
         <!-- targetProject:生成model类的位置，重要！！ -->
-        <javaModelGenerator targetPackage="pojo.activiti" targetProject="./src/main/java">
+        <javaModelGenerator targetPackage="pojo" targetProject="./src/main/java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
             <!-- 从数据库返回的值被清理前后的空格 -->
@@ -64,14 +64,14 @@
         </javaModelGenerator>
 
         <!-- targetProject:mapper映射xml文件生成的位置，重要！！ -->
-        <sqlMapGenerator targetPackage="main.resources.db_mapper.activiti"
+        <sqlMapGenerator targetPackage="main.resources.db_mapper"
                          targetProject="./src">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- targetPackage：mapper接口生成的位置，重要！！ -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="dao.activiti"
+                             targetPackage="dao"
                              targetProject="./src/main/java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
@@ -79,7 +79,7 @@
 
 
         <!-- 指定数据库表，要生成哪些表，就写哪些表，要和数据库中对应，不能写错！ -->
-        <table tableName="..."></table>
+        <table tableName="user"></table>
         <!--<table tableName="act_ru_task"></table>-->
         <!--<table tableName="total_send_count"></table>-->
         <!-- 有些表的字段需要指定java类型 <table schema="" tableName=""> <columnOverride column=""
