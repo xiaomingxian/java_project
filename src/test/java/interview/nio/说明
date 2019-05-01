@@ -1,3 +1,4 @@
+
 传统IO:
     传输数据直接面向流[管道中直接是流]
     管道为单向[输入,输出]
@@ -13,3 +14,32 @@ Charset编码解码
 
 FileIO  不能切换非阻塞IO   非阻塞针对于网络IO
 网络通信[非阻塞，传统io为阻塞]
+
+------- 马士兵
+一般都要对io做优化 ：
+    cpu速度是磁盘io的一千万倍  是网络io的成千万倍~
+BIO Blocking io    阻塞：eg:accept(),read()[只连上但是没有写数据],write()[写了但是没人接]
+NIO
+    单线程NIO模型
+        服务端，建立通道，设置为非阻塞，将其注册到selector并设置监听accept
+        selector轮训去查看客户端与服务端的状态
+        找到连接就绪的客户端请求--为其与服务端建立通道[非阻塞]，并将此通道注册到选择器，设置读事件
+        。。。
+        //selector.select();//马士兵写法--手动轮训？？此操作为阻塞操作
+        iterator.remove();//不remove下次轮训过来还会对此时间处理一次
+        if (next.isAcceptable()) //判断事件类型
+        SocketChannel accept = serverSocketChannel.accept();//为此事件建立一个通道
+        accept.configureBlocking(false);//切换阻塞状态
+        存在的问题：
+            selector  所处理的通道上 的读写发生阻塞 selector也停滞了 不会处理其他请求[也阻塞了]
+
+    多线程模型
+        解决了单线程存在的问题
+
+AIO 1.7
+
+
+linux上AIO与NIO 都是用epoll实现的没有区别[事件监听]  windows上有对AIO的封装
+
+-------------------------- netty-----------------------
+对BIO与NIO进行封装

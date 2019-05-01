@@ -11,6 +11,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class T3_NetIO {
+    /**
+     * BIO
+     *
+     * @throws Exception
+     */
     @Test
     public void client() throws Exception {
         //获取socket通道
@@ -50,6 +55,7 @@ public class T3_NetIO {
 
     /**
      * 服务端
+     * 马士兵写法：客户端联通服务端后[accept] 开启新线程处理数据[避免阻塞]
      *
      * @throws Exception
      */

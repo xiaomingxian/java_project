@@ -22,7 +22,7 @@ public class T4_NetNio {
     @Test
     public void client() throws Exception {
         //1.创建socket通道
-        SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress("localhost", 8888));
+        SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress("localhost", 9999));
 
 
         //   2.将通道切换到非阻塞模式
@@ -63,6 +63,7 @@ public class T4_NetNio {
         //SelectionKey.OP_WRITE
         //    6.轮训获取选择器上已准备就绪的时间
         while (selector.select() > 0) {
+            //selector.select();//马士兵写法--手动轮训？？此操作为阻塞操作
             Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
             while (iterator.hasNext()) {
                 //7.获取就绪的事件
@@ -70,7 +71,7 @@ public class T4_NetNio {
                 //8.判断什么就绪，此处是准备就绪
                 if (next.isAcceptable()) {
                     //接受数据
-                    SocketChannel accept = serverSocketChannel.accept();
+                    SocketChannel accept = serverSocketChannel.accept();//为此事件建立一个通道
                     accept.configureBlocking(false);//切换阻塞状态
                     //    将通道注册到选择器上
                     accept.register(selector, SelectionKey.OP_READ);
@@ -87,10 +88,9 @@ public class T4_NetNio {
                         buffer.clear();
                     }
 
-
                 }
                 //取消选择键
-                iterator.remove();
+                iterator.remove();//不remove下次轮训过来还会对此时间处理一次
             }
 
         }
