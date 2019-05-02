@@ -1,0 +1,42 @@
+IOC
+DI 依赖注入：
+    对IOC初始化的bean进行属性初始化，
+    setter 构造方法注入
+    还有一种方式是实现特定接口注入。由于这种方式采用侵入式编程，污染代码，所以已经不用了。
+
+
+注册组件：
+    @Bean
+    @ComponetScan
+    @Conditional
+    @Import  普通类.class/ImportSelector/ImportRegister
+    FactroyBean  &+范型中的类==工厂bean
+
+
+Bean的声明周期
+    1.构造：单实例：容器启动时创建  多实例：每次使用时创建
+    2.BeanPostProcessor.postProcessAfterInitialization
+    3.初始化
+    4.BeanPostProcessor.postProcessBeforeInitialization
+    5.销毁：单实例[容器关闭时]，多实例[不归容器管]
+
+
+BeanPostProcessor工作原理-->见：2.BeanPostProcessor原理
+BeanPostProcessor应用 想各个实现了Aware接口的类中注入Ioc容器
+    过程 :
+        在类初始化前       「 BeanPostProcessor.postProcessAfterInitialization 」
+        判断有没有实现Aware接口如果实现了就将 Ioc容器通过实现了的方法穿过去
+
+Aware接口：实现了此接口的一些类能够感知到自己的一些信息(自身的属性)[在IOC容器中？？是否是单例，系统信息...]
+
+
+@Qualifier 指定ID
+@Resource 默认按照名称进行装配[可以指定name/type] 不支持@Primary，required=false
+@AutoWried 位置 成员变量 setter 构造方法 都是从IOC容器中获取  如果只有一个构造方法[参数为需要注入的对象]可以省略注解
+@Bean标注的方法创建对象的时候可以将 对象中的bean属性作为参数写在参数列表位置 bean从容器中获取
+
+
+XXXAware 实现此类接口可以将spring底层的接口注入到类中  功能都是通过后置处理器[xxxBeanProcessor]来实现[发现实现了某个Aware接口，就将需要的组件进行注入]
+
+
+@Profile("xxxx") 环境切换--类上/@Bean

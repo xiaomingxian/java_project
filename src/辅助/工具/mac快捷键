@@ -1,3 +1,5 @@
+#mac
+显示隐藏文件：command shift .
 #------------- 环境变量配置 ------------
 open -e .bash_profile
     eg:

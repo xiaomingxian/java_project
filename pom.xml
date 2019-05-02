@@ -21,7 +21,6 @@
         <log4j.version>1.2.17</log4j.version>
         <lombok.version>1.16.16</lombok.version>
         <activiti.version>5.21.0</activiti.version>
-        <elasticsearch.version>7.0.0</elasticsearch.version>
 
     </properties>
 
@@ -336,24 +335,19 @@
             <artifactId>org.springframework.jms</artifactId>
             <version>3.2.1.RELEASE</version>
         </dependency>
-        <!--es-->
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>${elasticsearch.version}</version>
-        </dependency>
+        1. 导入相关jar包;
+        <!--elasticsearch-->
+        <!--<dependency>-->
+            <!--<groupId>org.elasticsearch</groupId>-->
+            <!--<artifactId>elasticsearch</artifactId>-->
+            <!--<version>7.0.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.data</groupId>≤-->
+            <!--<artifactId>spring-data-elasticsearch</artifactId>-->
+            <!--<version>2.0.4.RELEASE</version>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>transport</artifactId>
-            <version>5.6.10</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>${elasticsearch.version}</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
