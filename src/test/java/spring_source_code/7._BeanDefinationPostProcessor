@@ -1,0 +1,37 @@
+比BeanFactoryPostProcessor先执行
+[源码中写在它的前面--执行完所有的BeanDefinationPostProcessor[按类型找到所有的bean定义后置处理器]才执行bean工厂后置处理器]
+
+
+
+执行流程
+    1 初始ioc
+    2 从容器中找到所有的 BeanDefinationPostProcessor 类型的后置处理器执行 postProcessBeanDefinitionRegistry()
+         再找到所有的 BeanFactoryPostProcessor    类型的后置处理器执行 postProcessBeanFactory()
+    3 从容器中找到所有的 BeanFactoryPostProcessor    类型的后置处理器执行 postProcessBeanFactory()
+
+
+
+
+执行结果
+    =------------------->注册方法执行,bean定义数量：14
+    ======---->自定义注入bean定义信息--2种方式
+    =------------------->beanFactory的后置处理器执行法执行：bean数量：16
+    =------------------->beanFactory的后置处理数量：3
+    --------------->beanFactoryPostProcessor,当前bean个数：16
+    org.springframework.context.annotation.internalConfigurationAnnotationProcessor
+    org.springframework.context.annotation.internalAutowiredAnnotationProcessor
+    org.springframework.context.annotation.internalRequiredAnnotationProcessor
+    org.springframework.context.annotation.internalCommonAnnotationProcessor
+    org.springframework.context.event.internalEventListenerProcessor
+    org.springframework.context.event.internalEventListenerFactory
+    myBeanFactoryPostProcessor
+    cat
+    dog
+    iocContext
+    myBeanDefinationPostProcessor
+    t1PController
+    t1PDao
+    t1PService
+    person--mine
+    user--mine
+    ======================================

@@ -1,0 +1,27 @@
+事件发布流程：
+    1 获取事件多播器[派发器，getApplicationEventMulticaster]
+    2 多播器派发事件
+    3 拿到所有的监听器 遍历进行派发[区分异步与同步][派发：回调onApplicationEvent()]
+
+
+多播器获取：
+    1 创建IOC容器 refresh()
+    2 initApplicationEventMulticaster()  先在IOC容器中找 有没有 id为applicationEventMulticaster的组件，没有就new一个 放入IOC
+
+
+监听器的注入
+    1 创建IOC容器 refresh()
+    2 注册监听器 registerListener()  从容器中拿到所有的监听器类型的bean将其注入带 派发器/多播器中
+
+
+自定义监听器：所有的单实例创建完成后运行
+    实现ApplicationListener接口
+    @EventListener(classes = {ApplicationEvent.class})
+        原理：使用EventListenerMethodProcess来解析方法上的注解
+            public class EventListenerMethodProcessor implements SmartInitializingSingleton, ApplicationContextAware { ...
+                SmartInitializingSingleton 原理 -->afterSingletonsInstantiated
+                    ioc容器创建并 refresh()
+                    finshBeanFactoryInitialization(beanFactory)初始化剩下的bean
+                        先创建所有的单实例bean,getBean()
+                        获取所有创建好的Bean 判断是否实现了 SmartInitializingSingleton 如果是就调用 afterSingletonsInstantiated()
+

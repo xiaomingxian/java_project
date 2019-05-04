@@ -1,0 +1,154 @@
+////////////////////////////////// 总体流程
+1 Spring容器在启动的时候，会先保存所有注册进来的bean的定义信息
+        method1 xml注册bean
+              2 注解注册bean @Service @Compont ...
+2 spring 容器在合适的时机创建这些 bean
+    用到这个Bean的时候，利用getBean创建，之后保存在容器中
+    统一创建所有剩下的单实例bean    --->  this.finishBeanFactoryInitialization(beanFactory);
+3 后置处理器 BeanPostProcessor
+    1 每一个Bean创建完毕，都会使用各种后置处理器进行处理，来增强Bean的功能，
+        eg:AutowiredAnnotationBeanPostProcessor:处理自动注入
+            AnnotationAwareAspectJAutoProxyCreator:来做AOP
+            xxx...
+4 事件驱动模型
+    ApplicationListener 事件监听
+    ApplicationEventMulticaster:事件派发
+
+
+
+
+///////////////////////////////////application.refresh()  分析
+ public void refresh() throws BeansException, IllegalStateException {
+        synchronized(this.startupShutdownMonitor) {
+            //1 刷新时的预处理 [校验属性的合法性,保存容器中的早期事件...]
+            this.prepareRefresh();
+            //2 创建工厂，刷新工厂设置一些默认值
+            ConfigurableListableBeanFactory beanFactory = this.obtainFreshBeanFactory();
+            //3 工厂预处理-注入各种组件-设置哪些组件可见/不可见[能否自动注入]
+            this.prepareBeanFactory(beanFactory);
+
+            try {
+                //4 工厂店后置处理--由子类实现
+                this.postProcessBeanFactory(beanFactory);
+                //5 执行bean工厂的后置处理器 在beanFactory标准化之后执行
+                this.invokeBeanFactoryPostProcessors(beanFactory);
+                //6 注册各种Bean的后置处理器：拦截Bean的创建
+                this.registerBeanPostProcessors(beanFactory);
+                //7 初始化MessageSource组件(做国际化，消息绑定，消息解析)[springmvc中使用]
+                this.initMessageSource();
+                //8 事件派发器 先从容器中找，找不到就创建一个默认的注入容器
+                this.initApplicationEventMulticaster();
+                //9 刷新容器 留给子容器---子类重写此方法-在容器刷新的时候可以自定义一些东西
+                this.onRefresh();
+                //10 注册监听器-----拿到监听器-注册到事件派发器中
+                this.registerListeners();
+                //11 初始化所有剩下的单实例bean---完成初始化
+                this.finishBeanFactoryInitialization(beanFactory);
+                //12 完成BeanFactory的初始化工作，IOC容器就创建完成
+                this.finishRefresh();
+            } catch (BeansException var9) {
+                if (this.logger.isWarnEnabled()) {
+                    this.logger.warn("Exception encountered during context initialization - cancelling refresh attempt: " + var9);
+                }
+
+                this.destroyBeans();
+                this.cancelRefresh(var9);
+                throw var9;
+            } finally {
+                this.resetCommonCaches();
+            }
+
+        }
+    }
+================================================= 分析 ===========================
+
+refresh() [创建于刷新] 线程安全的 里面的方法体加了sychronized
+------------------ beanFactory的创建及与准备工作
+       1 this.prepareRefresh();刷新时的预处理
+               this.initPropertySources();//protected  修饰由子类进行设置  ---子类自定义的个性化属性设置
+               this.getEnvironment().validateRequiredProperties();//校验属性的合法性
+               this.earlyApplicationEvents = new LinkedHashSet();//保存容器中的早期事件
+       2 ConfigurableListableBeanFactory beanFactory = this.obtainFreshBeanFactory();
+               this.refreshBeanFactory();//刷新工厂
+                    创建了一个BeanFactory  this.beanFactory=new DefaultListableBeanFactory() 为其设置序列化id
+               getBeanFactory() //获取beanFactory 里面的属性全是默认值
+       3 this.prepareBeanFactory(beanFactory);//beanFactory的预处理
+                //放入各种东西：
+                        类加载器，表达式解析器，部分后置处理器
+                        设置忽略的接口类型[这些不能自动注入]，
+                        设置可以解析的自动装配，可以在任何组件中自动注入
+                          l可以@AutoWired自动注入：  BeanFactory,ResourceLoader,ApplicationEventPublisher,ApplicationContext
+                        事件的派发器
+                        添加编译时的 AspectJ
+                        给容器注入一些组件：environment,systemProperties,systemEnvironment
+               beanFactory.setBeanClassLoader(this.getClassLoader());
+               beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
+
+               beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, this.getEnvironment()));
+               beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+
+               beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
+               beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
+               beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
+               beanFactory.ignoreDependencyInterface(ApplicationEventPublisherAware.class);
+               beanFactory.ignoreDependencyInterface(MessageSourceAware.class);
+               beanFactory.ignoreDependencyInterface(ApplicationContextAware.class);
+
+               beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
+               beanFactory.registerResolvableDependency(ResourceLoader.class, this);
+               beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);//事件派发器
+               beanFactory.registerResolvableDependency(ApplicationContext.class, this);
+               beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
+               ...
+       4 this.postProcessBeanFactory(beanFactory);
+                //beanFactory 的后置处理器--由子类实现
+
+--------------------- beanFactory 注入各种组件
+        5 invokeBeanFactoryPostProcessor(beanFactory) 核心：执行bean工厂的后置处理器 在beanFactory标准化之后执行
+            两个接口：BeanFactoryPostProcessor,BeanDefinationRegistryPostProcessor
+            1 执行 BeanDefinationRegistryPostProcessor 的方法：找到ioc容器中的 此类型的处理器 遍历执行[优先级，排序，普通]
+            2 执行 BeanFactoryPostProcessor 的方法：找到ioc容器中的 此类型的处理器 遍历执行[优先级，排序，普通]
+
+        6 注册各种Bean的后置处理器：拦截Bean的创建
+        7 this.initMessageSource(); 初始化MessageSource组件(做国际化，消息绑定，消息解析)[springmvc中使用]  先从容器中找如果没有就创建一个默认的 并注册到容器中
+        8 this.initApplicationEventMulticaster(); //事件派发器 先从容器中找，找不到就创建一个默认的注入容器
+        9
+        10
+        11 初始化剩下的单实例bean
+            beanFactory.preInstantiateSingletons() 初始化剩下的单实例
+                1 获取容器中的所有bean依次进行初始化和创建对象
+                2 获取到 BeanDefinatation 定义信息
+                3 判断 非抽象 && 是单实例 && 是懒加载
+                    判断是否是 FactoryBean[创建Bean:factoryBean接口.getObject()] 或者其他 Bean[创建Bean(容器.getBean(xxx)是同一个方法)：getBean(beanName)]
+                        分析:--->getBean(xxx) 内部调用doGetBean(name,null,null,false)
+                            --->先从缓存中获取Bean[能获取到说明创建过] 缓存中拿不到但Bean正在创建中就去工厂中找
+                            --->获取Bean的定义信息--->获取Bean依赖的其他Bean 如果有先将他们创建出来[循环依赖的问题，解决：提前暴露bean]
+                            --->启动单实例bean的创建过程，先执行InstantiationAwareBeanPostProcessor 是否有代理对象 如果返回对象部位null 就出发 初始化实例的后置处理器
+                            --->代理对象为null doCreatBean(beanName,mbToUse,args) 实例化bean
+                            --->populateBean()进行赋值操作
+                            --->bean初始化：    之前 aware接口方法执行，后置处理器执行 执行初始化方法invokeInitMethods(beanNames,wrappedBean,mbd)
+                            --->这个是默认的初始化方法，@Bean(init="xxx")可以指定初始化方法
+                            --->执行后置处理器初始化之后的方法 BeanPostProcessor.postProcessAfterInitialization()
+                            --->注册Bean的销毁方法 [仅仅是注册，在容器关闭的时候调用]
+                 4 将创建好的bean放到缓存里  singletonObjects   线程安全且高效： private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(256);
+
+        12 finshRefresh()   完成BeanFactory的初始化工作，IOC容器就创建完成
+                1 初始化声明周期有关的后置处理器 initLifecyleProcessor()    默认从容器中找lifecyleProcessor 组件，如果没有就new一个加进去  可以自定义LifecyleProcesor实现此接口
+                2 getLifecyleProcessor().onRefresh()  回掉刷新
+                3 发布容器刷新事件 利用派发器派发 publishEvent(new ContentRefreshedEvent(this))//发布容器刷新事件
+                4 liveBeanView.registerApplicationContext(this)
+
+                //----------- 百度的解释 -------
+                // 清除context级资源缓存
+                 clearResourceCaches();
+               // 为这个context初始化生命周期处理器，默认为DefaultLifecycleProcessor
+               initLifecycleProcessor();
+
+               // 刷新LifecycleProcessor，调用所有Lifecycle的start方法
+               getLifecycleProcessor().onRefresh();
+
+               // 发布事件
+               publishEvent(new ContextRefreshedEvent(this));
+
+               // 。。。好像是对JMX支持
+               LiveBeansView.registerApplicationContext(this);

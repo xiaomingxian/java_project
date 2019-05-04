@@ -1,0 +1,32 @@
+*执行时机：
+    bean的定义信息已经被加载，但是实例未创建
+BeanFactoryPostProcessor是BeanFactory的后置处理器
+    在BeanFactory标准初始化之后调用，所有的Bean定义已经保存加载到BeanFactory,但Bean实例还没有创建
+
+*执行过程：
+    1 ioc容器创建对象
+    2 invokeBeanFactoryPostProcessor(beanFactory);执行 postProcessBeanFactory
+        如何找到BeanFactoryPostProcessor [有多个 系统的/优先级排序的，普通排序的，自定义的]    IOC容器根据类型查找
+        在初始化其他组件之前执行工厂实例 后处理器 [源码得(在初始化其他单实例的代码之前)]
+
+
+
+
+
+*自定义BeanfactoryPostProcessor
+    --------------->beanFactoryPostProcessor,当前bean个数：13
+    org.springframework.context.annotation.internalConfigurationAnnotationProcessor
+    org.springframework.context.annotation.internalAutowiredAnnotationProcessor
+    org.springframework.context.annotation.internalRequiredAnnotationProcessor
+    org.springframework.context.annotation.internalCommonAnnotationProcessor
+    org.springframework.context.event.internalEventListenerProcessor
+    org.springframework.context.event.internalEventListenerFactory
+    myBeanFactoryPostProcessor
+    cat
+    dog
+    iocContext
+    t1PController
+    t1PDao
+    t1PService
+    ======================================
+    。。。。。 创建 Bean 的信息

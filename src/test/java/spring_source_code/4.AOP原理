@@ -1,0 +1,8 @@
+@Import({AspectJAutoProxyRegistrar.class})
+    extends->ImportBeanDefinitionRegistrar
+             注册器中注入： AnnotationAttributes enableAspectJAutoProxy = AnnotationConfigUtils.attributesFor(importingClassMetadata, EnableAspectJAutoProxy.class);
+                   debug追踪     通过上面的注册器想容器中注入组件：AnnotationAwareAspectJAutoProxyCreator
+
+
+
+AnnotationAwareAspectJAutoProxyCreator 组件功能： 查看--> spring_source_code.test.T5_AOP1.yuanli

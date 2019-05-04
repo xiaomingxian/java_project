@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.transaction.BeforeTransaction;
 
 /**
  * author:
@@ -14,12 +13,15 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 @Aspect
 @Component("LogAdvice")
 public class LogAdvice {
+
+    private static final Logger log = LoggerFactory.getLogger(LogAdvice.class);
+
+
     /**
      * 配置切点
      * value/pointcut都可以
+     * 注解/切点表达式都可以
      */
-    private static final Logger log = LoggerFactory.getLogger(LogAdvice.class);
-
     @Pointcut("@annotation(utils.aop.Log)")
     public void logPointCut() {
     }
