@@ -1,10 +1,14 @@
 package design_parrent.pojo;
 
 public class Single2 {
+    private static Single2 single2;
+
     private Single2() {
+        if (single2 != null) {
+            throw new RuntimeException("非法创建");
+        }
     }
 
-    private static Single2 single2;
 
     public static Single2 getInstance() {
         synchronized (Single2.class) {//锁也可以直接加在 方法上
