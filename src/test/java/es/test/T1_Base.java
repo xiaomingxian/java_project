@@ -1,58 +1,73 @@
-//package es.test;
-//
-//import dao.EsAticleDao;
-//import org.elasticsearch.action.index.IndexResponse;
-//import org.elasticsearch.client.Client;
-//import org.elasticsearch.common.xcontent.XContentType;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-//import pojo.es.Aticle;
-//
-//import static org.apache.camel.model.rest.RestBindingMode.json;
-//
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = {"classpath:spring/applicationContext-es.xml"})
-//public class T1_Base {
-//    @Autowired
-//    private ElasticsearchTemplate elasticsearchTemplate;
-//
-//    @Autowired
-//    private EsAticleDao esAticleDao;
-//
-//    @Test
-//    public void createIndex() {
-//        elasticsearchTemplate.createIndex(Aticle.class);
-//        elasticsearchTemplate.putMapping(Aticle.class);
-//        System.out.println("---------ok---------");
-//    }
-//
-//    @Test
-//    public void insert() {
-//        //
-//        Client client = elasticsearchTemplate.getClient();
-//
-//        IndexResponse response = client.prepareIndex("itoo-user-whole", "ItooWebContentList",
-//                "11")
-//                .setSource(json, XContentType.JSON)//新版此处参数数量得是偶数
-//                .execute().actionGet();
-//        //多次index这个版本号会变
-//        System.out.println("response.version():" + response.getVersion());
-//        client.close();
-//
-//        //Aticle aticle = new Aticle();
-//        //aticle.setContent("这是内容");
-//        //aticle.setTitle("测试题目");
-//        //aticle.setId(1);
-//        //esAticleDao.save(aticle);
-//
-//
-//        System.out.println("-------ok---------");
-//
-//    }
-//
-//
-//}
+package es.test;
+
+import dao.EsDao.EsAticleDao;
+import pojo.es.Aticle;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.cluster.node.DiscoveryNode;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:spring/applicationContext-es.xml",
+        //"classpath:spring/applicationContext-scan.xml",
+        //"classpath:spring/applicationContext-tx.xml",
+        //"classpath:spring/springmvc.xml",
+        //"classpath:spring/applicationContext-dao.xml",
+        //"classpath:spring/applicationContext-activemq.xml",
+        //"classpath:spring/applicationContext-redis.xml",
+        //"classpath:spring/applicationContext-shiro.xml",
+        //"classpath:spring/applicationContext-acitiviti.cfg.xml",
+        //"classpath:spring/applicationContext-freemarker.xml",
+        //"classpath:spring/applicationContext-quartz.xml",
+})
+
+public class T1_Base {
+
+    @Autowired
+    private ElasticsearchTemplate template;
+
+
+
+    @Test
+    public void createIndex() {
+        template.createIndex(Aticle.class);
+
+
+        System.out.println("------------------- 操作成功 ----------------------");
+    }
+
+    @Test
+    public void write() {
+    }
+
+    @Test
+    public void query() {
+        boolean b = template.indexExists(Aticle.class);
+        System.out.println("索引是否存在：" + b);
+        TransportClient client = (TransportClient) template.getClient();
+        List<DiscoveryNode> discoveryNodes = client.connectedNodes();
+        System.out.println("------- 集群节点信息遍历 -----------");
+        discoveryNodes.stream().forEach(System.out::println);
+        //------------
+        System.out.println("------- 索引查询 -----------");
+        Pageable pageable = new PageRequest(1, 10);
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryStringQuery("")).withPageable(pageable).build();
+        List<Aticle> aticles = template.queryForList(searchQuery, Aticle.class);
+        aticles.stream().forEach(System.out::println);
+
+    }
+
+}

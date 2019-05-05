@@ -43,7 +43,7 @@ public class T8_Netty {
 
     @Test
     public void server() {
-        //相当于nio模型中的selector 
+        //相当于nio模型中的selector
         NioEventLoopGroup boosGroup = new NioEventLoopGroup();
         //工作线程池
         NioEventLoopGroup worksGroup = new NioEventLoopGroup();

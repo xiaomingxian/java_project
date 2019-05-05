@@ -8,7 +8,8 @@
 		http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
 
     <!-- 配置Client -->
-    <elasticsearch:transport-client id="client" cluster-nodes="localhost:9300" cluster-name="my-application"/>
+    <elasticsearch:transport-client id="client" cluster-nodes="localhost:9300,localhost:9301,localhost:9302"
+                                    cluster-name="my-application"/>
 
     <!-- 配置搜索模板  -->
     <bean id="elasticsearchTemplate"
