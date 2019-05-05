@@ -18,6 +18,16 @@ public class T0_Connection {
 
     private TransportClient client;
 
+    public static void main(String[] args) {
+        String a = "ac";
+        String b = "de";
+        String c = "acde";
+        String dd = "ac" + "de";
+        String ss = new String("acde");
+        System.out.println(dd == c);
+        System.out.println(dd == ss);
+    }
+
 
     @Before
     public void c1() throws Exception {
