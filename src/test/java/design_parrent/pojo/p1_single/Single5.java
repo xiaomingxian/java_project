@@ -1,4 +1,4 @@
-package design_parrent.pojo;
+package design_parrent.pojo.p1_single;
 
 public enum Single5 {//class Single5 extend Enum
 

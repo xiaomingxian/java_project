@@ -1,9 +1,9 @@
 package design_parrent.test;
 
-import design_parrent.pojo.Single1;
-import design_parrent.pojo.Single2;
-import design_parrent.pojo.Single4;
-import design_parrent.pojo.Single5;
+import design_parrent.pojo.p1_single.Single1;
+import design_parrent.pojo.p1_single.Single2;
+import design_parrent.pojo.p1_single.Single4;
+import design_parrent.pojo.p1_single.Single5;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -65,7 +65,7 @@ public class T1_Singleton {
      */
     @Test
     public void fanshe() throws Exception {
-        Class<Single1> single1Class = (Class<Single1>) Class.forName("design_parrent.pojo.Single1");
+        Class<Single1> single1Class = (Class<Single1>) Class.forName("design_parrent.pojo.p1_single.Single1");
 
         Constructor<Single1> declaredConstructor = single1Class.getDeclaredConstructor(null);//获取无餐构造
 
@@ -85,7 +85,7 @@ public class T1_Singleton {
         Single2 instance = Single2.getInstance();
 
 
-        Class<Single2> single1Class = (Class<Single2>) Class.forName("design_parrent.pojo.Single2");
+        Class<Single2> single1Class = (Class<Single2>) Class.forName("design_parrent.pojo.p1_single.Single2");
         Constructor<Single2> declaredConstructor = single1Class.getDeclaredConstructor(null);
 
         declaredConstructor.setAccessible(true);

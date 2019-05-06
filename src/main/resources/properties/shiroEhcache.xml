@@ -31,6 +31,7 @@
         <persistence strategy="localTempSwap"/>
     </cache>
 
+    <!--幂等缓存设置-->
     <cache name="midengCache"
            maxElementsInMemory="10000" eternal="false"
            timeToIdleSeconds="120" timeToLiveSeconds="120" maxElementsOnDisk="10000000"

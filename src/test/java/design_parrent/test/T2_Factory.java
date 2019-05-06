@@ -25,10 +25,14 @@ public class T2_Factory {
 
     /**
      * 抽象工厂[产品族]
+     * eg:
+     * 一级 造车接口
+     * 二级 车分级接口
+     * 三级 零部件接口
      */
     @Test
     public void abstFac() {
-        
+
     }
 
 }

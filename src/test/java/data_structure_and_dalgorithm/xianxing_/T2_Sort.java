@@ -20,7 +20,7 @@ public class T2_Sort {
      */
 
     /**
-     * 冒泡
+     * 冒泡   ok
      */
     @Test
     public void maopao() {

@@ -1,4 +1,4 @@
-package design_parrent.pojo;
+package design_parrent.pojo.p1_single;
 
 /**
  * 双重检测锁

@@ -1,9 +1,6 @@
-package design_parrent.pojo;
-
-import org.junit.Test;
+package design_parrent.pojo.p1_single;
 
 import java.io.Serializable;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * 饿汉式

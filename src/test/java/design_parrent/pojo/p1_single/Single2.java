@@ -1,4 +1,4 @@
-package design_parrent.pojo;
+package design_parrent.pojo.p1_single;
 
 public class Single2 {
     private static Single2 single2;

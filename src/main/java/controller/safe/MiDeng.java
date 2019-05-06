@@ -18,7 +18,10 @@ public class MiDeng {
     @Autowired
     private UserService userService;
 
-
+    /**
+     *  @Cacheable
+     * @param user
+     */
     @GetMapping("springCache")
     @Cacheable(value = "midengCache", key = "#id+'_'+#userName")//, condition = "#userName.length()>4"
     //参数说明  value:缓存名称   key:缓存key  condition:缓存条件-返回值为true才进行缓存
@@ -26,5 +29,9 @@ public class MiDeng {
         userService.update(user);
     }
 
+
+    /**
+     * 其他
+     */
 
 }

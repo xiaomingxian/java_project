@@ -1,4 +1,4 @@
-package design_parrent.pojo;
+package design_parrent.pojo.p1_single;
 
 /**
  * 静态内部类
