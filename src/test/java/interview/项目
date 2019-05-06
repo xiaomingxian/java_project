@@ -1,0 +1,6 @@
+如何实现幂等[多次请求-结果一致]    参考多种实现：https://www.jianshu.com/p/797d19f1efe9
+                                @Cache注解  https://blog.csdn.net/qq_23121681/article/details/53995666
+        测试位置：controller.safe.MiDeng
+        一、通过setnx实现
+        1、setnx key value
+        当且仅当key不存在，将key的值设置为value，并且返回1；若是给定的key已经存在，则setnx不做任何动作，返回0

@@ -5,12 +5,12 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans.xsd   
-            http://www.springframework.org/schema/context   
-            http://www.springframework.org/schema/context/spring-context.xsd   
-            http://www.springframework.org/schema/mvc   
-            http://www.springframework.org/schema/mvc/spring-mvc.xsd 
-            http://www.springframework.org/schema/cache  
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd
+            http://www.springframework.org/schema/cache
             http://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <context:property-placeholder location="classpath:properties/redis-config.properties" ignore-unresolvable="true"/>
@@ -61,28 +61,7 @@
     <bean id="JedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:host-name="${redis.hostName}" p:port="${redis.port}" p:password="${redis.pass}"
           p:pool-config-ref="jedisPoolConfig"/>
-    <!--与上面作用相同  格式不同   -->
-    <!--
-    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          destroy-method="destroy">
-        <property name="poolConfig" ref="jedisPoolConfig"></property>
-        &lt;!&ndash;IP地址 &ndash;&gt;
-        <property name="hostName" value="${redis.hostName}"></property>
-        &lt;!&ndash;端口号  &ndash;&gt;
-        <property name="port" value="${redis.port}"></property>
-        &lt;!&ndash;如果Redis设置有密码  &ndash;&gt;
-        <property name="password" value="${redis.password}"/>
-        &lt;!&ndash;客户端超时时间单位是毫秒  &ndash;&gt;
-        <property name="timeout" value="${redis.timeout}"></property>
-    </bean>
-    -->
 
-    <!--模版-->
-    <!--
-    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
-        <property name="connectionFactory" ref="JedisConnectionFactory"/>
-    </bean>
-    -->
 
     <!--redis操作模版,使用该对象可以操作redis  -->
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
@@ -135,4 +114,28 @@
     </bean>-->
 
 
-</beans>  
+    <!--，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，，分割线，，，，，，，，，，，，，，，，，，，，，，，，，，，，-->
+    <!--与上面作用相同  格式不同   -->
+    <!--
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          destroy-method="destroy">
+        <property name="poolConfig" ref="jedisPoolConfig"></property>
+        &lt;!&ndash;IP地址 &ndash;&gt;
+        <property name="hostName" value="${redis.hostName}"></property>
+        &lt;!&ndash;端口号  &ndash;&gt;
+        <property name="port" value="${redis.port}"></property>
+        &lt;!&ndash;如果Redis设置有密码  &ndash;&gt;
+        <property name="password" value="${redis.password}"/>
+        &lt;!&ndash;客户端超时时间单位是毫秒  &ndash;&gt;
+        <property name="timeout" value="${redis.timeout}"></property>
+    </bean>
+    -->
+
+    <!--模版-->
+    <!--
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="JedisConnectionFactory"/>
+    </bean>
+    -->
+
+</beans>

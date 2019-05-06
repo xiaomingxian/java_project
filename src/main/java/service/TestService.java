@@ -11,4 +11,5 @@ public interface TestService {
     int getCount(Test test);
 
     List<Test> selectByMyPageHelper(MyPageHelper<Test> testMyPageHelper);
+
 }

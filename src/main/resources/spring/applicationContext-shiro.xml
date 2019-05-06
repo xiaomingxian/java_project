@@ -22,13 +22,13 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--anon未认证可以访问-->
-                <!--/page/pre_authorcation/** = anon-->
-                <!--/pre/** = anon-->
-                <!--/css/** = anon-->
-                <!--/images/** = anon-->
-                <!--/js/** = anon-->
-                <!--/** = authc-->
-                /** = anon
+                /page/pre_authorcation/** = anon
+                /pre/** = anon
+                /css/** = anon
+                /images/** = anon
+                /js/** = anon
+                /** = authc
+                <!--/** = anon-->
             </value>
         </property>
     </bean>

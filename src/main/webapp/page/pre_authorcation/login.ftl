@@ -13,7 +13,7 @@
 <center>
 
 
-    <form action="http://localhost:8081/learn/pre/check.do" method="post">
+    <form action="http://localhost:8082/learn/pre/check.do" method="post">
 
         name:<input name="name" type="text"><br>
         paswd:<input name="password" type="password"><br>

@@ -35,4 +35,5 @@ public class TestServiceImpl implements TestService {
     public List<Test> selectByMyPageHelper(MyPageHelper<Test> testMyPageHelper) {
         return testMapper.selectByMyPageHelper(testMyPageHelper);
     }
+
 }

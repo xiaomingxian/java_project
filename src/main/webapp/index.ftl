@@ -13,7 +13,7 @@
 <center><h4>INDEX</h4>
 
     <br>
-    <form action="http://localhost:8081/learn/date" method="post">
+    <form action="./learn/date" method="post">
 
         name:<input type="text" name="name"><br> pass:
         <input type="password" name="password"><br> date:
@@ -28,7 +28,8 @@
     <br>
     <br>
     <center><a href="http://localhost:8081/learn/activiti/getPage.do">任务发布</a></center>
-    <center><h4>Tincymce</h4>
+    <center>
+        <h4>Tincymce</h4>
         <form action="http://localhost:8081/learn/tincymce/insert.do" method="post">
             <textarea name="value"></textarea>
             <input type="submit" value="提交">

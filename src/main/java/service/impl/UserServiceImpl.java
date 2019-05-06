@@ -8,6 +8,7 @@ import pojo.UserExample;
 import service.UserService;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,5 +36,18 @@ public class UserServiceImpl implements UserService {
 
 
         return users;
+    }
+
+    @Override
+    public void update(User user) {
+        User user1 = new User();
+        user1.setId(user.getId());
+        user1.setCreateTime(new Date());
+        user1.setPassword("123456");
+        user1.setPhone(user.getPhone());
+        user1.setEmail("safe-test@qq.com");
+        user1.setUpdateTima(new Date());
+        user1.setUserName("safe-md");
+        lUserMapper.updateByPrimaryKey(user1);
     }
 }
