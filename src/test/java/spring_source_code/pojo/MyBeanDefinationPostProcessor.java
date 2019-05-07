@@ -19,8 +19,6 @@ public class MyBeanDefinationPostProcessor implements BeanDefinitionRegistryPost
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(User.class);
         AbstractBeanDefinition user = beanDefinitionBuilder.getBeanDefinition();
         beanDefinitionRegistry.registerBeanDefinition("user--mine", user);
-
-
     }
 
     /**
