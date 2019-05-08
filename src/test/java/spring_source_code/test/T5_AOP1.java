@@ -1,6 +1,7 @@
 package spring_source_code.test;
 
 import org.junit.Test;
+import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator;
@@ -72,6 +73,17 @@ public class T5_AOP1 {
         //    6-5 拦截器链的触发过程  .proceed()的执行过程
         //        1. 如果没有拦截器，或者拦截器的索引==拦截器数组长度-1(到了最后一个)就执行原始方法
         //        2. 链式获取每一个拦截器，拦截器执行invoke方法每一个拦截器等待下一个拦截器执行完成返回以后再来执行
+
+    }
+
+    @Test
+    public void ttt() {
+
+        int i = 0;
+
+        Advisor d=null;
+        int j = ++i;
+        System.out.println(j);
 
     }
 }
