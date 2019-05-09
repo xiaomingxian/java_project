@@ -3,3 +3,23 @@ mapper 接口的实现类 通过JDK的动态代理实现
 四大设计模式
     动态代理[创建mapper接口的实现类]
     装饰者模式[动态sql]
+
+
+================================  原理
+Mapper接口 通过动态代理实现
+
+面试问题：为什么mapper方法名要与sql语句的ID相同
+   答：sql语句的存储方式：map中key是名称空间+SQLID[包名+方法名] value是MappedStatement[里面包含了Sql(sqlSource),参数,返回值...]
+   流程：初始化 将 mapper的id和sql放在一个map中
+        查询 语句的执行 EXector[接口]-mybatis的默认实现 CacheExecutor[一级缓存]  执行JDBC 执行体 PreParedStatment
+
+
+
+
+
+
+//mybatis 自带一级缓存 【因为session不关闭，人为close()也会失效】与spring整合后失效【session被SqlSesisonFactoryBean管理，请求完毕后就会关闭 Aop帮助关闭[事物执行完关闭]】
+//mybatis 二级缓存    【】
+
+缓存文章：
+https://www.cnblogs.com/liouwei4083/p/6025929.html
