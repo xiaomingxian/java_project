@@ -6,7 +6,7 @@ import org.apache.ibatis.session.defaults.DefaultSqlSession;
 import org.junit.Test;
 import org.mybatis.spring.annotation.MapperScannerRegistrar;
 
-public class T1_Ibatis {
+public class T0_Ibatis {
 
     /**
      * 两种写sql的方式
