@@ -10,4 +10,7 @@ public interface PersonMapper {
     @Select("select * from user")
     List<User> select();
 
+    @mybatis.aop.Select("select * from user")
+    List<User> selectOfMy();
+
 }

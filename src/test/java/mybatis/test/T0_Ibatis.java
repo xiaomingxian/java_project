@@ -14,6 +14,18 @@ public class T0_Ibatis {
     @Test
     public void t1() {
 
+//查询
+
+
+//method1
+        SqlSession sqlSession = null;
+        sqlSession.selectOne("明明空间.sql语句ID", "参数");
+
+//method2--- 面向对象的方式-最终调用的还是method1
+        PermissionMapper mapper = sqlSession.getMapper(PermissionMapper.class);
+        mapper.getPermissions(null);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
         //SqlSession 是个接口--默认的实现类：
         //mybatis/hibernate 自带一级缓存 与spring整合后失效
         DefaultSqlSession defaultSqlSession = null;
@@ -49,15 +61,5 @@ public class T0_Ibatis {
         //}
 
 
-//查询
-
-
-//method1
-        SqlSession sqlSession = null;
-        sqlSession.selectOne("明明空间.sql语句ID", "参数");
-
-        //method2--- 面向对象的方式-最终调用的还是method1
-        PermissionMapper mapper = sqlSession.getMapper(PermissionMapper.class);
-        mapper.getPermissions(null);
     }
 }

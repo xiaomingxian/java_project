@@ -13,11 +13,11 @@ DI 依赖注入：
     FactroyBean  &+范型中的类==工厂bean
 
 
-Bean的声明周期
+Bean的生命周期
     1.构造：单实例：容器启动时创建  多实例：每次使用时创建
-    2.BeanPostProcessor.postProcessAfterInitialization
+    2.BeanPostProcessor.postProcessBeforeInitialization
     3.初始化
-    4.BeanPostProcessor.postProcessBeforeInitialization
+    4.BeanPostProcessor.postProcessAfterInitialization
     5.销毁：单实例[容器关闭时]，多实例[不归容器管]
 
 
@@ -25,7 +25,7 @@ BeanPostProcessor工作原理-->见：2.BeanPostProcessor原理
 BeanPostProcessor应用 想各个实现了Aware接口的类中注入Ioc容器
     过程 :
         在类初始化前       「 BeanPostProcessor.postProcessAfterInitialization 」
-        判断有没有实现Aware接口如果实现了就将 Ioc容器通过实现了的方法穿过去
+        判断有没有实现Aware接口如果实现了就将 Ioc容器通过实现了的方法传过去
 
 Aware接口：实现了此接口的一些类能够感知到自己的一些信息(自身的属性)[在IOC容器中？？是否是单例，系统信息...]
 

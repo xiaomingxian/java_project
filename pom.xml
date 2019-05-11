@@ -366,8 +366,6 @@
 
         <!--elasticsearch,,,end,,,-->
 
-
-
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
             <groupId>io.netty</groupId>
@@ -375,6 +373,12 @@
             <version>4.1.16.Final</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>7.1</version>
+        </dependency>
 
     </dependencies>
 

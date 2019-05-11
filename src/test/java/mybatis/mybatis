@@ -6,16 +6,16 @@ mapper 接口的实现类 通过JDK的动态代理实现
 
 
 ================================  原理  mybatis.test.T0_Ibatis
-SqlSession
-Mapper接口 通过动态代理实现
+底层调用
+//selectOne 最终调用的是selectList
+//通用sql无法确保查出一条数据----mybatis 的做法 调用selectList 先去查如果查处一条就正常-超过一条就报错
+================================
+Mapper接口 通过动态代理实现 JDK的动态代理
 
 面试问题：为什么mapper方法名要与sql语句的ID相同
-   答：sql语句的存储方式：map中key是名称空间+SQLID[包名+方法名] value是MappedStatement[里面包含了Sql(sqlSource),参数,返回值...]
+   答：sql语句的存储方式：map中key是名称空间+SQLID[包名+方法名] value是 MappedStatement [里面包含了Sql(sqlSource),参数,返回值...]
    流程：初始化 将 mapper的id和sql放在一个map中
         查询 语句的执行 EXector[接口]-mybatis的默认实现 CacheExecutor[一级缓存]  执行JDBC 执行体 PreParedStatment
-
-
-
 
 
 
