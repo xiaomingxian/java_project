@@ -1,3 +1,19 @@
 堆内存快照设置：-XX:+HeapDumpOnOutOfMemoryError
     -Xmx3550m：设置JVM最大可用内存为3550M。
     -Xms3550m：设置JVM促使内存为3550m。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。
+
+
+
+    -XX:+TraceClassLoading  追踪类加载
+    -XX:+TraceClassUnLoading  追踪类卸载
+====================  jvm三种类型指令  =====================
+//开启或关闭
+    -XX:+<option> 开启option选项 [option:jvm指令]
+    -XX:-<option> 关闭option选项
+
+//赋值
+    -XX:<option>=<value>
+====================  =============  =====================
+//反编译命令   javap -c T14_ClassLoader.class
+
+

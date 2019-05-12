@@ -1,8 +1,8 @@
-package jvm.test;
+package jvm.test.t14_classLoader;
 
 import org.junit.Test;
 
-public class T14_ClassLoader {
+public class T1_ClassLoader {
     /**
      * 类初始化
      * 主动使用与被动使用
@@ -11,10 +11,9 @@ public class T14_ClassLoader {
      */
     @Test
     public void t1() {
-        System.out.println(Son.str);//仅仅父类初始化
-        System.out.println("-------------- 子类初始化父类先初始化 --------------------");
-        System.out.println(Son.str2);
-        new Parent();
+        System.out.println(Son.str);//仅仅父类初始化----类初始化追踪，即使没有对子类初始化也完成了子类的加载 -XX:+TraceClassLoading
+        //System.out.println("-------------- 子类初始化父类先初始化 --------------------");
+        //System.out.println(Son.str2);
     }
 }
 
