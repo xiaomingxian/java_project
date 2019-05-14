@@ -2,9 +2,11 @@ package pojo;
 
 import lombok.Data;
 
+import javax.persistence.Table;
 import java.util.Date;
 
 @Data
+@Table(name = "test")
 public class User {
     private String id;
 

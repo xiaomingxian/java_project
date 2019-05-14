@@ -45,7 +45,7 @@ public class T1_Base {
             }
         });
 
-        o.select();
+        o.select1();
     }
 
     /**

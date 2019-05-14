@@ -15,7 +15,7 @@ public class PersonService {
     private PersonMapper personMapper;
 
     public void select() {
-        List<User> select = personMapper.select();
+        List<User> select = personMapper.select1();
         System.out.println(select);
     }
 
