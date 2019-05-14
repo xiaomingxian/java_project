@@ -15,4 +15,24 @@ public class T5_ClassLoader {
         System.out.println(aClass1.getClassLoader());//sun.misc.Launcher$AppClassLoader@18b4aac2
 
     }
+
+
+    /**
+     * 加载 不会导致初始化
+     *
+     * @throws Exception
+     */
+    @Test
+    public void tt() throws Exception {
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        Class<?> aClass = systemClassLoader.loadClass("jvm.test.t14_classLoader.T1");
+        System.out.println(aClass);
+    }
+}
+
+class T1 {
+    //检测初始化
+    static {
+        System.out.println("-------");
+    }
 }
