@@ -22,6 +22,16 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 public class T2_GenMapper {
+    /**
+     * 将类名小写作为key   将类信息与mapper信息封装起来
+     * <p>
+     * <p>
+     * <p>
+     * 增    解析request参数，删选出实体有的字段   封装成键值对格式  反射进行调用
+     * 删    通过主键[参数传入]  反射进行调用
+     * 改    通过主键[参数传入]   解析request参数，删选出实体有的字段-- 反射进行调用
+     * 查    解析request参数，删选出实体有的字段，封装成equals条件   解析特定参数封装成分页条件
+     */
 
     //初始化容器
     private static ApplicationContext applicationContextAll = new AnnotationConfigApplicationContext(MyBatisConfig.class);
@@ -58,9 +68,9 @@ public class T2_GenMapper {
 
         //判断类是否是某个类或者某个类/接口的子类或者实现类
         //以Type的形式返回本类直接实现的接口.这样就包含了泛型参数信息
-        //利用ParameterizedType获取java泛型的参数类型   type[0] 一个接口上只有一个泛型
         classes.stream().filter(Mapper.class::isAssignableFrom).forEach(cl -> {
             Type[] type = cl.getGenericInterfaces();
+            //利用ParameterizedType获取java泛型的参数类型   type[0] 一个接口上只有一个泛型
             if (type.length > 0 && type[0] instanceof ParameterizedType) {
                 Type[] p = ((ParameterizedType) type[0]).getActualTypeArguments();//泛型
                 if (p.length > 0) {

@@ -12,10 +12,8 @@ public interface PersonMapper extends Mapper<User> {
     List<User> select1();
 
 
-
-
     //自定义获取aop注解测试
-    //@mybatis.aop.Select("select * from user")
-    //List<User> selectOfMy();
+    @mybatis.aop.Select("select * from user")
+    List<User> selectOfMy();
 
 }
