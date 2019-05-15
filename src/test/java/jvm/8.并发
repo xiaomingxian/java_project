@@ -59,6 +59,9 @@ map与set原理一样不过是 map是kv set是k
 并发较高：  concurrentHashMap  ConcurrentSet
 并发高且排序： ConcurrentSkipListMap  ConcurrentSkipListSet
 写时复制：Copy-On-Write 读可能不会立即读到最新的数据-->最终一致性。:https://www.cnblogs.com/hapjin/p/4840107.html
+     * 写时复制  写的时候复制一份 写完再将引用指向复制后的地址
+          * 读不涉及安全问题
+
 
 
 
