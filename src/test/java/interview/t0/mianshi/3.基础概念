@@ -50,3 +50,22 @@
 
 demo:对volatile在进行写操作的时候会在操作后加一条 store屏障指令，将工作中的变量值刷回到主内存中       ======>多线程操作时是在后面加指令前面没有加所以不会先读(个人理解)
     对volatile在进行读操作时会在操作前加一条 load 指令，从主内存中读取共享变量
+
+Synchronized与Lock的区别：
+    1 synchronized是关键字 属于jvm层面(底层是通过monitor对象来完成，wait/notify也依赖于monitor，对象只有在同步块或方法中才能调用 wait.notify)
+        lock是api层面
+        sychronized反编译结果：monitorenter-->加锁    monitorexit-->释放锁[一个正常释放，一个出现异常释放]
+               4: monitorenter
+               5: aload_1
+               6: monitorexit
+               7: goto          15
+              10: astore_2
+              11: aload_1
+              12: monitorexit
+    2 syc不可中断[除非异常或者正常执行完]  Reentrantlock可中断
+                    1 设置超时方法 tryLock(Long timeout,TimeUnit unit)
+                    2 lockInterruptibly放代码块中，调用 interrupt()方法可中断
+    3 是否是公平锁 sys不是 reen可以是[通过构造参数]
+    4 绑定多个条件 syc没有 reen有
+
+生产者消费者之阻塞队列   demo:jvm.test.T11_ProducAndCou.T13_BlockQueue

@@ -57,7 +57,6 @@ public class T11_BlockingQueue {
             } catch (Exception e) {
             }
         }).start();
-
         new Thread(() -> {
             try {
                 Thread.sleep(1000);

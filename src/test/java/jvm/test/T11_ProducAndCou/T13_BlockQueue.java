@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class T13_BlockQueue {
 
-
+    //可以用多种阻塞队列来实现
     BlockingQueue queue = new LinkedBlockingQueue(10);
 
 
