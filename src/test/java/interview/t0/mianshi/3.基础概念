@@ -69,3 +69,7 @@ Synchronized与Lock的区别：
     4 绑定多个条件 syc没有 reen有
 
 生产者消费者之阻塞队列   demo:jvm.test.T11_ProducAndCou.T13_BlockQueue
+
+Callable 适配器模式
+    返回值：Fulture.get() 此方法为阻塞方法-->获取值获取不到就阻塞直到获取到值[直到该线程计算完毕]
+    多个线程使用同一个FultureTask此task只会执行一次[复用]，如果想执行多次就得创建多个task实例
