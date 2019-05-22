@@ -3,7 +3,6 @@ package interview.t0.mianshi.test;
 import org.junit.Test;
 
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Semaphore;
 
 public class T9_CyclicBarrier {
 
