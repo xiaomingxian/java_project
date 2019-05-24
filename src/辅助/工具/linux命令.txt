@@ -9,6 +9,9 @@
         查找jdk版本：yum search jdk  / yum -y list java*
 上传工具：
         yum install lrzsz
+
+解压：
+    zip   yum install zip  unzip xxx.zip
 ************************************** 通用  ***************************************************
 <1>.查看进程
     ps -aux | grep tomcat
