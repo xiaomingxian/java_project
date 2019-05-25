@@ -2,11 +2,17 @@ package interview.t0.mianshi.test;
 
 import lombok.Data;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 public class T16_DieLock {
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Test
     public void die() {
+
 
         //jps -l 查进程号
         //jstack 进程号  查异常堆栈信息

@@ -1,0 +1,2 @@
+spring mvc 返回json数据 如果map的key为null会造成json转换失败--页面效果404
+解决：自定义Json序列化规则[配置] /临时解决方案-加校验
