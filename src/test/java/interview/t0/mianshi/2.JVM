@@ -1,0 +1,78 @@
+MinorGC的过程[复制-清空-互换] [浪费空间没有充分利用内存碎片，而且大对象的复制比较耗时]
+    1 eden,SurvivorFrom 复制到ServivorTo 年龄+1
+       首先当 enden区满的时候会触发第一次gc，把还活着的对象拷贝到SurvivorFrom区
+       当 eden区再次触发gc的时候会扫描 enden和SurvivorFrom区，对这两个区域进行回收，经过这次回收还存活的对象进入到To区
+            [如果对象的年龄到达老龄的标准-则赋值到老年区，年龄+1][To区满了后，会向老年区 申请内存担保(此说法为自己总结，准确性待确定)]
+    2 清空 eden,SurvivorFrom
+        然后 清空Eden SurvivorFrom 中的对象 也即 复制后有交换，谁空谁是To[?????]
+    3 SurvivorTo和SurvivorFrom 互换
+        最后To和From互换，原To成为下一次GC时的SurvivorFrom区，部分对象会在From和To区中复制来复制去，
+            由此交换15次[由jvm参数MaxTenuringThreshold决定，默认是15]，最终如果还存活，就存入老年代
+
+引用计数算法：
+复制清除算法：
+标记清除算法：会产生时间碎片
+标记整理算法：没有时间碎片，但是移动对象成本比较大
+
+
+================ gcRoot
+虚拟机栈[栈帧中的局部变量区，也叫局部变量表]中引用的对象
+方法区中静态属性引用的对象
+方法区中常量引用的对象
+本地方法栈中引用的对象[JNI(Native方法)]
+
+
+================ jvm参数
+查看进程编号：jps -l
+查看某参数是否开启：jinfo -flag 参数 进程号
+查看默认值：eg:jinfo -flag MetaspaceSize 4300(进程号) [元空间大小：默认21m-22m]
+查看进程的所有参数： jinfo -flags 进程号
+参数类型
+    标配参数
+        java -version -help -showversion
+    x参数
+        -Xint 解释执行
+        -Xcomp 第一次使用就编译成本地代码
+        -Xmixed 混合模式
+    xx参数
+        Boolean类型：-XX:+~开启 -XX:-~关闭
+        kv：设值
+
+
+
+美团：如何让解释：[相当于别名]
+    -Xms 等价于：-XX:InitHeapSize    默认1/64
+    -Xmx 等价于: -XX:MaxHeapSize     默认1/4
+    -Xss 栈大小
+========================================
+查看默认值：java -XX:+PrintFlagsInitial
+    k=v格式是jvm默认的
+    k:=v是人为修改过的
+
+运行时打印参数：-XX:+PrintFlagsFinal
+运行时修改参数：java -XX:+PrintFlagsFinal(打印参数) -XX:MetaspaceSize=512m(修改元空间大小) classes名
+打印命令行参数：-XX:+PrintCommandLineFlags    eg: java -XX:+PrintCommandLineFlags -version
+
+-----java8与java7的不同  【元空间 https://www.jianshu.com/p/474d98fc4776】
+8中 元空间替代永久带 本质相同
+区别：7永久带使用jvm内存 8元空间使用物理内存
+因此默认情况下元空间的大小受本地内存限制，类的元数据放入 native memory 字符串池和类的静态变量放入Java堆中，这样可以加载多少类的元数据就不受MaxPermsize控制，而是由系统实际可用空间来控制
+扩展：
+    元数据：元数据是指用来描述数据的数据，更通俗一点，就是描述代码间关系，或者代码与其他资源（例如数据库表）之间内在联系的数据
+    K8之前，由永久代实现，主要存放类的信息、常量池、方法数据、方法代码等；JDK8之后，取消了永久代，提出了元空间，并且常量池、静态成员变量等迁移到了堆中；元空间不在虚拟机内存中，而是放在本地内存中。那么，方法区是不是就不属于虚拟机内存的一部分了？还是元空间只是方法区的一部分，还有一部分东西存放在方法区中？待了解。
+
+============================ 常用参数：
+-Xms==-XX:InitialHeapSize 初始大小内存-默认是物理内存的 1/64     查出=0表示是默认-根据平台而定
+-Xmx==-XX:MaxHeapSize     最大内存分配-默认是物理内存的 1/4
+-Xss==-XX:ThreadStackSize 设置单个线程的大小[栈大小]-一般默认 512k~1024k
+-Xmn 设置年轻代大小
+-XmetaspaceSize:元空间大小设置[元空间的oom:类和类加载器元数据过多]
+
+     -Xms10m -Xmx10m -XX:MetaspaceSize=1024m -XX:+PrintFlagsFinal
+-XX:+PrintGCDetails  打印gc细节
+-XX:SurvivorRatio    设置Eden区比例占多少，s0/s1 相同
+    设置新生代 eden与 s0/s1空间的比例
+    默认：-XX:SurvivorRatio=8 Eden:s0:s1=8:1:1
+
+-XX:+PrintGCDetails
+
