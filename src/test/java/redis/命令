@@ -6,3 +6,6 @@ API : https://www.runoob.com/redis/redis-strings.html
 flushdb
 //删除所有数据库中的key
 flushall
+
+
+keys效率 问题 用 scan解决
