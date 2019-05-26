@@ -12,6 +12,9 @@ public class T16_DieLock {
 
     @Test
     public void die() {
+        /**
+         * 此处是错误案例
+         */
 
 
         //jps -l 查进程号

@@ -1,0 +1,17 @@
+Error是
+java.lang.StackOverflowError:简单演示[递归调用无出口]
+java.lang.OutOfMemoryError:java heap space 简单演示[大对象，不断的创建对象]
+java.lang.OutOfMemoryError:GC overhead limit exceeded  超过98%的时间来做gc,回收效率不到2%
+java.lang.OutOfMemoryError:Direct buffer memory  场景:netty[nio--避免数据在java堆中和Native堆中来回复制]
+    java/jre/lib/rt.jar java运行时包:会将数据放在元空间中保证java一开始的时候就能用 eg:Sting,Object等
+    对外内存的设置：sun.misc.VM.class中
+java.lang.OutOfMemoryError:unable to create new native thread 线程的创建达到上限[高并发] 与对应的平台有关[操作系统]linux允许单个进程创建的线程数量：1024
+    解决方案：降低自己的线程创建   /   将平台的线程上限设置改高
+    同一个Thread对象两次 start会报异常：不合法的状态  原因：在一次start后会修改状态 每次start都会进行状态判断 (状态!=0)
+java.lang.OutOfMemoryError:Metaspace  元数据 类信息等
+
+
+
+
+cglib
+https://blog.csdn.net/yaomingyang/article/details/82762697
