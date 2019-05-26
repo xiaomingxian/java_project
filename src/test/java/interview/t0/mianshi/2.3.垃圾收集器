@@ -8,4 +8,30 @@ java10以后 ZGC
 
 
 ===================
-查看默认垃圾收集器：     * -XX:+PrintCommandLineFlags  结果中的最后一个
+查看默认垃圾收集器：   * -XX:+PrintCommandLineFlags  结果中的最后一个
+jvm的默认垃圾收集器有哪些 ：[6种 底层源码]
+    UseSerialGC[Serial]
+    UseParallelGC[Parallel]
+    UseConcMarkSweepGC[cms]
+    UseParNewGC[新生区的并行回收器]
+    UseSerialOld[老年代串行]         ****************** 自己补充
+    UseParallelOldGC[老年区的并行回收器]
+    UseG1GC
+
+使用场景：
+    新生代与老年代对应
+    新生代：
+        串行GC(Serial/Serial Copying)  简单高效[单线程会停顿]
+            配置：-XX:+UseSerialGC 会自动激活老年区的 UseSerialOld[已经不推荐]   新生代是复制算法，老年代是标记整理
+        并行GC(ParNew)[只影响新生代]  对应老年代 SerialOld[不变]  新生代是复制算法，老年代是标记整理
+            最常见的是配合老年代的CMS GC
+            -XX:+ParNewGC    也可指定并行的线程数
+
+        并行回收-XX:+UseParallelGC[默认的收集器]  或者 -XX:+UseParallelOldGC 可互相激活   也可指定并行的线程数
+            可控的吞吐量：=运行用户代码时间/(运行用户代码时间+垃圾收集时间) eg:程序运行100min 垃圾收集1min 吞吐量=99% 高吞吐量意味着高效利用CPU时间，多用于后台运算而不需要太多交互任务
+
+        GC(ParNew) 与 ParallelGC的区别 前者只是新生代用并行老年代还是串行  后者是都用并行
+
+
+
+
