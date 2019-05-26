@@ -30,7 +30,66 @@ jvm的默认垃圾收集器有哪些 ：[6种 底层源码]
         并行回收-XX:+UseParallelGC[默认的收集器]  或者 -XX:+UseParallelOldGC 可互相激活   也可指定并行的线程数
             可控的吞吐量：=运行用户代码时间/(运行用户代码时间+垃圾收集时间) eg:程序运行100min 垃圾收集1min 吞吐量=99% 高吞吐量意味着高效利用CPU时间，多用于后台运算而不需要太多交互任务
 
-        GC(ParNew) 与 ParallelGC的区别 前者只是新生代用并行老年代还是串行  后者是都用并行
+      ********* GC(ParNew) 与 ParallelGC的区别 前者只是新生代用并行老年代还是串行  后者是都用并行
+
+    老年代：
+        串性GC(Serial Old)/(Serial MSC)   标记整理算法
+        并行GC(Parallel Old)/(Parallel MSC)
+        并发标记清除GC->CMS[互联网多用]
+            并发收集低停顿，并发指的是与用户线程一起执行
+            -XX:+UseConcMarkSwapGC 会自动打开yong区的 ParNew  和老年区的 Serial Old收集器[作为CMS出错后的备用收集器]
+            步骤：
+                初始标记[CMS initial mark] 阻塞
+                并发标记[CMS concurrent mark] 和用户线程一起工作
+                重新标记[CMS remark] 阻塞 二次确认[有些被标记的对象产生变动]
+                并发清除[CMS concurrent sweep]和用户线程一起工作
+             缺点：并发执行cpu的压力大[cms可能会失败，失败后由Serial Old工作 效率低] ；并发标记清除算法会产生大量内存碎片
+
+===================== 如何选择
+单CPU或小内存  -XX:+UseSerialGC
+多CPU,需要大吞吐量，如后台计算型应用：-XX:+UseParallelGC / -XX:+UseParallelOldGC
+多CPU,追求低挺对时间，需要快速响应，如互联网：-XX:+UseConcMarkSweepGC / -XX:ParNewGC
+
+=========================== G1 [Garbage-First]
+特点：
+    像CMS一样，能与应用程序并发执行
+    整理空闲空间更快
+    需要更多的时间来预测GC的停顿时间
+    不希望牺牲大量的吞吐新能
+    不希望更大的java heap
+
+    G1 的目标是取代CMS，与CMS相比
+        G1是一个有整理内存过程的垃圾收集器，不会产生很多内存碎片
+        G1的STW[Stop The World]可控，有停顿时间预测机制，用户可指定期望的停顿时间
+
+原理：
+    避免了全内存扫描-只需扫描一小块
+    核心思想是将整个堆内存分成大小相同的子区域[Regin],在jvm启动时会自动设置这些区域的大小
+    在堆的使用上，对象的存储是逻辑连续分区，每个区域按需在年轻代和老年代切换  启动时可通过参数指定分区大小 -XX:G1HeapReginSize=n(必须是2的幂) 默认将堆划分为2048个分区
+
+参数：
+    -XX:+UseG1GC
+    -XX:G1HeapRegionSize=n 设置分区大小，值是2的幂
+    -XX:MaxGCPauseMillis=n 最大gc停顿时间，jvm将尽可能停顿小于这个值
+    -XX:InitiatingHeapOccupancyPercent=n 堆占用多少的时候就触发GC，默认45
+    -XX:ConcGCThreads=n 并发GC使用线程数
+    -XX:G1ReservePercent=n 设置作为空闲空间的预留内存百分比，以降低空间溢出的风险，默认10%
+    ...
+
+G1与CMS 的区别：
+    G1不会产生时间碎片[发生少]
+    可以精确控制停顿。每次根据允许停顿的时间去收集垃圾最多的区域
+
+
+================================ SpringBoot微服务+GC调参
+内
+外：java -jar jar包===> java server  jvm的各种参数 -jar jar包
+    eg:java server -Xms1024m -Xmx1024 -XX:+UseG1GC -jar hello.jar/.war
+
+================================ tomcat GC调参
+omcat启动参数，将JVM GC信息写入tomcat_gc.log
+CATALINA_OPTS='-Xms512m -Xmx4096m -XX:PermSize=64M -XX:MaxNewSize=128m -XX:MaxPermSize=64m -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -Xloggc:/var/log/search/tomcat_gc.log'
+
 
 
 

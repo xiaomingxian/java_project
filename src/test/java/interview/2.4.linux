@@ -1,0 +1,7 @@
+整机:top/uptime[简化版]
+    %CPU %MEM[内存]  loadaverage  x x x[系统的负载均衡-有三个值分别表示系统 1/5/15min的负载值] 如果三个值相加*100% 超过60%说明负载重
+CPU:vmstat
+内存:free
+硬盘:df
+磁盘IO:iostat
+网络IO:ifstat
