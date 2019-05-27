@@ -1,0 +1,21 @@
+fork  拉一份到自己的账户下
+start 点赞
+flow 会收到动态 猜你喜欢
+
+搜索：
+    in
+         xxx in:name  项目名包含xxx的
+         xxx in:description 项目描述包含xxx的
+         xxx in:readme 项目的readme 中包含xxx的
+         组合使用 xxx in:name,readme...
+    start/fork
+        springboot starts:>=5000
+        springcloud forks:>1000
+        在多少到多少之间：eg: springcloud forks:1000..2000
+
+    awesome xxx   收集学习，工具，书籍相关的项目
+    给别人指出行号[高亮显示]   地址+L行号    L[行号]
+    T搜索[项目内搜索]  页面直接t[小写] 后跟想搜索的东西
+
+    地区大佬：location:beijing language:java
+
