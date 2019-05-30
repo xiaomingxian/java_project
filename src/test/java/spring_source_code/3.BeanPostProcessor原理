@@ -1,7 +1,7 @@
 
 BeanPostProcessor工作原理
 
-            //得到容器中所有的BeanPostProcessor 挨个执行
+            //得到容器中所有的 BeanPostProcessor 挨个执行
 
             public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
             //initializeBean之前调用-进行属性赋值

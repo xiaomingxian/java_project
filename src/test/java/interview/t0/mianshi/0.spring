@@ -1,7 +1,7 @@
 ioc :各种各样的map
     map里保存了 单实例信息，环境信息，各种组件。。。
 
-pring 单实例的循环依赖问题：体检暴露Bean-->暴露时机 构造之后，初始化之前(属性注入之前)
+spring 单实例的循环依赖问题：体检暴露Bean-->暴露时机 构造之后，初始化之前(属性注入之前)
     spring单例在同一个spring容器中只创建一次，之后在获取bean的时候，会首先尝试从缓存加载bean，首先从singletonObjects中获取，
     singletonObjects中存储的是BeanName->Bean Instance, 如果缓存为空，但该bean正在创建过程中（isSingletonCurrentlyInCreation）则尝试从singletonFactories中获取。
     这是因为spring创建单例bean的时候，存在循环依赖的问题。比如创建bean a的时候发现bean a引用了bean b，此时会去创建bean b，但又发现bean b引用了bean c，所以此时会去创建bean c，

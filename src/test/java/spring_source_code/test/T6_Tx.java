@@ -19,7 +19,7 @@ public class T6_Tx {
 
     @Test
     public void yuanli() {
-        //    1. 通过@EnableTransactionManagement 给容器中注入2个组件：
+        //    1. 通过 @EnableTransactionManagement 给容器中注入2个组件：
         //              AutoProxyRegistrar
         //              ProxyTransactionManagementConfiguration
 

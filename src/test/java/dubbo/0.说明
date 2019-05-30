@@ -1,0 +1,11 @@
+传统：同一进程内调用
+dubbo:rpc
+
+rpc性能点：
+    [通信效率]多个服务间建立连接的速度；
+    序列化反序列化的速度
+
+rpc框架：
+    dubbo,HSF   [ali]
+    gRPC
+    Thrift
