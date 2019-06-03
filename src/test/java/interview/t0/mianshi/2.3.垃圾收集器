@@ -87,7 +87,7 @@ G1与CMS 的区别：
     eg:java server -Xms1024m -Xmx1024 -XX:+UseG1GC -jar hello.jar/.war
 
 ================================ tomcat GC调参
-omcat启动参数，将JVM GC信息写入tomcat_gc.log
+tomcat启动参数，将JVM GC信息写入tomcat_gc.log
 CATALINA_OPTS='-Xms512m -Xmx4096m -XX:PermSize=64M -XX:MaxNewSize=128m -XX:MaxPermSize=64m -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -Xloggc:/var/log/search/tomcat_gc.log'
 
 

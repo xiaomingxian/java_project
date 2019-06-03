@@ -20,7 +20,8 @@ Mapper接口 通过动态代理实现 JDK的动态代理
 
 
 //mybatis 自带一级缓存 【因为session不关闭，人为close()也会失效】与spring整合后失效【session被SqlSesisonFactoryBean管理，请求完毕后就会关闭 Aop帮助关闭[事物执行完关闭]】
-//mybatis 二级缓存    【】
+//mybatis 二级缓存    【namespace级别的缓存 使用共同的查询结果[除非当前的namespce中有增删改操作，会清空缓存]】在关联查询时会存在问题
+    A表 中间表[关联AB]  B表  当中间表添加数据,只有中间表的缓存会刷新 AB表不会刷新 造成读取结果不变
 
 
 

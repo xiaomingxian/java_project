@@ -27,7 +27,6 @@ public class T9_CyclicBarrier {
             }).start();
         }
 
-
     }
 
 }

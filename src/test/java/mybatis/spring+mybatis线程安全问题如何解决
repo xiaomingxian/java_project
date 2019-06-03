@@ -9,7 +9,7 @@
 //构造方法
 //********************************************************************************************
 public SqlSessionTemplate(SqlSessionFactory sqlSessionFactory, ExecutorType executorType,
-      PersistenceExceptionTranslator exceptionTranslator) {
+     PersistenceExceptionTranslator exceptionTranslator) {
 
     notNull(sqlSessionFactory, "Property 'sqlSessionFactory' is required");
     notNull(executorType, "Property 'executorType' is required");

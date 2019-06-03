@@ -107,10 +107,10 @@ Semaphore :    信号量：1 用于多个共享资源的互斥使用  2 用于�
     ------》7参：***************** 参数详解
         public ThreadPoolExecutor(    int corePoolSize,     //核心常驻线程
                                       int maximumPoolSize,  //能够容纳同时执行的最大线程数，必须大于1[包括核心线程数与空闲线程数]
-                                      long keepAliveTime,  //多余的空闲线程存活事件--当空闲线程达到keepAliveTime值时，多余线程会被销毁到只剩下核心常驻线程
-                                      TimeUnit unit,     //事件单位
+                                      long keepAliveTime,  //多余的空闲线程存活时间--当空闲线程达到keepAliveTime值时，多余线程会被销毁到只剩下核心常驻线程
+                                      TimeUnit unit,     //时间单位
                                       BlockingQueue<Runnable> workQueue,  //任务队列，被提交但尚未执行的任务；[发现核心常驻线程都被占用后，任务会在此等待]---[此处满了后线程池会扩容，扩容最大限制为keepAliveTime]
-                                      ThreadFactory threadFactory,      //线程工厂[生成线程中的工作线程，一般使用默认]
+                                      ThreadFactory threadFactory,      //线程工厂[生成线程中的工作线程，一般使用默认]   [函数式接口]Thread newThread(Runnable r);
                                       RejectedExecutionHandler handler) {   //线程池的拒绝策略[有4个实现]
                 ...
         拒绝策略：JDK内置策略
