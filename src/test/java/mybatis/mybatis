@@ -23,6 +23,9 @@ Mapper接口 通过动态代理实现 JDK的动态代理
 //mybatis 二级缓存    【namespace级别的缓存 使用共同的查询结果[除非当前的namespce中有增删改操作，会清空缓存]】在关联查询时会存在问题
     A表 中间表[关联AB]  B表  当中间表添加数据,只有中间表的缓存会刷新 AB表不会刷新 造成读取结果不变
 
+================ 数据库连接池通过与spring整合交给spring管理
+ <!-- 让spring管理sqlsessionfactory 使用mybatis和spring整合包中的 -->
+ <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 
 
 缓存文章：
