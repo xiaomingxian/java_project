@@ -12,6 +12,8 @@ public class T20_垃圾收集器 {
     @Test
     public void t1() {
 
+        System.out.println(320000==320000);
+
     }
 
 }

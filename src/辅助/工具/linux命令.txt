@@ -11,7 +11,12 @@
         yum install lrzsz
 
 解压：
-    zip   yum install zip  unzip xxx.zip
+    zip   yum install zip  unzip xxx.zip4
+
+压缩：
+    实例：压缩服务器上当前目录的内容为xxx.zip文件
+    zip -r xxx.zip ./*
+
 ************************************** 通用  ***************************************************
 <1>.查看进程
     ps -aux | grep tomcat

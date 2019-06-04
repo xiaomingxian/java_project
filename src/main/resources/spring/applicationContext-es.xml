@@ -8,14 +8,14 @@
 		http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
 
     <!-- 配置Client -->
-    <!--<elasticsearch:transport-client id="client" cluster-nodes="localhost:9300,localhost:9301,localhost:9302"-->
-                                    <!--cluster-name="my-application"/>-->
+    <elasticsearch:transport-client id="client" cluster-nodes="localhost:9300,localhost:9301,localhost:9302"
+                                    cluster-name="my-application"/>
 
-    <!--&lt;!&ndash; 配置搜索模板  &ndash;&gt;-->
-    <!--<bean id="elasticsearchTemplate"-->
-          <!--class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">-->
-        <!--<constructor-arg name="client" ref="client"/>-->
-    <!--</bean>-->
+    <!-- 配置搜索模板  -->
+    <bean id="elasticsearchTemplate"
+          class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+        <constructor-arg name="client" ref="client"/>
+    </bean>
 </beans>
 
 

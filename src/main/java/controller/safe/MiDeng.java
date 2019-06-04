@@ -28,8 +28,8 @@ public class MiDeng {
     private UserService userService;
 
     /**
-     *  @Cacheable
      * @param user
+     * @Cacheable
      */
     @GetMapping("springCache")
     @Cacheable(value = "midengCache", key = "#id+'_'+#userName")//, condition = "#userName.length()>4"
@@ -82,5 +82,17 @@ public class MiDeng {
         System.out.println(getGreeting.getObjectValue());
 
 
+    }
+
+    static String s = "sss";
+
+    public static void main(String[] args) {
+        String s = "2019010200";
+        String substring = s.substring(0, 8);
+        System.out.println(substring);
+        s="xxx";
+        System.out.println(s);
+        s="sasa";
+        System.out.println(s);
     }
 }

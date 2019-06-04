@@ -22,23 +22,12 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:spring/applicationContext-es.xml",
-        //"classpath:spring/applicationContext-scan.xml",
-        //"classpath:spring/applicationContext-tx.xml",
-        //"classpath:spring/springmvc.xml",
-        //"classpath:spring/applicationContext-dao.xml",
-        //"classpath:spring/applicationContext-activemq.xml",
-        //"classpath:spring/applicationContext-redis.xml",
-        //"classpath:spring/applicationContext-shiro.xml",
-        //"classpath:spring/applicationContext-acitiviti.cfg.xml",
-        //"classpath:spring/applicationContext-freemarker.xml",
-        //"classpath:spring/applicationContext-quartz.xml",
 })
 
 public class T1_Base {
 
     @Autowired
     private ElasticsearchTemplate template;
-
 
 
     @Test

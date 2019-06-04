@@ -1,6 +1,7 @@
 package es.test;
 
-import org.elasticsearch.client.Client;
+import org.elasticsearch.action.fieldstats.FieldStats;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.common.settings.Settings;
@@ -15,10 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 public class T0_Connection {
-
+    //https://blog.csdn.net/linzhiqiang0316/article/details/80354898
+    
     private TransportClient client;
-
-
 
 
     @Before
@@ -42,5 +42,24 @@ public class T0_Connection {
         for (DiscoveryNode node : nodes) {
             System.out.println(node.getHostAddress() + "---" + node.getName());
         }
+    }
+
+    /**
+     * 创建索引库
+     * 索引库的名称必须为小写
+     *
+     * @throws Exception
+     */
+    @Test
+    public void createIndex() throws Exception {
+        IndexResponse response = client.prepareIndex("msg", "tweet", "1")
+                .setSource(XContentFactory.jsonBuilder().startObject()
+                        .field("name", "linzhiqiang")
+                        //.field("date", new FieldStats.Date())
+                        .field("msg", "hello world")
+                        .endObject())
+                .get();
+        System.out.println("索引名称:" + response.getIndex() + "类型:" + response.getType()
+                + "文档ID:" + response.getId() + "当前实例状态:");
     }
 }
