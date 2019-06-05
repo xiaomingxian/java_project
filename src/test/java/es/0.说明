@@ -1,1 +1,19 @@
+图解: https://blog.csdn.net/zl1zl2zl3/article/details/84799928
+
+
+======================================= elastic特点:
+    近实时:1-从写入数据到可以被搜索有一个延迟(大概1s)  ;2-基于es搜索和分析可以达到秒级
+    集群:
+    shard[每个索引默认10个shard,5个primary shard(建立索引时一次设置默认5个不能修改),5个replica shard]  es规定shard与replica必须不在一个节点上[一般集群最少两台机器]
+        shard[primary shrd][lunce index]:index[shard(分布在多个节点上-吞吐量横向扩展)] 参考图解
+            假设一台机器的吞吐量是2000 shard在不同的node上 node又分布在不同的机器上 就达到了横向扩展的目的
+        replica[replica shard] 确保每个shard都有副本信息replica--防止宕机数据丢失
+            高可用:防止宕机数据丢失
+            提升搜索操作的吞吐量和性能:提高每秒查询率[QPS] 查询shard与replica
+    与mysql对比:
+        index       库
+        type        表
+        document    行
+    面向文档的数据结构:无论一个文档嵌套多少层 在es中是以一个documennt来表示 而不像mysql用关联关系来表示
+======================================= kibanna
 倒排索引:

@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class T0_Connection {
     //https://blog.csdn.net/linzhiqiang0316/article/details/80354898
-    
+
     private TransportClient client;
 
 
@@ -61,5 +61,26 @@ public class T0_Connection {
                 .get();
         System.out.println("索引名称:" + response.getIndex() + "类型:" + response.getType()
                 + "文档ID:" + response.getId() + "当前实例状态:");
+    }
+
+    /**
+     * 创建索引2-传入Map对象
+     *
+     * @return void
+     * @Title: addIndex3
+     */
+    @Test
+    public void createIndex2() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("name", "小妹");
+        map.put("age", 18);
+        map.put("sex", "女");
+        map.put("address", "广东省广州市天河区上社");
+        map.put("phone", "15521202233");
+        map.put("height", "175");
+        map.put("weight", "60");
+        IndexResponse response = client.prepareIndex("species", "person").setSource(map).get();
+        System.out.println("map索引名称:" + response.getIndex() + "\n map类型:" + response.getType()
+                + "\n map文档ID:" + response.getId() + "\n当前实例map状态:" + response);
     }
 }
