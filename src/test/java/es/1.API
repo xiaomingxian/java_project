@@ -1,0 +1,31 @@
+GET /product/dianzi/_search
+{
+  "took" : 24,//毫秒
+  "timed_out" : false,//是否超时
+  "_shards" : {
+    "total" : 5,//将请求打到5个分片上[primary shard][或者是某个replica shard上]
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 1,    //查询到的结果数量  1个document
+    "max_score" : 1.0,  //相关度，匹配度越高分数越高
+    "hits" : [      //搜索到的document详细数据
+      {
+        "_index" : "product",
+        "_type" : "dianzi",
+        "_id" : "1",
+        "_score" : 1.0,
+        "_source" : {
+          "name" : "mac",
+          "price" : 100000,
+          "desc" : [
+            "america",
+            "china"
+          ]
+        }
+      }
+    ]
+  }
+}
