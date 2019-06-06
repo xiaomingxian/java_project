@@ -36,44 +36,35 @@ http://localhost:9200/
         type        表
         document    行
     面向文档的数据结构:无论一个文档嵌套多少层 在es中是以一个documennt来表示 而不像mysql用关联关系来表示
-======================================= kibanna
-http://localhost:5601
-Dev Tools
-    检查集群健康状况：GET _search/health
+------------------倒排索引(Inverted Index)
+每一个文档都对应一个ID。倒排索引会按照指定语法对每一个文档进行分词，然后维护一张表，列举所有文档中出现的terms以及它们出现的文档ID和出现频率。
+    搜索时同样会对关键词进行同样的分词分析，然后查表得到结果。
+ES对于JSON文档中的每一个field都会构建一个对应的倒排索引
 
-========== es cat api
-集群健康状态：GET _cat/health          [显示信息头] GET _cat/health?v
-    green:每个索引的primary shard和replica shard都是active状态
-    yellow:每个索引的primary shard都是active状态，但是部分replica shard不是active状态，处于不可用状态
-    red : 不是所有的primary shard都是active状态，部分索引数据丢失了
+------------------增加文件可能会使索引空间变小[lunce擅长压缩]
+    随着时间的增加，我们会有很多segments，所以ElasticSearch会将这些segment合并，在这个过程中，segment会最终被删除掉,
+    这就是为什么增加文件可能会使索引所占空间变小，它会引起merge，从而可能会有更多的压缩
 
-    yellow原因：无集群状态下只有一个node 而primary shard与replica shard不能处于同一个节点上
+------------------路由        https://blog.csdn.net/weixin_39471249/article/details/80600176
+这个请求可能被分发到集群里的任意一个节点
+每个节点，每个都存留一份路由表，所以当请求到任何一个节点时，ElasticSearch都有能力将请求转发到期望节点的shard进一步处理。
+存储的时候 根据routing[一般是文档id也可以自己设置] 和hash函数 shard = hash(routing) % number_of_primary_shards 再根据分片总数计算出 存储位置[哪一个分片上]
+查找的时候 更具routing计算出位置
 
-查看所有索引：GET _cat/indices?v
+------------------ es缓存
+现象:第一次搜索5-10s后面搜索变快
+性能优化:Filesystem Cache
+写数据的时候是写到磁盘里,查询的时候,操作系统会将磁盘文件里的数据自动缓存到Filesystem Cache里
+Es的搜索引擎严重依赖于 Filesystem Cache 如果将这个内存设置的很大 容纳更多的IDX Segement File 搜索的时候基本都是走内存的 性能会很高
 
-创建索引：PUT /testindex?pretty
+如果内存留给Es的过小-超出的部分会走磁盘查询-性能下降
+最佳:在Es中存少量的数据[仅用来查询的数据],其他数据放在其他地方[Hbase]
 
-删除索引：DELETE /testindex?pretty
+------------------ 冷热分离
+将冷数据放在一个索引 [查询少,效率低无所谓]
+将热数据放在一个索引 [频繁的查询走Filesystem Cache]性能高
 
----------文档增删改查   es会为每个field建立倒排索引保证搜索
-增：
-    # PUT   /索引/type/id  {数据}
-    PUT /product/dianzi/1
-    {
-      "name":"mac",
-      "price":100000,
-      "desc":["america","china"]
-    }
-查：GET /索引/type/id
-
-改：
-    替换操作 PUT   /索引/type/id  {所有数据}    版本号+1 "result":"updated" "created":false
-    修改
-         POST /product/dianzi/1/_update
-         {
-           "doc":{
-             "name":"macbook"
-           }
-         }
-删：DELETE /索引/type/id
------------------- 其他api
+------------------  Document设计
+合理的设计
+关联查询性能都很差   eg:join/nested/parent-child
+------------------

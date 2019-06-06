@@ -1,12 +1,18 @@
 package es.test;
 
-import org.elasticsearch.action.fieldstats.FieldStats;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,6 +20,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class T0_Connection {
     //https://blog.csdn.net/linzhiqiang0316/article/details/80354898
@@ -43,6 +50,8 @@ public class T0_Connection {
             System.out.println(node.getHostAddress() + "---" + node.getName());
         }
     }
+
+    //================================================ create  =========================================
 
     /**
      * 创建索引库
@@ -83,4 +92,53 @@ public class T0_Connection {
         System.out.println("map索引名称:" + response.getIndex() + "\n map类型:" + response.getType()
                 + "\n map文档ID:" + response.getId() + "\n当前实例map状态:" + response);
     }
+
+    /**
+     * 创建索引3--json对象
+     */
+    @Test
+    public void createIndex3() {
+        //这里只是个字符串--不是json
+        String str = "{'name':'mac2','price':'1000002'}";
+
+        JSONObject jsonObject = JSON.parseObject(str);
+
+        System.out.println(jsonObject);
+
+        IndexResponse response = client.prepareIndex("product", "computer").setSource(jsonObject, XContentType.JSON).get();
+        System.out.println("map索引名称:" + response.getIndex() + "\n map类型:" + response.getType() + "\n map文档ID:" + response.getId());
+
+    }
+
+    //================================================ query  =========================================
+    @Test
+    public void query() {
+        GetResponse getFields = client.prepareGet("product", "computer", "AWsq3y0MYioh13R7oy7j").get();
+        System.out.println("---->" + getFields.getSourceAsString());
+
+    }
+
+
+    //================================================ update =========================================
+    @Test
+    public void update() {
+        String str = "{'name':'mac-update','price':'5200'}";
+
+        JSONObject jsonObject = JSON.parseObject(str);
+
+        UpdateResponse updateResponse = client.prepareUpdate("product", "computer", "AWsq3y0MYioh13R7oy7j").setDoc(jsonObject).get();
+        System.out.println("---->" + updateResponse.getIndex() + "\n");
+    }
+
+    //================================================ delete =========================================
+    @Test
+    public void delete() {
+        DeleteResponse deleteResponse = client.prepareDelete("product", "computer", "AWsq6L1bYioh13R7oy7o").get();
+
+        System.out.println("index:" + deleteResponse.getIndex() + "\ntype:" + deleteResponse.getType() + "\nid:" + deleteResponse.getId());
+
+    }
+
+
+
 }

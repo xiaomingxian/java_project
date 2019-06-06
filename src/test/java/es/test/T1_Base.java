@@ -1,7 +1,5 @@
 package es.test;
 
-import dao.EsDao.EsAticleDao;
-import pojo.es.Aticle;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.junit.Test;
@@ -14,6 +12,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import pojo.es.Aticle;
 
 import java.util.List;
 
@@ -40,7 +39,6 @@ public class T1_Base {
 
     @Test
     public void write() {
-
 
     }
 
