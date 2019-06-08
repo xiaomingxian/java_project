@@ -1,0 +1,101 @@
+1 es对复杂分布式机制的透明隐藏特性
+    分布式：应对大数据量
+    分片机制
+    集群发现机制
+    shard负载均衡
+    shard副本，请求路由，集群扩容，shard重分配
+2 es的垂直扩容与水平扩容
+    垂直：单台强大机器
+    水平：多台普通机器
+3 增加减少节点时的数据rebalance[自动]
+4 master节点[不承载]
+5 节点对等的分布式架构
+    请求可能被分发到集群里的任意一个节点
+
+
+===========Shard&Replica再梳理
+1 index包含多个Shard
+2 每个shard都是一个最小工作单元，承载部分数据，lunce实例，完整的建立索引和处理请求的能力
+3 增加节点时，shard会自动在node中负载均衡
+4 primary shard和replica shard,每个document存在与一个shard及其副本中，不可能存在与多个分片中
+5 副本分片负责容错，承担读请求负载
+6 主分片的数量在创建的索引的时候就固定了，副本分片的数量可以随时修改
+7 分片默认量参考 0.说明
+8 主分片不能和自己的副本分片放在同一个节点上(节点宕机的时候数据会丢失)，可以和其他主分片或者副本分片放在同一个节点上
+
+===============创建节点是分配节点
+PUT /testindex
+{
+  "settings": {
+    "number_of_shards":6,//为啥可以超过6个
+    "number_of_replicas":3
+  }
+}
+[此处为单节点所以状态为yellow]yellow open   testindex Nul4kDASRZOKnhiZe6WJ2w   6   3          0            0      1.3kb          1.3kb
+
+================= 元数据
+1 _index元数据
+    代表一个document放在哪个index中
+    类似的数据放在一个索引上，非类似的放在不同的索引
+        [类似的数据放在同一个index请求过来的时候就减少不想关的数据的shard的加载???，反之加载其他不想关的shard但是这些数据可能在执行耗时的操作get请求性能下降甚至超时]
+    index中包含了很多类似的document
+    索引名称必须是小写的，不能用_开头，不能包含,
+2 _type元数据
+    代表document属于index中的哪个类别[type]
+    一个索引通常会划分多个type,逻辑上对index中有些许不同的数据进行分类
+    type名称不区分大小写，但是不能_开头，不能包含,
+3 _id元数据
+    document的唯一标识，与index and type在一起唯一标识document位置
+    可以手动指定[从其他系统中倒入数据 eg:]，也可以不指定 es会自动创建[GUID方式自动生成，分布式系统不会存在问题]
+        POST /postindex/zidong_id
+        {
+          "name":"自动ID测试",
+          "desc":["auto id","es id"]
+        }
+===================
+source中返回指定字段：GET /product/dianzi/1?_source=name,price
+===================
+1 document全量替换[id存在再创建会覆盖原来
+    [原来的并没有被删除只是被标记为deleted引用发生了改变]][被标记为deleted的会在适当的时机进行删除deleted标记的数据[当数据量太大的时候]]
+
+2 创建[不存在就创建，存在就报错] PUT /index/type/id?op_type=create  PUT /index/type/id/_create
+
+3 局部修改
+    POST /bingfa/bf/1/_update
+    {
+      "doc":{
+        "name":"aaa"
+      }
+    }
+    底层与put一样都是读出原数据，将字段修改产生新数据，改变引用指向，将原来的标记为deleted
+    相较于全量替换的好处
+        减少网络IO:全量替换需要将所有数据返回到页面 局部替换不用
+        减少了查询和修改的时间间隔[查询与修改都发生在shard内部]，可以有效减少并发冲突情况
+
+groovy脚本
+    1 基于groovy脚本执行局部更新
+        POST /bingfa/bf/1/_update
+        {
+          "script":"ctx._source.name='xxx'"//脚本
+        }
+    2 自定义脚本
+        位置：/plugins/下添加文件xxx.groovy 内容：ctx._source.name=new_tag'
+        使用：
+            POST /index/type/id/_update
+            {
+                "script":{
+                    "lang":"groovy",
+                    "file":"自定义的文件名不要后缀",
+                    "params":{
+                        "new_tag":"tag1"//脚本中的变量
+                    }
+                }
+            }
+    3 存在更新[只执行更新操作]不存在新增[只执行初始化操作]
+        POST /bingfa/bf/1/_update
+        {
+          "script":"ctx._source.name='xsxsxs'",
+          "upsert":{
+            "naname":"初始"
+          }
+        }

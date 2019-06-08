@@ -71,3 +71,207 @@ Dev Tools
          }
 删：DELETE /索引/type/id
 
+======================= 多种搜索方式[6种]
+==类型
+1 query string search
+        GET product/dianzi/_search?q=name:iphone
+        GET product/dianzi/_search?sort=price:desc
+2 query DSL[es领域的特定语言]
+        -------------匹配所有
+        GET product/dianzi/_search
+        {
+          "query":{
+            "match_all": {}
+          }
+        }
+        -------------匹配
+        GET product/dianzi/_search
+        {
+          "query":{
+            "match": {//match得拼接条件
+              "name":"mac"
+            }
+          }
+        }
+        -----------排序
+        GET /product/dianzi/_search
+        {
+          "query":{
+            "match_all":{}
+
+          },
+           "sort":[{"price":"desc"}]
+        }
+        -----------查询指定字段，分页
+        GET /product/dianzi/_search
+        {
+          "query":{
+            "match_all": {}
+
+          },
+           "_source":["name","desc"],
+          "from":0,
+          "size":1
+        }
+
+
+3 query filter
+         ------------条件过滤
+            GET /product/dianzi/_search
+            {
+              "query":{
+                "bool":{//封装多种查询条件
+                  "must":{//必须
+                    "match":{"name":"mac"}
+                  },
+                  "filter": {
+                    "range": {
+                      "price": {//字段Field
+                        "gte": 10,
+                        "lte": 200000
+                      }
+                    }
+                  }
+                }
+              }
+            }
+4 full-text search[全文检索]
+        GET /product/dianzi/_search
+        {
+          "query":{
+            "match":{
+              "name":"mac book"//mac 和 book 会被拆解进行倒排索引式的搜索  谁得的分数高谁就排在前面
+            }
+          }
+        }
+        倒排索引
+        字段分割  文档id
+        mac     1 2
+        pro     2
+
+5 parse search
+        GET /product/dianzi/_search
+        {
+          "query":{
+            "match_phrase":{
+              "name":"mac"//包含就返回
+            }
+          }
+        }
+6 highlight search
+
+        GET /product/dianzi/_search
+        {
+          "query":{
+            "match_phrase":{
+              "name":"mac"
+            }
+
+          }
+        ,"highlight":{
+          "fields": {
+            "price":{}
+          }
+        }
+        }
+
+==============聚合
+    ---聚合查询之前设置[聚合查询会把各个分片上的数据加载到堆空间-会消耗大量内存-es默认关闭-用以下操作开启]
+    PUT /product/_mapping/dianzi
+    {
+      "properties": {
+        "name": {
+          "type":     "text",
+          "fielddata": true
+        }
+      }
+    }
+    ---聚合操作
+    GET /product/dianzi/_search
+    {
+    "aggs": {
+      "NAME": {
+        "AGG_TYPE": {}
+      }
+    }
+    }
+    eg分组聚合:
+        GET /product/dianzi/_search
+        {
+         "aggs": {//聚合
+           "my_juhe":{//自定义名称
+             "terms": {//
+               "field": "name",
+               "size": 10
+             }
+           }
+         }
+        }
+    ----聚合查询
+        GET /product/dianzi/_search
+        {
+          "query": {
+            "match": {
+              "name": "mac"
+            }
+          },
+         "aggs": {
+           "my_juhe":{
+             "terms": {
+               "field": "name",
+               "size": 10
+             }
+           }
+         }
+        }
+    ----先分组再求平均数
+        GET /product/dianzi/_search
+        {
+          "size":0,
+          "aggs": {
+            "my_group": {
+              "terms": {
+                "field": "name"
+              },
+              "aggs": {
+                "my_price": {
+                  "avg": {
+                    "field": "price"
+                  }
+                }
+              }
+            }
+          }
+        }
+    ----先范围-再分组--再平均
+        GET /product/dianzi/_search
+        {
+          "size":0,
+          "aggs": {
+            "my_range": {
+              "range": {
+                "field": "price",
+                "ranges": [
+                  {
+                    "from": 3000,
+                    "to": 200000
+                  }
+                ]
+              },
+              "aggs": {
+                "my_term": {
+                  "terms": {
+                    "field": "name"
+                  }
+                  ,"aggs": {
+                    "my_avg": {
+                      "avg": {
+                        "field": "price"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
