@@ -31,3 +31,5 @@
             }
             假如版本号一致或者更小
             "reason": "[bf][1]: version conflict, current version [3] is higher or equal to the one provided [3]",
+        retry策略：尝试指定次数
+            post /index/type/id/_update?retry_on_conflic=5&version

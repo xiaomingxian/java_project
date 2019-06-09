@@ -275,3 +275,38 @@ Dev Tools
             }
           }
         }
+=======================批量查询mget
+===重要性：一次性查询多条数据可以尽量减少网络开销，提升性能
+    GET /_mget
+    {
+      "docs":[
+      {
+        "_index":"bingfa",
+        "_type":"bf",
+        "_id":1
+      },
+       {
+        "_index":"product",
+        "_type":"dianzi",
+        "_id":1
+      }
+      ]
+    }
+    -----同一个索引下的数据
+        GET /product/_mget
+        {
+          "docs":[
+            {
+              "_type":"dianzi","_id":1
+            },
+            {
+              "_type":"dianzi","_id":2
+            }
+            ]
+        }
+    -------同一个type下的数据
+        GET /product/dianzi/_mget
+        {
+          "ids":[1,2,3]
+        }
+========================bulk语法
