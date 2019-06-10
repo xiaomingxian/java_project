@@ -7,6 +7,7 @@ public class T4_CacheThreadPool {
 
 
     public static void main(String[] args) {
+        //线程服用：线程池为无限大，当执行第二个任务时第一个任务已经完成，会复用执行第一个任务的线程，而不用每次新建线程。
         ExecutorService service = Executors.newCachedThreadPool();
 
         System.out.println(service);

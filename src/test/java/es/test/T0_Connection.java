@@ -17,10 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class T0_Connection {
     //https://blog.csdn.net/linzhiqiang0316/article/details/80354898
@@ -139,6 +136,16 @@ public class T0_Connection {
 
     }
 
+    @Test
+    public void t() {
+        ArrayList<Integer> integers = new ArrayList<>();
+        integers.add(1);
+        integers.add(3);
+        integers.add(2);
+        integers.add(2);
+        integers.add(1);
 
+
+    }
 
 }

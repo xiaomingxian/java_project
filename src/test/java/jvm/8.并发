@@ -78,6 +78,24 @@ https://www.cnblogs.com/heyonggang/p/9112731.html
 ConcurrentSkipListMap   高并发环境下并且需要排序 不安全的map对应treemap
 
 ------------------------ queue java.util.queue ---------------------
+ /**
+     * 抛出异常型
+     * add()
+     * remove()
+     * element()  检查 拿到第一个元素
+     * -----------------------------
+     * 返回boolean
+     * offer("xxx")添加失败返回false
+     * pool()移除失败返回null
+     * peek() 检查获取第一个元素
+     * ----------------------------
+     * 阻塞
+     * put(e)//超出大小-阻塞
+     * take();//没有元素阻塞
+     * 没有检查方法
+     * ----------------------------
+     * 超时--过时不候(存取)
+     */
 1.并发的加锁的
     concurrentLinkedQueue[无界队列，直到内存消耗完]  offer加数据，有返回值判断是否添加成功  size poll获取值并取出  peak只获取值
     ConcurrentLinkedDeque[双向]
@@ -130,7 +148,11 @@ https://www.cnblogs.com/zhujiabin/p/5404771.html
     ...
     newScheduledThreadPool线程可复用[容器DelayQueue] 与 Timer不一样它是每次都是一个新线程
     newWorkStealingPool     场景：任务分配的不均匀  底层是：ForkJoinPool
-    ForkJoinPool            分而治之
+    ForkJoinPool            分而治之   https://www.jianshu.com/p/de025df55363
+        ForkJoinPool里有三个重要的角色：
+            ForkJoinWorkerThread（下文简称worker）：包装Thread；
+            WorkQueue：任务队列，双向；
+            ForkJoinTask：worker执行的对象，实现了Future。两种类型，一种叫submission，另一种就叫task。
 
 ThreadPoolExecutor大多数线程池背后都是这个类 [获取实例]  ForkJoinPool除外[它直接继承了 AbstractExecutorService]
     eg:

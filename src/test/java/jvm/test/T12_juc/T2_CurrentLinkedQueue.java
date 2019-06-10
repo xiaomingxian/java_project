@@ -40,7 +40,7 @@ public class T2_CurrentLinkedQueue {
                     //如果没值就是null
                     Object poll = queue.poll();//
                     if (null == poll) break;//判断后没有继续操作----没有线程安全问题？？？
-                    else System.out.println("tick:" + poll);
+                    else System.out.println("++tick:" + poll);
                 }
             }
         }).start();

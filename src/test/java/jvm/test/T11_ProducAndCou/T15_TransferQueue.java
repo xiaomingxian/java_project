@@ -12,21 +12,23 @@ public class T15_TransferQueue {
 
 
     public static void main(String[] args) {
-        //new Thread(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        try {
-        //            Object poll = queue.take();
-        //            System.out.println(poll);
-        //        }catch (Exception e){}
-        //    }
-        //}).start();
+        //先开启消费者--不阻塞
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Object poll = queue.take();
+                    System.out.println(poll);
+                }catch (Exception e){}
+            }
+        }).start();
 
         try {
             queue.transfer("111");
         } catch (Exception e) {
         }
 
+        //后开启消费者--阻塞
         new Thread(new Runnable() {
             @Override
             public void run() {
