@@ -13,7 +13,7 @@
   //-XX:+/-    +表示开启   -表示禁用
         //-XX:+PrintGCDetails
         //空格隔开多条指令
-        //ava的gc回收的类型主要有几种
+        //java的gc回收的类型主要有几种
         // UseSerialGC，UseConcMarkSweepGC，
         // UseParNewGC，UseParallelGC，UseParallelOldGC，UseG1GC，
 
