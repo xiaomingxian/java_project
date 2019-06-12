@@ -13,3 +13,21 @@
     服务端代理根据解码调用本地服务
     本地服务调用成功将结果返回给服务端代理
     服务端代理将返回结果打包成消息体发送至消费方
+
+======================= dubbo设计结构  =========================
+Bussiness[业务逻辑层]
+    Service[interface  implement]
+RPC
+    Config[][ReferenceConfig[配置文件中标明的实现] ServiceConfig[配置文件中标明的接口]]
+    Register[注册中心][服务的注册与发现]
+    Cluster[路由层负载均衡]
+    Monitor[监控层]
+    Protocol[远程调用层]
+Remoting[远程通信]
+    Exchange[信息交换层][客户端服务端建立起通信管道]
+    Transport[传输层][底层是netty]
+    Serilize[序列化层]
+
+===================== 标签解析 ============================
+BeanDefinationParser[Spring的继承树下有dubbo的包]
+ioc容器启动的时候加载配置文件，解析标签，生成对应的组建
