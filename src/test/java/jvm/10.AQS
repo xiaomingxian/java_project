@@ -1,0 +1,26 @@
+AbstractQueuedSynchronizer      https://www.cnblogs.com/waterystone/p/4920797.html
+state的默认值应该是0
+[FIFO先进先出][CLH队列]
+锁的实现框架
+
+线程.join()//守护线程-等此线程执行完毕后[线程数组循环 线程.join() 等待所有线程结束]
+
+sychronized 1.5之前不可重入
+jdk1.6 sychronized锁升级的过程[默认打开偏向锁][sychronized的优化过程]
+    偏向锁[偏向第一个线程,如果有其他线程征用的话就升级]-->轻量级锁[一般自旋锁(10次)]-->重量级锁[sychronized悲观]
+
+
+ReentryLock 底层是AQS
+
+sychronized加锁是 JVM要与操作系统打交道[os][调用操作系统的底层进行加锁]
+    用户态[jvm]与Kernel切换耗时[os][重量级的原因-1.5后优化没有那么重 锁升级的过程(偏向锁-->轻量-->重量)]
+
+
+1.5之后增加了很多ConcurrentLock的内容 [只用在jvm内部就能实现锁的效果 无需os底层 效率会提高]
+
+
+CAS  现代CPU支持CAS指令[栅栏] 内存偏移量上做操作 [适用情况：阻塞时间短自旋时间短(自旋时间长也消耗CPU)][阻塞时间长->synchronized比较合适]
+
+
+
+CounDownLunch  的内部实现类也是用了AQS  用的是共享锁[多个线程都可以持有这个锁]
