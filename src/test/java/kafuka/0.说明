@@ -1,0 +1,6 @@
+写高效:页缓存[os cache]+磁盘顺序写入
+消费高效:零拷贝
+    [原来是有2层多余的拷贝os cache->应用进程 应用进程->socket缓存->网卡]
+    现在:os cache->网卡  os cache-[拷贝描述符]->socket缓存
+
+es的高效也是基于os cache
