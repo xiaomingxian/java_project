@@ -15,7 +15,7 @@ import static org.objectweb.asm.Opcodes.ASM4;
  */
 public class T13_ParseClass extends ClassVisitor {
 
-    public T13_ParseClass(int i) {
+    public T13_ParseClass() {
         super(ASM4);
     }
 
@@ -54,7 +54,7 @@ public class T13_ParseClass extends ClassVisitor {
     }
 
     public static void main(String[] args) throws Exception {
-        T13_ParseClass t13_parseClass = new T13_ParseClass(1);
+        T13_ParseClass t13_parseClass = new T13_ParseClass();
 
         ClassReader classReader = new ClassReader("java.lang.Runnable");
 
