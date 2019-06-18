@@ -1,9 +1,13 @@
 package test;
 
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class StaticTest {
+
+    private     static String s="x";
 
     public static void main(String[] args) {
         AC ac = new AC();
@@ -16,6 +20,12 @@ public class StaticTest {
         System.out.println(map);
 
 
+    }
+
+    @Test
+    public void t1(){
+        s="xxx";
+        System.out.println(StaticTest.s);
     }
 
 

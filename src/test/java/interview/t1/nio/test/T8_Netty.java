@@ -55,7 +55,7 @@ public class T8_Netty {
                 .childHandler(new ChannelInitializer<SocketChannel>() {//当每一个客户端连接上来之后给它一个监听器进行处理
                     @Override
                     protected void initChannel(SocketChannel channel) throws Exception {
-                        channel.pipeline().addLast(new Hander());//这个通道一旦初始化就添加此通道的处理器--对数据做出炉
+                        channel.pipeline().addLast(new Hander());//这个通道一旦初始化就添加此通道的处理器--对数据做处理
                     }
                 });
         try {

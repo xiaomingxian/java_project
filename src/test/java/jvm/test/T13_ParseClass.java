@@ -6,6 +6,8 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
+import java.util.Arrays;
+
 import static org.objectweb.asm.Opcodes.ASM4;
 
 /**
@@ -22,7 +24,8 @@ public class T13_ParseClass extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name, String sinature, String superName, String[] interfaces) {
 
-        System.out.println("版本: " + version + "，access:" + access + ",名称：" + name);
+        System.out.println("版本: " + version + "，access:" + access + ",名称：" + name + ",sinature:" + sinature + ",superName:" + superName);
+        System.out.println("接口：" + Arrays.toString(interfaces));
     }
 
     /**
