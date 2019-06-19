@@ -21,3 +21,10 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+.idea/**
+*.iml
+src/test/java/design_parrent/pojo/p8_zhuangshizhe/
+src/test/java/design_parrent/pojo/p9_waiguan/
+target/apache-tomcat-maven-plugin/
+target/**
+.gitignore

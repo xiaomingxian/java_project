@@ -390,6 +390,21 @@
 
     </dependencies>
 
+    <!-- 指定发布路径 -->
+    <distributionManagement>
+        <!-- use the following if you're not using a snapshot version. -->
+        <repository>
+            <id>cintel-releases</id><!--与setting中保持一致-->
+            <url>http://localhost:8080/nexus/content/repositories/releases/</url>
+        </repository>
+        <!-- use the following if you ARE using a snapshot version. -->
+        <snapshotRepository>
+            <id>cintel-snapshots</id><!--与setting中保持一致-->
+            <url>http://localhost:8080/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
     <build>
         <plugins>
             <plugin>
