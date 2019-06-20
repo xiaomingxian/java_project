@@ -1,0 +1,9 @@
+session
+    https://blog.csdn.net/u011213044/article/details/80525997
+    服务器session复制 tomcat server.xml进行配置[基于网络广播策略，一个节点session变化，其他节点同步复制]
+    session共享机制    [使用分布式缓存方案比如memcached、Redis，但是要求Memcached或Redis必须是集群。]
+    session持久化到数据库
+
+
+分布式事物：  https://www.jianshu.com/p/16b1baf015e8
+    

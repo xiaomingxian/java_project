@@ -23,7 +23,7 @@ public class T1_QueueConsumer {
             //3、开启连接
             connection.start();
 
-            //创建一个服务对象session
+            //创建一个服务对象session  ---参数：事物，第二个参数对于producer无效[如果第一个是false][对于consumer不管用，消费者没有事物]
             Session session = connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
             //创建一个目的地Destination，,即ActiveMQ的接收点
             Queue queue = session.createQueue("test-q2");
@@ -61,6 +61,8 @@ public class T1_QueueConsumer {
             //3、开启连接
             connection.start();
             //4、使用 Connection 对象 创建一个 Session 对象
+            //其他参数值[消费者确认，如果消费者没有确认可能会有数据重复的问题] Session.CLIENT_ACKNOWLEDGE  此处的确认机制是确认后客户端就删除消息[其他消费者拉去不到信息]
+            //允许消息的重复处理[会产生副本][不推荐]Session.DUPS_OK_ACKNOWLEDGE
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             //5、创建一个 Destination 对象。queue 对象
             Queue queue = session.createQueue("test.queue");
