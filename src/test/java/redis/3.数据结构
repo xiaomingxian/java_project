@@ -12,6 +12,7 @@ https://www.cnblogs.com/wxd0108/p/5729739.html
     lindex list1 0 #获取0位置上的元素
     lrange list1 0 2 #获取0-2范围内的元素
     lpop list1 #移除并返回左边第一个元素
+    llen list1 #元素数量
 
 =================== set[去重]
     sadd set1 v1 #添加成功会显示成功数量-添加重复元素不会成功，返回0
