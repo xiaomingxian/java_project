@@ -1,0 +1,31 @@
+原因排查
+    top
+    sql写的烂
+    索引失效
+    关联查询过多
+    服务器调优及各个参数的设置(缓冲,线程数等)
+
+索引
+    建索引：create index idx_user_name on user(name)  #idx_user_name[默认索引前缀_表名_字段名]
+    建复合索引：create index idx_user_nameEmail on user(name,email)  #idx_user_name[默认索引前缀_表名_字段名]
+
+SQL机器执行顺序：开始----from---on---join/where----group by---having---order by---select ----limit
+
+
+JOIN[7种]   图： 0.sqlJoin.jpg
+    内/外/左/交叉/笛卡尔/全 连接
+
+    内：select * from a inner join b on a.key=b.key
+
+
+    左：select * from a left join b on a.key=b.key
+    右：select * from a right join b on a.key=b.key
+
+    左外：select * from a left join b on a.key=b.key where b.key is null
+    右外：select * from a right join b on a.key=b.key where a.key is null
+
+    全：select * from a full outer join b on a.key=b.key
+    select * from a full out outer join b on a.key=b.key where a.key is null or b.key is null
+
+    UNION 操作符用于合并两个或多个 SELECT 语句的结果集。请注意，UNION 内部的 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每条 SELECT 语句中的列的顺序必须相同。
+    SELECT column_name(s) FROM table_name1 UNION SELECT column_name(s) FROM table_name2

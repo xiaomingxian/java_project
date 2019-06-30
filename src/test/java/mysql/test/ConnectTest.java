@@ -1,4 +1,4 @@
-package mysql;
+package mysql.test;
 
 
 import java.sql.Connection;
