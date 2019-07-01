@@ -1,0 +1,74 @@
+
+id | select_type | table | type | possible_keys | key | key_len | ref | rows | filtered | extra
+
+
+
+执行计划(Explain)
+    是什么：使用explain关键字可以模拟优化器执行sql,从而知道mysql是如何处理sql的，分析查询语句或者表结构的性能瓶颈
+    作用：
+        表的读取顺序
+        数据读取操作的操作类型
+        哪些索引可以使用
+        哪些索引实际被使用
+        表之间的引用
+        每张表有多少行被优化器查询
+    使用：explain+sql
+    https://blog.csdn.net/weixin_39680135/article/details/81084324
+    结果展示：id | select_type | table | type | possible_keys | key | key_len | ref | rows | filtered | extra
+        id:查询的序列号，包含一组数字，表示查询中执行 select 子句或操作表的顺序
+           值： id相同/不同/相同又不同
+               相同：id相同，表执行顺序由上到下，与sql中顺序无关
+               不同：如以上子查询，id的序号会递增，id值越大优先级越高，越先被执行
+               相同有不同：d 如果相同，可以认为是一组，从上往下顺序执行；（衍生 = derived）  在所有组中，id值越大，优先级越高，越先执
+
+        select_type:
+            simple:简单查询，查询中不包含子查询或者union等任何复杂查询
+            primary:查询中若包含任何复杂的子查询，则最外层被标记为paimary，俗称是鸡蛋壳
+            subquery:在select或where列表包含了子查询
+            derived:[临时表]延伸虚表 from (selct * from xxx) as t1    t1为延伸虚表
+            union：若第二个select出现在union之后，则被标记为union；若union包含在from子句的子查询中，外层select将被标记为：derived
+            union result：两种union结果的合并
+
+            eg:
+                explain select * from user where id=1 UNION select * from user  # select_type:[primary,union,union result]
+                explain select * from user where id=1    #select_type:primary
+                explain select * from user               #select_type:simple
+
+        type:
+            性能排序：System > const > eq_ref > ref > range > index > all
+            一般来说，得保证查询至少达到range级别，最好能达到ref
+
+            system:表里只有一行记录，一般是系统表[mysql出厂自带]
+            const:表示通过索引一次就找到了，const用于比较primary key 或者 unique索引，因为只匹配一行数据，所以很快，如将主键置于where列表中，mysql就能将该查询转换为一个常量。
+            eq_ref:唯一性索引扫描。对于每个索引建，表中只有一条记录与之匹配。常见于主键或唯一索引扫描
+            ref:非唯一性索引扫描，返回匹配某个单独值得所有行，本质上也是一种索引访问，它返回所有匹配某个单独值得行，然而它可能会找到多个符合条件的行，所以他应该属于查找和扫描的混合体
+            range:只检索给定范围的行，使用一个索引来选择行，key 列显示使用了哪个索引，一般就是你的where语句中出现了between、<、>、in等的查询(mysql5.7支持in走索引)，
+                    这种范围扫描索引扫描比全表扫描好，因为它至于要开始索引的某一点，而结束语另一点，不用扫描全部索引
+            index:full index scan(全索引扫描)，index与all区别为index类型只遍历索引树，这通常比all块，因为索引文件通常比数据文件小。
+                    （也就是说虽然all和index都是读全表，单index是从索引中读取的，而all是从硬盘中读的）
+            all:全表扫描
+        possible_keys/key 判断索引是否生效-多个索引竞争的情况下 mysql选择了哪一个
+            possible_keys:查询sql可能会用到的索引，但实际不一定被使用
+            key:实际使用到的索引
+                [如果为null-1.没有索引-2.索引失效]
+                [查询中若使用了覆盖索引，则该索引仅出现在key列表中]
+            possible为null而key不为null的情况：创建的索引与查询条件刚好匹配[个数和顺序]   select a,b from table where a=1 and b=1 #a,b是创建的复合索引
+        key_len:索引中使用的字节数[索引字段的最大可能长度，并非实际使用长度] 原则：在同样的查询条件下 字节数长度越短越好
+            select * from t1 where c1='a' and c2='b'   /select * from t1 where c1='a'   #第一句比第二句使用的长度长 因为条件更多
+
+        ref:显示索引的那一列被使用，如果可能的话是一个常数。哪些列或常量被用于查找索引上的列
+        rows:每张表有多少行被优化器查询 越少越好
+        extra:
+            #-----------------重要
+            using filesort:外部索引排序，而不是按照表内的索引顺序进行读取。mysql中无法利用索引完成的排序操作称为 文件排序  #索引排序不管用-再将数据在内部进行再排序[危险，九死一生]
+                    模拟：建立复合索引 但是where 或 order by 没有全部使用 /顺序没有测
+            using temporary:新建了一个临时表[更危险] 临时表的创建与回收增加数据库的空间负担
+                    模拟：group by 后的索引数量与顺序对不上
+            using index:[好]表示使用了覆盖索引[查找的字段与所建的索引字段一致]，避免了访问表的数据行
+            #-----------------其他
+            using where:
+            using buffer:使用了连接缓存
+            impossible where:where 条件总是false eg:where name=1 and name=2
+            select tables optimized away
+            distinct:找到第一个匹配的就结束
+
