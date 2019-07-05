@@ -2,7 +2,7 @@ package java_se_test;
 
 import org.junit.Test;
 
-public class T6_StringTest {
+public class T4_StringTest {
 
 
     /**

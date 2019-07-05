@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 
-public class T10_Return {
+public class T5_Return {
 
-    Logger logger = LoggerFactory.getLogger(T10_Return.class);
+    Logger logger = LoggerFactory.getLogger(T5_Return.class);
 
 
     @Test
@@ -25,8 +25,11 @@ public class T10_Return {
         String s="a";
 
         try {
+            int i = 1 / 0;
             return s;
         }catch (Exception e){
+            s = "e";
+            return s;
         }finally {
             s="b";
             logger.info("");
