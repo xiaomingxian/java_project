@@ -1,10 +1,10 @@
-package test;
+package java_se_test;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-public class Invok {
+public class T3_Invok {
 
     public static void main(String[] args) {
 

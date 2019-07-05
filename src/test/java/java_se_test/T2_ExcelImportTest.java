@@ -1,4 +1,4 @@
-package test;
+package java_se_test;
 
 import com.alibaba.excel.support.ExcelTypeEnum;
 import pojo.excelpojo.Person;
@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class ExcelImportTest {
+public class T2_ExcelImportTest {
 
 
     public static void main(String[] args) {

@@ -40,7 +40,7 @@
     <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
         <!-- 设置消息队列的名字 -->
         <constructor-arg>
-            <value>test.queue</value>
+            <value>java_base_test.queue</value>
         </constructor-arg>
     </bean>
     <bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
@@ -57,7 +57,7 @@
     <bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
         <!-- 设置消息队列的名字 -->
         <constructor-arg>
-            <value>test.topic</value>
+            <value>java_base_test.topic</value>
         </constructor-arg>
     </bean>
     <bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
@@ -77,8 +77,8 @@
     <bean id="queueReceiver2" class="controller.activemq.listener.QueueListener2"/>
     <jms:listener-container destination-type="queue" container-type="default" connection-factory="connectionFactory"
                             acknowledge="auto">
-        <jms:listener destination="test.queue" ref="queueReceiver1"/>
-        <jms:listener destination="test.queue" ref="queueReceiver2"/>
+        <jms:listener destination="java_base_test.queue" ref="queueReceiver1"/>
+        <jms:listener destination="java_base_test.queue" ref="queueReceiver2"/>
     </jms:listener-container>
 
 
@@ -88,8 +88,8 @@
 
     <jms:listener-container destination-type="topic" container-type="default" connection-factory="connectionFactory"
                             acknowledge="auto">
-        <jms:listener destination="test.topic" ref="topicReceiver1"/>
-        <jms:listener destination="test.topic" ref="topicReceiver2"/>
+        <jms:listener destination="java_base_test.topic" ref="topicReceiver1"/>
+        <jms:listener destination="java_base_test.topic" ref="topicReceiver2"/>
     </jms:listener-container>
     <!-- 监听器 end -->
 

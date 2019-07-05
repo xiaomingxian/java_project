@@ -1,4 +1,4 @@
-package test;
+package java_se_test;
 
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.metadata.Sheet;
@@ -8,7 +8,6 @@ import org.junit.Test;
 import pojo.excelpojo.Person;
 import pojo.excelpojo.Teacher;
 
-import javax.print.attribute.standard.SheetCollate;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ExcelExportTest {
+public class T1_ExcelExportTest {
 
     String macPath="/Users/xxm/develop/workspace/learn/src/test/java/excel";
 

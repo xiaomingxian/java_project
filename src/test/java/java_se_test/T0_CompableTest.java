@@ -1,11 +1,11 @@
-package test;
+package java_se_test;
 
 import pojo.Person;
 import pojo.Test;
 
 import java.util.*;
 
-public class CompableTest {
+public class T0_CompableTest {
     public static void main(String[] args) {
         Test test1 = new Test(0);
         Test test2 = new Test(2);
