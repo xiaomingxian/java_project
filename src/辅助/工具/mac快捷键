@@ -33,3 +33,6 @@ get/set/toString...   control enter
 --------------------------- 命令
 lsof -i tcp:6379 查看进程
 kill pid         杀进程
+
+--------------------------- navicat pre for mac 快捷键
+command y 查询试图

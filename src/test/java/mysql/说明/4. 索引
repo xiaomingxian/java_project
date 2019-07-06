@@ -34,6 +34,14 @@
     删除：drop index [indexname] on mytable
     查看：show index from tablename/G
 
+=================================  mysql索引种类
+https://www.cnblogs.com/luyucheng/p/6289714.html
+1.普通索引
+2.唯一索引
+3.主键索引
+4.组合索引
+5.全文索引
+
 =================================  mysql索引结构
 bTree索引
     三层的b+[横向扩展，高度低，降低IO次数]树可以表示上百万的数据

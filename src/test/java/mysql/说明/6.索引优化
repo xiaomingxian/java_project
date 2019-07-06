@@ -16,21 +16,32 @@
 覆盖索引：https://www.cnblogs.com/happyflyingpig/p/7662881.html
     不是所有类型的索引都可以成为覆盖索引。覆盖索引必须要存储索引的列，而哈希索引、空间索引和全文索引等都不存储索引列的值，所以MySQL只能使用B-Tree索引做覆盖索引
 ============================== 索引优化 ==============================
-1 全值匹配我最爱
-2 最佳左前缀：查询从最左边开始[带头大哥不能死]，并且不跳过索引列[跳过会使后面的索引失效][中间兄弟不能断]
+1 全值匹配
+2 最佳左前缀：查询从最左边开始[带头大哥不能死-不符合也会使用到索引(不过ref不佳,有左前缀用=全部会按照常量const处理,不符合ref处显示null)]，并且不跳过索引列[跳过会使后面的索引失效][中间兄弟不能断-断了只有第一个生效]
     多列索引：idx_name_age_add
         索引有效where：name;name,age;name,age,add
         索引失效where：age;age,add;age,name...[失去了带头大哥]
+
 3 不在索引列上做任何操作 [计算,函数,(自动or手动)类型转换],会导致索引失效而转向全表扫描   #函数计算：explain select * from t where left(name,3)='tom'
+
 4 存储引擎不能使用索引中范围条件右边的列？？  #select * from t where name='tom' and age>20 and pos='hr' #有效索引 name[检索],age[范围]；无效索引:pos
+
 5 尽量使用覆盖索引 [只访问索引的查询(索引列和查询列一致)],减少select *
+
 6 mysql在使用不等于(!=或者<>)的时候无法使用索引会导致全表扫描
+
 7 is null,is not null 也无法使用索引
+
 8 like以通配符开头(%abc...)mysql索引失效会变成全表扫描的操作   #like %xxx% ;like %xxx 的type为all 全表扫描  。like xxx% 的type 为 range
     mybatis中如何拼接like参数：where username LIKE concat(concat('%',#{username}),'%')
     like %xxx% 索引失效如何解决：使用覆盖索引[解释之一：如果一个索引包含了（或覆盖了）满足查询语句中字段与条件的数据就叫做覆盖索引(eg:复合索引覆盖了展示字段与条件字段)]
         select name,age from t where name like '%xxx%'  #索引:inx_name_age
         #反例：要查询的列或者条件的范围大与索引的字段范围 eg:select * from t where name like '%xxx%' #索引:inx_name_age
-9 字符串不加单引号索引失效   #eg:age字段类型为varchar select * from t where age=20 #这里会涉及到类型的自动转换int->varchar[参考第三条]
-x 少用or,用它来连接时索引会失效
 
+9 字符串不加单引号索引失效   #eg:age字段类型为varchar select * from t where age=20 #这里会涉及到类型的自动转换int->varchar[参考第三条]
+
+x 少用or,用它来连接时索引会失效
+    [不会失效MySQL5.0 索引合并 在用OR，AND连接的多个查询条件时，可以分别使用前后查询中的索引，然后将它们各自的结果合并交集或并集
+        然具体是否使用index merge，***优化器会自己选择***，比如and连接时有联合索引，或干脆全表查询就很快，就没必要使用它了。]
+    #测试结果：未失效   #EXPLAIN select age from user where age>19 or age<18  建立了复合索引 idx_name_age 会生成name与age索引
+    #where后的or中有未创建索引的字段 索引会失效
