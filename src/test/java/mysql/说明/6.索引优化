@@ -4,7 +4,7 @@
 当无法保证被驱动表的join条件字段被索引 且 内存充足的情况下，不要吝啬joinbuffer的设置[设置大]
 
 
-1.范围会使该字段后的字段索引用不上  select a,b,c from t1 where a=1 and b>1 order by c desc #b>1会使 c 索引失效
+1.范围会使该字段后的字段索引用不上  select a,b,c from t1 where a=1 and b>1 order by c desc #b>1会使 c 索引失效  #排序方式得一致 a desc b desc c desc 索引会生效 有一个不一致就不会生效
     原因：BTree的工作原理 先排序a,如果遇到相同的再排序b,再遇到相同的再排c  因为b是一个范围，mysql无法利用索引对后面的c进行检索，即c的索引无效
     解决：删除原来三个字段的索引，仅为 a,b建立索引
 
