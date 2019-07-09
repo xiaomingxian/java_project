@@ -122,6 +122,14 @@ public class T5_Return {
         p(person);
         System.out.println(person);
 
+        StringBuffer stringBuffer = new StringBuffer("");
+        add(stringBuffer);
+        System.out.println(stringBuffer.toString());
+
+    }
+
+    private void add(StringBuffer stringBuffer) {
+        stringBuffer.append("00000");
     }
 
     public void p(Person p) {

@@ -1,0 +1,8 @@
+查看邮箱用户信息  git config --global --list
+查看用户名的命令  git  config user.name
+查看邮箱的命令  git  config  user.email
+
+修改用户名和邮箱地址
+    git   config --global  user.name  "username"
+
+    git   cinfig  --global  user.email  "email"
