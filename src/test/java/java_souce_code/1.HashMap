@@ -4,7 +4,7 @@
     static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
 数组最大值：
     static final int MAXIMUM_CAPACITY = 1 << 30;
-加载因子[负载因子]
+加载因子[负载因子]3/4
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
     构造方法中可以指定负载因子
 链表转红黑树的临界值 [最大]jdk1.8
@@ -26,6 +26,8 @@
 
 扩容后大小：是扩容前的2倍？
 
+
+#怎么根据元素找到他的位置  hashCode+equals
 
 /////////////// 多线程下的死循环问题
 扩容会进行 rehash  多线程环境下 Node中的next的指向问题 可能会互相指向对方 造成get()时的死循环

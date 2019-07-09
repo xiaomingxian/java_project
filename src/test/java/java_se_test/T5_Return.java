@@ -55,11 +55,11 @@ public class T5_Return {
     private String finallyReturn() {
         new SimpleDateFormat("HH:mm:ss");
 
-        String s="a";
+        String s = "a";
 
         try {
             return s;
-        }catch (Exception e){
+        } catch (Exception e) {
             s = "e";
         } finally {
             s = "b";
@@ -113,5 +113,18 @@ public class T5_Return {
             stringBuffer.append("  finally");
         }
         return null;
+    }
+
+
+    @Test
+    public void test_1() {
+        Person person = new Person();
+        p(person);
+        System.out.println(person);
+
+    }
+
+    public void p(Person p) {
+        p.setName("aaaa");
     }
 }
