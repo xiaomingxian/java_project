@@ -11,7 +11,10 @@
 平常所说的索引：没有特别说明都是指B树[多路搜索树[不仅是二叉树，还有可能是三叉n叉]]
     唯一索引[主键]默认使用B+树---其他索引：聚集索引，次要索引，覆盖索引[B-Tree]，前缀索引等
     除了B+树索引，还有哈希索引等
-
+================================= 索引类型
+https://www.cnblogs.com/zhangqie/p/8416164.html
+https://www.cnblogs.com/zuochuang/p/8184349.html
+MYISM-INNODB-ES索引区别：http://www.lvesu.com/?uri=/blog/main/cms-611.html
 
 =================================  索引的优势劣势[查找/排序]：
     优势：
