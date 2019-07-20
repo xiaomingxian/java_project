@@ -6,3 +6,6 @@
     git   config --global  user.name  "username"
 
     git   cinfig  --global  user.email  "email"
+
+
+eclipse提交到git:https://blog.csdn.net/su1573/article/details/79231475
