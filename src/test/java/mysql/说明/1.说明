@@ -23,3 +23,17 @@ ql执行慢的原因
     适用情况：[查询多]
     不适用：表记录少，增删改多，用不到的查询条件
     group包括order by [分组的时候先做了一次排序]
+
+
+
+事务的隔离级别：https://www.cnblogs.com/ubuntu1/p/8999403.html
+read uncommited[造成脏读]    读到了未提交的内容
+
+read commited[解决了脏读造成重复读]  oracle默认
+            读到了另一事务的update数据，与自己刚进来应该读到的内容不一致
+            或者 更新丢失，一事务在提交之后读取到另一个事务[后提交的事务]的结果 #对先提交的事务进行了覆盖
+            #解决：如果检测到另一事务正在执行那么先不要访问
+
+read repeatable[解决了重复读，造成幻读] mysql默认
+
+read serialized[解决了所有]  读到了另一事务的insert数据
