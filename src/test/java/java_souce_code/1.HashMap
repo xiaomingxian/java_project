@@ -29,6 +29,15 @@
 
 #怎么根据元素找到他的位置  hashCode+equals
 
+/////////////// put
+https://blog.csdn.net/the_one_and_only/article/details/81665098
+static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+}
+
+
+
 /////////////// 多线程下的死循环问题
 扩容会进行 rehash  多线程环境下 Node中的next的指向问题 可能会互相指向对方 造成get()时的死循环
 https://coolshell.cn/articles/9606.html
