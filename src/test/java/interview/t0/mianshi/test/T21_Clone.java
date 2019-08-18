@@ -1,5 +1,6 @@
 package interview.t0.mianshi.test;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class T21_Clone implements Cloneable {
@@ -29,6 +30,7 @@ public class T21_Clone implements Cloneable {
         t21_clone.setAge(11);
         t21_clone.setName("Jerry");
 
+        ArrayList l=null;
         try {
 
             T21_Clone clone = (T21_Clone) t21_clone.clone();
