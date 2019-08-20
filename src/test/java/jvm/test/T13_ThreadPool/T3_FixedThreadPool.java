@@ -1,7 +1,5 @@
 package jvm.test.T13_ThreadPool;
 
-import javafx.concurrent.Task;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

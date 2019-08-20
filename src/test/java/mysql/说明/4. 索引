@@ -43,7 +43,8 @@ https://www.cnblogs.com/luyucheng/p/6289714.html
 2.唯一索引
 3.主键索引
 4.组合索引
-5.全文索引
+5.全文索引：只能用在MyIsam的char,varchar,text字段   #5.6.24Innodb也加入了全文索引
+    分词，全文索引以词为基础的，MySQL默认的分词是所有非字母和数字的特殊符号都是分词符
 
 =================================  mysql索引结构
 bTree索引
