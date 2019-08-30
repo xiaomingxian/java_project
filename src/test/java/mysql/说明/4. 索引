@@ -1,3 +1,5 @@
+https://www.cnblogs.com/boothsun/p/8970952.html
+
 300万左右性能开始下降
 官方：索引是为了帮助mysql高效获取数据的数据结构  【排好序的快速查找数据结构】[排序+快速查找]
 影响：where后的查找与order by 后的排序
