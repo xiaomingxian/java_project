@@ -1,0 +1,11 @@
+会签基于多实例
+    Sequential：执行顺序。必选项，可选值有true、false。用于设置多实例的执行顺序。True：多实例顺序执行，false：多实例并行
+    loop cardinality：循环基数。可选项。可以直接填整数，表示会签的人数。
+    Collection：集合。可选项。会签人数的集合，通常为list。和loop cardinality二选一
+    Element variable：元素变量。选择Collection时必选，为collection集合每次遍历的元素
+    Completion condition：完成条件。可选。Activiti会签有个特性，比如设置一个人完成后会签结束，那么其他人的代办任务都会消失
+
+会签中的默认变量
+     nrOfInstances（numberOfInstances）：会签中总共的实例数
+     nrOfCompletedInstances：已经完成的实例数量
+     nrOfActiviteInstances：当前活动的实例数量，即还没有完成的实例数量
