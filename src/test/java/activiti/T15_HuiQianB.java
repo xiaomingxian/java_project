@@ -1,6 +1,5 @@
 package activiti;
 
-
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -18,10 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 并行会签
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
-public class T14_HuiQian {
-
+public class T15_HuiQianB {
 
     @Autowired
     private RepositoryService repositoryService;
@@ -39,11 +40,10 @@ public class T14_HuiQian {
     @Test
     public void deploy() {
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/huiqian/HuiQian.bpmn")
-                .addClasspathResource("bpmn/huiqian/HuiQian.png")
+                .addClasspathResource("bpmn/huiqian/BXHuiQian.bpmn")
+                .addClasspathResource("bpmn/huiqian/BXHuiQian.png")
                 .deploy();
 
-        //255001
         System.out.println("------->部署实例：" + deploy.getId());
     }
 
@@ -54,7 +54,7 @@ public class T14_HuiQian {
     @Test
     public void start() {
 
-        String instanceKey = "HuiQian";
+        String instanceKey = "BXHuiQian";
 
 
         //设置会签人员
@@ -70,27 +70,30 @@ public class T14_HuiQian {
         vars.put("pass", "ok");
         vars.put("ok", "yes");
 
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(instanceKey,vars);
-
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(instanceKey, vars);
 
         System.out.println("======>" + processInstance.getProcessDefinitionId());
 
     }
 
     /**
-     * 处理任务设置会签人员
-     */
-    @Test
-    public void doHuiQianTask() {
-    }
-
-    /**
-     * 会签人员处理任务
+     * 处理会签任务
+     * 并行--当condition又一个满足条件时 此节点就结束
      */
     @Test
     public void doTask() {
+        //查询任务并办理
+        String user = "jerry";
+        Task task = taskService.createTaskQuery().taskAssignee(user).singleResult();
+
+        Map map = new HashMap();
+        map.put("pass", "ok");
+
+        //taskService.complete(task.getId(), map);
+        taskService.complete(task.getId());
+
+        System.out.println(task.getAssignee() + "  " + task.getName());
 
     }
-
 
 }

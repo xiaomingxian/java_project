@@ -5,7 +5,6 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
@@ -30,8 +27,8 @@ public class T10_PersonalTask {
 
         RepositoryService repositoryService = processEngine.getRepositoryService();
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/Personal_Listener.bpmn")
-                .addClasspathResource("bpmn/Personal_Listener.png")
+                .addClasspathResource("bpmn/base/Personal_Listener.bpmn")
+                .addClasspathResource("bpmn/base/Personal_Listener.png")
                 .deploy();
         System.out.println("---->发布成功|name:" + deploy.getName() + " " + deploy.getId());
     }

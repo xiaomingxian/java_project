@@ -30,8 +30,8 @@ public class T6_LineTest {
     public void deploy() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/ParallelGateWay.bpmn")
-                .addClasspathResource("bpmn/ParallelGateWay.png")
+                .addClasspathResource("bpmn/base/ParallelGateWay.bpmn")
+                .addClasspathResource("bpmn/base/ParallelGateWay.png")
                 .deploy();
         System.out.println("--->流程id:" + deploy.getId());
     }

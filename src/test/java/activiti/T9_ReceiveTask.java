@@ -27,8 +27,8 @@ public class T9_ReceiveTask {
     public void deploy() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/ReceiveTask.bpmn")
-                .addClasspathResource("bpmn/ReceiveTask.png")
+                .addClasspathResource("bpmn/base/ReceiveTask.bpmn")
+                .addClasspathResource("bpmn/base/ReceiveTask.png")
                 .deploy();
         System.out.println("--->流程id:" + deploy.getId());
     }

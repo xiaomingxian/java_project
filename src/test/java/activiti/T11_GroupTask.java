@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashMap;
@@ -34,8 +33,8 @@ public class T11_GroupTask {
     public void deploy() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/Group3.bpmn")
-                .addClasspathResource("bpmn/Group3.png")
+                .addClasspathResource("bpmn/base/Group3.bpmn")
+                .addClasspathResource("bpmn/base/Group3.png")
                 .deploy();
 
         System.out.println("---->流程部署成功：" + deploy.getId());
