@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -83,6 +84,25 @@ public class T18_SubHuiQian {
         taskService.complete(task.getId(), map);
 
         System.out.println(task.getAssignee() + "  " + task.getName());
+
+    }
+
+    /**
+     * 办理会签与子流程任务
+     */
+    @Test
+    public void doSubTask() {
+
+        String name = "张三";
+        List<Task> list = taskService.createTaskQuery().taskAssignee(name).list();
+
+        list.forEach(k -> System.out.println("----->" + k));
+
+        Task task = list.get(0);
+        HashMap map = new HashMap();
+        map.put("okCount", 4);
+        map.put("subCount", 4);
+        taskService.complete(task.getId(), map);
 
     }
 
