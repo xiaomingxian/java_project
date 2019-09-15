@@ -1,3 +1,11 @@
+mac连接linux
+    · 打开Mac终端，切换到root权限下
+        切换root权限： sudo -i
+    ·通过ssh命令连接linux服务器
+        ssh root@127.0.0.1
+        root是账户名，@后面的是连接的ip地址
+        然后根据提示输入密码即可成功
+
 #mac
 显示隐藏文件：command shift .
 #------------- 环境变量配置 ------------
