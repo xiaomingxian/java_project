@@ -9,3 +9,9 @@
 
 
 eclipse提交到git:https://blog.csdn.net/su1573/article/details/79231475
+
+
+git rm -r --cached . // 删除本地缓存
+.ignore插件下载 .ignore文件设置过滤规则
+git add . // 添加要提交的文件
+git commit -m 'update .gitignore' // 更新本地的缓存
