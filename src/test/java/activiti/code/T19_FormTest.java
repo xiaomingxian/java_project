@@ -34,8 +34,8 @@ public class T19_FormTest {
     public void deploy() {
 
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/huiqian/SubHuiQian.bpmn")
-                .addClasspathResource("bpmn/huiqian/SubHuiQian.png")
+                .addClasspathResource("bpmn/jump/Jump.bpmn")
+                //.addClasspathResource("bpmn/huiqian/SubHuiQian.png")
                 .deploy();
 
 

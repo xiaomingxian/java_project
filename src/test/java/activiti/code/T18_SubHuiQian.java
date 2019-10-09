@@ -45,7 +45,7 @@ public class T18_SubHuiQian {
 
     @Test
     public void start() {
-        String key = "SubHuiQian";
+        String key = "daling";
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
 
         System.out.println("--->开启成功" + processInstance.getId());
