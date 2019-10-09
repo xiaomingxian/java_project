@@ -166,7 +166,7 @@ public class T5_Stream {
     public void guiY() {
         List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
 
-        Integer reduce = list1.stream().reduce(2, (x, y) -> x + y);//起始值  (起始之，集合中的值)->运算方式--->运算出的值再次作为起始值
+        Integer reduce = list1.stream().reduce(3, (x, y) -> x + y);//起始值(3)  (起始之，集合中的值)->运算方式--->运算出的值再次作为起始值  #3与集合中所有的数据之和
         System.out.println(reduce);
 
         Optional<String> reduce1 = list.stream().map(Person::getName).reduce(String::join);
