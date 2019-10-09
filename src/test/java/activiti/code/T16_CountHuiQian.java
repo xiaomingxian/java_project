@@ -1,4 +1,4 @@
-package activiti;
+package activiti.code;
 
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -17,12 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 并行会签
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
-public class T15_HuiQianB {
+public class T16_CountHuiQian {
+    /**
+     * 根据数量进行判断
+     */
+
 
     @Autowired
     private RepositoryService repositoryService;
@@ -40,8 +41,8 @@ public class T15_HuiQianB {
     @Test
     public void deploy() {
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/huiqian/BXHuiQian.bpmn")
-                .addClasspathResource("bpmn/huiqian/BXHuiQian.png")
+                .addClasspathResource("bpmn/huiqian/CountHuiQian.bpmn")
+                .addClasspathResource("bpmn/huiqian/CountHuiQian.png")
                 .deploy();
 
         System.out.println("------->部署实例：" + deploy.getId());
@@ -54,7 +55,7 @@ public class T15_HuiQianB {
     @Test
     public void start() {
 
-        String instanceKey = "BXHuiQian";
+        String instanceKey = "CountHuiQian";
 
 
         //设置会签人员
@@ -67,8 +68,6 @@ public class T15_HuiQianB {
         sigList.add("田七");
 
         vars.put("users", sigList);
-        vars.put("pass", "ok");
-        vars.put("ok", "yes");
 
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(instanceKey, vars);
 
@@ -83,17 +82,21 @@ public class T15_HuiQianB {
     @Test
     public void doTask() {
         //查询任务并办理
-        String user = "jerry";
+        String user = "赵六";
         Task task = taskService.createTaskQuery().taskAssignee(user).singleResult();
 
-        Map map = new HashMap();
-        map.put("pass", "ok");
+        String executionId = task.getExecutionId();
+        System.out.println("=========>执行实例id:" + executionId);
+        Integer count = (Integer) runtimeService.getVariables(executionId).get("count");
+        if (count != null) count++;
+        else count = 0;
 
-        //taskService.complete(task.getId(), map);
-        taskService.complete(task.getId());
+        Map map = new HashMap();
+        map.put("count", count);
+
+        taskService.complete(task.getId(), map);
 
         System.out.println(task.getAssignee() + "  " + task.getName());
 
     }
-
 }

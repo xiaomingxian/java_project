@@ -1,4 +1,4 @@
-package activiti;
+package activiti.code;
 
 import java.util.Date;
 import java.util.HashMap;

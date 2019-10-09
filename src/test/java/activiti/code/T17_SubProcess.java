@@ -1,4 +1,4 @@
-package activiti;
+package activiti.code;
 
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -12,17 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
-public class T16_CountHuiQian {
-    /**
-     * 根据数量进行判断
-     */
+public class T17_SubProcess {
 
 
     @Autowired
@@ -35,68 +27,40 @@ public class T16_CountHuiQian {
     private TaskService taskService;
 
 
-    /**
-     * 部署
-     */
     @Test
     public void deploy() {
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/huiqian/CountHuiQian.bpmn")
-                .addClasspathResource("bpmn/huiqian/CountHuiQian.png")
+                .addClasspathResource("bpmn/huiqian/SubProcess.bpmn")
+                .addClasspathResource("bpmn/huiqian/SubProcess.png")
                 .deploy();
 
         System.out.println("------->部署实例：" + deploy.getId());
     }
 
-
-    /**
-     * 开启流程实例--设置会签人
-     */
     @Test
     public void start() {
+        String key = "SubProcess";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
 
-        String instanceKey = "CountHuiQian";
-
-
-        //设置会签人员
-        Map vars = new HashMap<>();
-        List<String> sigList = new ArrayList<>();
-        sigList.add("张三");
-        sigList.add("李四");
-        sigList.add("王五");
-        sigList.add("赵六");
-        sigList.add("田七");
-
-        vars.put("users", sigList);
-
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(instanceKey, vars);
-
-        System.out.println("======>" + processInstance.getProcessDefinitionId());
+        System.out.println("--->开启成功" + processInstance.getId());
 
     }
 
-    /**
-     * 处理会签任务
-     * 并行--当condition又一个满足条件时 此节点就结束
-     */
     @Test
     public void doTask() {
         //查询任务并办理
-        String user = "赵六";
+        String user = "jerry";
         Task task = taskService.createTaskQuery().taskAssignee(user).singleResult();
 
         String executionId = task.getExecutionId();
         System.out.println("=========>执行实例id:" + executionId);
-        Integer count = (Integer) runtimeService.getVariables(executionId).get("count");
-        if (count != null) count++;
-        else count = 0;
 
-        Map map = new HashMap();
-        map.put("count", count);
 
-        taskService.complete(task.getId(), map);
+        taskService.complete(task.getId());
 
         System.out.println(task.getAssignee() + "  " + task.getName());
 
     }
+
+
 }

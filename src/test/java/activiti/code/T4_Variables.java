@@ -1,4 +1,4 @@
-package activiti;
+package activiti.code;
 
 import activiti.pojo.User;
 import org.activiti.engine.HistoryService;
@@ -60,7 +60,7 @@ public class T4_Variables {
     public void setVaribles2() {
         RuntimeService runtimeService = processEngine.getRuntimeService();
         String excutionId = "42501";
-        HashMap<String, Object> map = new HashMap<>();
+    HashMap<String, Object> map = new HashMap<>();
         map.put("请假天数", 3);
         map.put("请假原因", "回家2");
         map.put("请假时间", new Date());
@@ -68,7 +68,7 @@ public class T4_Variables {
         runtimeService.setVariablesLocal(excutionId, map);
         System.out.println("流程变量值更新成功");
 
-    }
+}
 
     /**
      * 3.

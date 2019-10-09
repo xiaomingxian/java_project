@@ -1,5 +1,5 @@
 
-package activiti;
+package activiti.code;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;

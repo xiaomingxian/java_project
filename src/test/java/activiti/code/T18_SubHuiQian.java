@@ -1,4 +1,4 @@
-package activiti;
+package activiti.code;
 
 
 import org.activiti.engine.RepositoryService;
