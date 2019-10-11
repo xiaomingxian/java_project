@@ -374,7 +374,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.16.Final</version>
+            <version>4.1.42.Final</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
