@@ -34,7 +34,7 @@ public class T19_FormTest {
     public void deploy() {
 
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/jump/Jump.bpmn")
+                .addClasspathResource("bpmn/jump/parallel.bpmn")
                 //.addClasspathResource("bpmn/huiqian/SubHuiQian.png")
                 .deploy();
 
@@ -47,7 +47,7 @@ public class T19_FormTest {
     }
 
     /**
-     * 根据流程定义id从开始时间获取信息
+     * 根据流程定义id从开始事件获取信息
      * 根据任务id从任务节点获取信息
      */
 

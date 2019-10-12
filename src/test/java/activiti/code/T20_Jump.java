@@ -2,8 +2,11 @@ package activiti.code;
 
 
 import activiti.util.JDJumpTaskCmd;
+import activiti.util.ParallelJumpTaskCmd;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
@@ -29,6 +32,12 @@ public class T20_Jump {
     private ManagementService managementService;
     @Autowired
     private TaskServiceImpl taskServiceImpl;
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private RuntimeService runtimeService;
+
 
     /**
      * method1
@@ -79,5 +88,35 @@ public class T20_Jump {
 
 
         commandExecutor.execute(new JDJumpTaskCmd(executionId, destinationActivity, vars, currentActivity));
+    }
+
+    /**
+     * 分支节点跳转
+     */
+    @Test
+    public void fenZhiJump() {
+        /**
+         runtimeService.startProcessInstanceByKey("myProcess_1");
+         Task task = taskService.createTaskQuery().taskAssignee("张三").singleResult();
+         taskService.complete(task.getId());
+         */
+        CommandExecutor commandExecutor = taskServiceImpl.getCommandExecutor();
+
+        String executionId = "2507";
+
+
+        //流程定义实体
+        ReadOnlyProcessDefinition processDefinitionEntity = (ReadOnlyProcessDefinition) repositoryService.getProcessDefinition("myProcess_1:1:4");
+
+
+        // 目标节点
+        ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity("UserTask1");
+        // 当前节点
+        ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity("UserTask2");
+
+
+        commandExecutor.execute(new ParallelJumpTaskCmd(executionId, destinationActivity, new HashMap<>(), currentActivity));
+
+
     }
 }

@@ -16,7 +16,8 @@ import java.util.Map;
  * 分享牛原创(尊重原创 转载对的时候第一行请注明，转载出处来自分享牛http://blog.csdn.net/qq_30739519)
  */
 public class JDJumpTaskCmd implements Command<Void> {
-    protected String executionId;
+    protected String parentId;//执行实例id------单实例下与流程实例id相同
+    protected String executionId;//流程实录id
     protected ActivityImpl desActivity;
     protected Map<String, Object> paramvar;
     protected ActivityImpl currentActivity;
