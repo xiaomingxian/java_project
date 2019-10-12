@@ -110,9 +110,9 @@ public class T20_Jump {
 
 
         // 目标节点
-        ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity("UserTask1");
+        ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity("_4");//参数是节点id
         // 当前节点
-        ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity("UserTask2");
+        ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity("_3");
 
 
         commandExecutor.execute(new ParallelJumpTaskCmd(executionId, destinationActivity, new HashMap<>(), currentActivity));
