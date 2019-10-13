@@ -13,72 +13,67 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 分支节点跳转
- */
-public class ParallelJumpTaskCmd implements Command<Void> {
+public class MulJumpTaskCmd implements Command<Void> {
+
     protected String parentId;//执行实例id
     protected String executionId;//流程实例id
     protected ActivityImpl desActivity;
     protected Map<String, Object> paramvar;
     protected ActivityImpl currentActivity;
 
-    /**
-     *
-     */
-    public Void execute(CommandContext commandContext) {
-        //流程实体管理器
-        ExecutionEntityManager executionEntityManager = Context.getCommandContext().getExecutionEntityManager();
-        //流程实例
-        ExecutionEntity executionEntity = executionEntityManager.findExecutionById(executionId);
 
-        //如果流程有父节点就把父节点作为节点
+    @Override
+    public Void execute(CommandContext commandContext) {
+
+
+        //获取流程实体管理器
+        ExecutionEntityManager executionEntityManager = Context.getCommandContext().getExecutionEntityManager();
+        //通过流程实例id找到流程实体
+        ExecutionEntity executionEntity = executionEntityManager.findExecutionById(this.executionId);
+        //查找顶级实例--为啥只有两次-[应该是递归]
         String id = null;
         if (executionEntity.getParent() != null) {
             executionEntity = executionEntity.getParent();
             if (executionEntity.getParent() != null) {
                 executionEntity = executionEntity.getParent();
                 id = executionEntity.getId();
-            } else {
-                id = executionEntity.getId();
             }
+            id = executionEntity.getId();
         }
-        //
-        executionEntity.setVariables(paramvar);
+
+        executionEntity.setVariables(this.paramvar);
+        executionEntity.setExecutions(null);
         executionEntity.setEventSource(this.currentActivity);
         executionEntity.setActivity(this.currentActivity);
-        //根据 executionId获取Task
+
+        //根据 executionId 获取Task
         TaskEntityManager taskEntityManager = Context.getCommandContext().getTaskEntityManager();
-        List<TaskEntity> tasksByExecutions = taskEntityManager.findTasksByExecutionId(executionId);
-        Iterator<TaskEntity> iterator = tasksByExecutions.iterator();
+        Iterator<TaskEntity> iterator = taskEntityManager.findTasksByExecutionId(id).iterator();
         while (iterator.hasNext()) {
             TaskEntity next = iterator.next();
-            //    触发任务监听
+            // 触发任务监听
             next.fireEvent("complete");
-            //    删除任务的原因
-            taskEntityManager.deleteTask(next, "test-reason", false);
+            // 删除任务原因
+            taskEntityManager.deleteTask(next, "completed", false);
         }
-        //删除实例数据
         List<ExecutionEntity> list = executionEntityManager.findChildExecutionsByParentExecutionId(parentId);
-        for (ExecutionEntity e : list) {
-            e.remove();
+        for (ExecutionEntity entity : list) {
+            List<ExecutionEntity> parent = executionEntityManager.findChildExecutionsByParentExecutionId(entity.getId());
+            for (ExecutionEntity executionEntity1 : parent) {
+                executionEntity1.remove();
+                Context.getCommandContext().getHistoryManager().recordActivityEnd(executionEntity1);
+            }
+            entity.remove();
+            Context.getCommandContext().getHistoryManager().recordActivityEnd(entity);
         }
+        Context.getCommandContext().getIdentityLinkEntityManager().deleteIdentityLinksByProcInstance(id);
         executionEntity.executeActivity(this.desActivity);
 
         return null;
     }
 
-    /**
-     * 构造参数 可以根据自己的业务需要添加更多的字段
-     * 分享牛原创(尊重原创 转载对的时候第一行请注明，转载出处来自分享牛http://blog.csdn.net/qq_30739519)
-     *
-     * @param executionId
-     * @param desActivity
-     * @param paramvar
-     * @param currentActivity
-     */
-    public ParallelJumpTaskCmd(String executionId,String  parentId, ActivityImpl desActivity,
-                               Map<String, Object> paramvar, ActivityImpl currentActivity) {
+    public MulJumpTaskCmd(String executionId, String parentId, ActivityImpl desActivity,
+                          Map<String, Object> paramvar, ActivityImpl currentActivity) {
         this.executionId = executionId;
         this.parentId = parentId;
         this.desActivity = desActivity;

@@ -2,11 +2,9 @@ package activiti.code;
 
 
 import activiti.util.JDJumpTaskCmd;
+import activiti.util.MulJumpTaskCmd;
 import activiti.util.ParallelJumpTaskCmd;
-import org.activiti.engine.ManagementService;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
@@ -103,6 +101,7 @@ public class T20_Jump {
         CommandExecutor commandExecutor = taskServiceImpl.getCommandExecutor();
 
         String executionId = "2507";
+        String parentId = "2501";
 
 
         //流程定义实体
@@ -112,10 +111,47 @@ public class T20_Jump {
         // 目标节点
         ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity("_4");//参数是节点id
         // 当前节点
-        ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity("_3");
+        ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity("_5");
 
 
-        commandExecutor.execute(new ParallelJumpTaskCmd(executionId, destinationActivity, new HashMap<>(), currentActivity));
+        commandExecutor.execute(new ParallelJumpTaskCmd(executionId, parentId, destinationActivity, new HashMap<>(), currentActivity));
+    }
+
+    /**
+     * 多实例节点跳转
+     */
+    @Test
+    public void mulJump() {
+        //发布
+        //repositoryService.createDeployment().addClasspathResource("bpmn/jump/multiInstance.bpmn").deploy();
+
+        HashMap<String, Object> map = new HashMap<>();
+        String[] users = {"张三", "李四", "王五", "赵六"};
+        map.put("users", Arrays.asList(users));
+        //runtimeService.startProcessInstanceByKey("mul",map);
+
+
+
+        CommandExecutor commandExecutor = taskServiceImpl.getCommandExecutor();
+
+        String executionId = "2501";
+        String parentId = "2501";
+
+
+        //流程定义实体
+        ReadOnlyProcessDefinition processDefinitionEntity = (ReadOnlyProcessDefinition) repositoryService.getProcessDefinition("mul:1:4");
+
+
+        // 目标节点
+        ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity("task1");//参数是节点id
+        // 当前节点
+        ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity("task2");
+
+
+        //commandExecutor.execute(new MulJumpTaskCmd(executionId, parentId, destinationActivity, new HashMap<>(), currentActivity));
+        commandExecutor.execute(new MulJumpTaskCmd(executionId, parentId, destinationActivity, map, currentActivity));
+
+        ProcessEngine processEngine=null;
 
 
     }
