@@ -15,3 +15,10 @@ git rm -r --cached . // 删除本地缓存
 .gitignore插件下载 .gitignore文件设置过滤规则
 git add . // 添加要提交的文件
 git commit -m 'update .gitignore' // 更新本地的缓存
+
+
+
+
+git push <远程主机名> <本地分支名>:<远程分支名>
+
+git push origin master:master
