@@ -330,6 +330,12 @@
             <artifactId>activiti-spring</artifactId>
             <version>${activiti.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-json-converter</artifactId>
+            <version>5.22.0</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- activemq-all -->
         <dependency>
@@ -390,6 +396,7 @@
             <artifactId>mapper</artifactId>
             <version>4.1.2</version>
         </dependency>
+
 
     </dependencies>
 
