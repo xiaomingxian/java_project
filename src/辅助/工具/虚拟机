@@ -3,4 +3,4 @@ windows:
 
 
 mac:
-    centos64 name:Parallels pass:xiaoming.xian
+    centos64 name:Parallels pass:xianxiaoming   root用户
