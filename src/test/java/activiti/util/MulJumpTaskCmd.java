@@ -24,8 +24,6 @@ public class MulJumpTaskCmd implements Command<Void> {
 
     @Override
     public Void execute(CommandContext commandContext) {
-
-
         //获取流程实体管理器
         ExecutionEntityManager executionEntityManager = Context.getCommandContext().getExecutionEntityManager();
         //通过流程实例id找到流程实体

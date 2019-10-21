@@ -6,9 +6,13 @@ import activiti.util.MulJumpTaskCmd;
 import activiti.util.ParallelJumpTaskCmd;
 import org.activiti.engine.*;
 import org.activiti.engine.impl.TaskServiceImpl;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.runtime.Execution;
+import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +21,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-acitiviti.cfg.xml"})
 public class T20_Jump {
+
+    @Autowired
+    private ProcessEngine processEngine;
 
     @Autowired
     private RepositoryService repositoryService;
@@ -35,6 +43,76 @@ public class T20_Jump {
 
     @Autowired
     private RuntimeService runtimeService;
+
+
+    @Test
+    public void deploy() {
+        repositoryService.createDeployment().addClasspathResource("bpmn/jump/Jump.bpmn").deploy();
+    }
+
+
+    @Test
+    public void start() {
+        String key = "daling";
+        String busKey = "1";
+        HashMap<String, Object> map = new HashMap<>();
+        String[] users = {"tom", "jerry", "alice"};
+        map.put("users", Arrays.asList(users));
+        //runtimeService.startProcessInstanceByKey(key, busKey, map);
+        runtimeService.startProcessInstanceByKey(key, busKey);
+    }
+
+    @Test
+    public void isMul() {
+
+        String assignee = "c";
+
+        Task task = taskService.createTaskQuery()
+                //.taskAssignee(assignee)
+                .singleResult();
+        //String name = task.getName();
+
+        String taskDefinitionKey = task.getTaskDefinitionKey();
+
+        String executionId = task.getExecutionId();
+        Execution execution = runtimeService.createExecutionQuery().executionId(executionId).singleResult();
+        String processInstanceId = execution.getProcessInstanceId();
+
+        System.out.println(processInstanceId.equals(executionId));
+
+        //发布
+        HashMap<String, Object> map = new HashMap<>();
+        //String[] users = {"张三", "李四", "王五", "赵六"};
+        //map.put("users", Arrays.asList(users));
+
+
+        CommandExecutor commandExecutor = taskServiceImpl.getCommandExecutor();
+
+
+        String processDefinitionId = task.getProcessDefinitionId();
+        //流程定义实体
+        ReadOnlyProcessDefinition processDefinitionEntity = (ReadOnlyProcessDefinition) repositoryService.getProcessDefinition(processDefinitionId);
+
+
+        // 目标节点
+        ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity("usertask4");//参数是节点id
+        // 当前节点
+        ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity(taskDefinitionKey);
+
+
+        commandExecutor.execute(new activiti.util.csdn.JDJumpTaskCmd(task.getId(), executionId, processInstanceId, destinationActivity, map, currentActivity));
+
+
+    }
+
+
+
+    @Test
+    public void stop() {
+        String proId = "10001";
+        Authentication.setAuthenticatedUserId("stop");
+        runtimeService.deleteProcessInstance(proId, "人工终止");
+    }
 
 
     /**
@@ -131,7 +209,6 @@ public class T20_Jump {
         //runtimeService.startProcessInstanceByKey("mul",map);
 
 
-
         CommandExecutor commandExecutor = taskServiceImpl.getCommandExecutor();
 
         String executionId = "2501";
@@ -150,8 +227,6 @@ public class T20_Jump {
 
         //commandExecutor.execute(new MulJumpTaskCmd(executionId, parentId, destinationActivity, new HashMap<>(), currentActivity));
         commandExecutor.execute(new MulJumpTaskCmd(executionId, parentId, destinationActivity, map, currentActivity));
-
-        ProcessEngine processEngine=null;
 
 
     }

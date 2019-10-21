@@ -1,5 +1,6 @@
 package controller.activiti;
 
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -12,10 +13,7 @@ import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -34,6 +32,7 @@ import java.util.zip.ZipInputStream;
  */
 @RestController
 @RequestMapping("process")
+@Slf4j
 public class ProcessController {
 
     @Autowired
@@ -51,7 +50,7 @@ public class ProcessController {
      * 名称读取上传文件的名称
      */
     @RequestMapping("deploy")
-    public void deploy(@RequestParam(value="file",required=false) MultipartFile multipartFile) throws IOException {
+    public void deploy(@RequestParam(value = "file", required = false) MultipartFile multipartFile) throws IOException {
         InputStream inputStream = multipartFile.getInputStream();
 
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
@@ -169,6 +168,33 @@ public class ProcessController {
         //    关闭流
         processDiagram.close();
         outputStream.close();
+    }
+
+    @GetMapping(value = "/resource/read")
+    public void loadByDeployment(@RequestParam("processDefinitionId") String processDefinitionId,
+                                 @RequestParam("resourceType") String resourceType, HttpServletResponse response) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(processDefinitionId).singleResult();
+
+        String resourceName = "";
+        if (resourceType.equals("image")) {
+            resourceName = processDefinition.getDiagramResourceName();
+        } else if (resourceType.equals("xml")) {
+            resourceName = processDefinition.getResourceName();
+        }
+        InputStream resourceAsStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(),
+                resourceName);
+        byte[] b = new byte[1024];
+        int len = -1;
+        try {
+            while ((len = resourceAsStream.read(b, 0, 1024)) != -1) {
+                response.getOutputStream().write(b, 0, len);
+            }
+        } catch (IOException e) {
+            log.error("查询流程资源失败", e);
+        }
+
+
     }
 
 
