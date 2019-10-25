@@ -1,0 +1,12 @@
+GROUP_CONCAT：多条记录合为一条
+    SELECT
+        u.id,u.username,GROUP_CONCAT(d.depart_name)
+    FROM
+        sys_role r
+    LEFT JOIN sys_user_role ur ON r.id = ur.role_id
+    LEFT join sys_user u ON ur.user_id = u.id
+    LEFT JOIN sys_user_depart ud ON ud.user_id = u.id
+    LEFT JOIN sys_depart d ON d.id = ud.dep_id
+    WHERE
+        r.role_name = '开发人员'
+    GROUP BY r.id
