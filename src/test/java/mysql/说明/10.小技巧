@@ -12,4 +12,4 @@ GROUP_CONCAT：多条记录合为一条
     GROUP BY r.id
 
 #根据注释(或其他条件)查表信息
-selct table_name,table_comment from TABLES where TABLE_SCHEMA='aioa' and table_comment like '%表%';
+select table_name,table_comment from TABLES where TABLE_SCHEMA='aioa' and table_comment like '%表%';
