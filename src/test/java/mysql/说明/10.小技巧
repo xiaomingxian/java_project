@@ -10,3 +10,6 @@ GROUP_CONCAT：多条记录合为一条
     WHERE
         r.role_name = '开发人员'
     GROUP BY r.id
+
+#根据注释(或其他条件)查表信息
+select table_name,table_comment from TABLES where TABLE_SCHEMA='aioa' and table_comment like '%表%';
