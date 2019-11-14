@@ -1,1 +1,17 @@
 root root123456.
+root Mysql_root_123456
+
+#查询进程并排除自身
+ps -ef |grep redis|grep -v grep
+
+jdk安装配置：https://blog.csdn.net/github_38336924/article/details/82221258
+
+mysql(centos7.x):https://www.cnblogs.com/brianzhu/p/8575243.html
+修改密码的另一种方式：set password=password("youpassword");
+
+redis安装：https://blog.csdn.net/qq_1290259791/article/details/82913947
+
+
+防火墙相关命令：centos6.x service iptables status / centos7.x firewall-cmd --state
+
+docker:https://blog.csdn.net/the_fool_/article/details/82744127
