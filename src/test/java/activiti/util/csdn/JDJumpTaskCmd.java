@@ -1,6 +1,5 @@
 package activiti.util.csdn;
 
-
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.interceptor.Command;
@@ -13,13 +12,13 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.pvm.process.ScopeImpl;
 import org.activiti.engine.impl.pvm.runtime.InterpretableExecution;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @description: 自由跳转流程
- * @create: 2018-06-13 09:22
+ * @description: 节点跳转
  **/
 public class JDJumpTaskCmd implements Command<Void> {
 
@@ -29,26 +28,16 @@ public class JDJumpTaskCmd implements Command<Void> {
     protected ActivityImpl desActivity;//目标节点
     protected Map<String, Object> paramvar;//变量
     protected ActivityImpl currentActivity;//当前的节点
+    protected String deleteReason;//当前的节点
 
     @Override
     public Void execute(CommandContext commandContext) {
 
-        ExecutionEntityManager executionEntityManager = Context
-                .getCommandContext().getExecutionEntityManager();
-        ExecutionEntity executionEntity = executionEntityManager
-                .findExecutionById(executionId);
-        //寻找根路径
-        String id = null;
-        if (executionEntity.getParent() != null) {
-            executionEntity = executionEntity.getParent();
+        ExecutionEntityManager executionEntityManager = Context.getCommandContext().getExecutionEntityManager();
+        ExecutionEntity executionEntity = executionEntityManager.findExecutionById(executionId);
+        //寻找根路径--子流程向主流程跳转失败(没有找到跟路径)
 
-            if (executionEntity.getParent() != null) {
-                executionEntity = executionEntity.getParent();
-                id = executionEntity.getId();
-            }
-
-            id = executionEntity.getId();
-        }
+        executionEntity = findRootId(executionEntity);
         //设置相关变量
         executionEntity.setVariables(paramvar);
         //executionEntity.setExecutions(null);
@@ -59,43 +48,32 @@ public class JDJumpTaskCmd implements Command<Void> {
                 .getTaskEntityManager().findTasksByProcessInstanceId(parentId).iterator();
         //删除无用的工作项
         while (localIterator.hasNext()) {
-            TaskEntity taskEntity = (TaskEntity) localIterator.next();
-            System.err.println("==================" + taskEntity.getId());
-            if(taskId.equals(taskEntity.getId())) {
+            TaskEntity taskEntity = localIterator.next();
+            System.err.println("==================移除任务项:" + taskEntity.getId());
+            if (taskId.equals(taskEntity.getId())) {
                 // 触发任务监听
                 taskEntity.fireEvent("complete");
                 // 删除任务的原因
-                Context.getCommandContext().getTaskEntityManager()
-                        .deleteTask(taskEntity, "completed", false);
-            }else {
+                Context.getCommandContext().getTaskEntityManager().deleteTask(taskEntity, deleteReason, false);
+            } else {
                 // 删除任务的原因
-                Context.getCommandContext().getTaskEntityManager()
-                        .deleteTask(taskEntity, "deleted", false);
+                Context.getCommandContext().getTaskEntityManager().deleteTask(taskEntity, deleteReason, false);
             }
-
         }
+
+        //找出所有执行子路径
+        List<ExecutionEntity> list = new ArrayList<>();
+        List<ExecutionEntity> childExecutionsByParentExecutionId = executionEntityManager.findChildExecutionsByParentExecutionId(parentId);
+        findAllChiled(list, childExecutionsByParentExecutionId, executionEntityManager);
+
+
         //删除相关执行子路径，只保留根执行路径
-        List<ExecutionEntity> list = executionEntityManager
-                .findChildExecutionsByParentExecutionId(parentId);
         for (ExecutionEntity executionEntity2 : list) {
-            ExecutionEntity findExecutionById = executionEntityManager.findExecutionById(executionEntity2.getId());
-
-            List<ExecutionEntity> parent = executionEntityManager
-                    .findChildExecutionsByParentExecutionId(executionEntity2
-                            .getId());
-            for (ExecutionEntity executionEntity3 : parent) {
-                executionEntity3.remove();
-                System.err.println(executionEntity3.getId()
-                        + "----------------->>>>>>>>>>");
-                Context.getCommandContext().getHistoryManager()
-                        .recordActivityEnd(executionEntity3);
-
-            }
+            //移除--记录历史
 
             executionEntity2.remove();
             Context.getCommandContext().getHistoryManager().recordActivityEnd(executionEntity2);
-            System.err.println(findExecutionById + "----------------->>>>>>>>>>");
-
+            System.err.println("--------------->>>>移除子流程实例：" + executionEntity2.getId());
 
         }
 
@@ -126,6 +104,23 @@ public class JDJumpTaskCmd implements Command<Void> {
         propagatingExecution.executeActivity(this.desActivity);
 
         return null;
+    }
+
+    private void findAllChiled(List<ExecutionEntity> list, List<ExecutionEntity> childExecutions, ExecutionEntityManager executionEntityManager) {
+        for (ExecutionEntity executionEntity : childExecutions) {
+            List<ExecutionEntity> childExecutionsByParentExecutionId = executionEntityManager.findChildExecutionsByParentExecutionId(executionEntity.getId());
+            findAllChiled(list, childExecutionsByParentExecutionId, executionEntityManager);
+            list.add(executionEntity);
+        }
+    }
+
+    private ExecutionEntity findRootId(ExecutionEntity executionEntity) {
+
+        while (executionEntity.getParent() != null) {
+            executionEntity = executionEntity.getParent();
+        }
+        return executionEntity;
+
     }
 
 
@@ -159,21 +154,24 @@ public class JDJumpTaskCmd implements Command<Void> {
 
     /**
      * 构造参数 可以根据自己的业务需要添加更多的字段
+     *
      * @param taskId
      * @param executionId
      * @param desActivity
      * @param paramvar
      * @param currentActivity
      */
-    public JDJumpTaskCmd(String taskId,String executionId, String parentId,
-                         ActivityImpl desActivity, Map<String, Object> paramvar,
-                         ActivityImpl currentActivity) {
-        this.taskId=taskId;
+    public JDJumpTaskCmd(String taskId, String executionId, String parentId,
+                       ActivityImpl desActivity, Map<String, Object> paramvar,
+                       ActivityImpl currentActivity,
+                       String deleteReason) {
+        this.taskId = taskId;
         this.executionId = executionId;
         this.parentId = parentId;
         this.desActivity = desActivity;
         this.paramvar = paramvar;
         this.currentActivity = currentActivity;
+        this.deleteReason = deleteReason;
 
     }
 }
