@@ -100,9 +100,9 @@ public class T20_Jump {
         ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity.findActivity(taskDefinitionKey);
 
 
-        commandExecutor.execute(new activiti.util.csdn.JDJumpTaskCmd(task.getId(), executionId, processInstanceId, destinationActivity, map, currentActivity));
+        activiti.util.csdn.JDJumpTaskCmd jumpTaskCmd = new activiti.util.csdn.JDJumpTaskCmd(task.getId(), executionId, processInstanceId, destinationActivity, map, currentActivity, "删除原因");
 
-
+        commandExecutor.execute(jumpTaskCmd);
     }
 
 

@@ -13,3 +13,7 @@ GROUP_CONCAT：多条记录合为一条
 
 #根据注释(或其他条件)查表信息
 select table_name,table_comment from TABLES where TABLE_SCHEMA='aioa' and table_comment like '%表%';
+
+#读取表内容写入另一张表(或者本表)
+insert into oa_button_set(PROC_DEF_KEY_,TASK_DEF_KEY_,i_proc_button_id,i_button_id,i_order)  (select PROC_DEF_KEY_,TASK_DEF_KEY_,i_proc_button_id,i_button_id,i_order from oa_button_set where task_def_key_='usertask1')
+
