@@ -29,4 +29,8 @@ public class Lazy {
     }
 
 
+    private Object readResolve() {
+        System.out.println("----------");
+        return lazy;
+    }
 }

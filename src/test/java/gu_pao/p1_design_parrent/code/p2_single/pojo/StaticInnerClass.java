@@ -1,9 +1,12 @@
 package gu_pao.p1_design_parrent.code.p2_single.pojo;
 
-public class StaticInnerClass {
+import java.io.Serializable;
+
+public class StaticInnerClass implements Serializable {
 
 
     private StaticInnerClass() {
+
     }
 
     public static StaticInnerClass getInstance() {
@@ -26,5 +29,6 @@ public class StaticInnerClass {
         System.out.println("-------------");
         return staticInnerClass=new StaticInnerClass();
     }
+
 
 }
