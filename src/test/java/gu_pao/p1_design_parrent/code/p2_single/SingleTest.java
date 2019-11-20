@@ -31,9 +31,55 @@ public class SingleTest {
         //serializable();
 
         //注册式单例：将每一个实例都缓存到统一的容器中，使用唯一的标示获取实例
-        //8.1枚举(最安全)根据 类名+枚举名 去jvm中去拿[注册式](jvm只会创建一次这个实例)
-        enumTest();
-        //8.2容器式
+        //8.1枚举(最安全->从jdk底层优化)根据 类名+枚举名 去jvm中去拿[注册式](jvm只会创建一次这个实例)
+        //enumTest();
+
+        //8.2容器式(Spring的ioc容器)
+        //container();
+
+
+        //9 ThreadLocal实现(伪线程安全-只是线程内的安全，跨线程是不安全的[非单例]),注册式单例
+        threadLocal();
+
+    }
+
+    /**
+     * return threadLocal.get();
+     * <p>
+     * ThreadLocalMap map = getMap(t);
+     * 注册式单例类似于ioc
+     * ThreadLocalMap的key是线程名称,value是自己存入的值
+     * <p>
+     * 场景：使用threadlocal实现数据源动态切换
+     */
+    private static void threadLocal() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println(Thread.currentThread() + ":" + ThreadLocalSingleton.getInstance());
+        }
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(Thread.currentThread() + ":" + ThreadLocalSingleton.getInstance());
+
+                }
+            }).start();
+        }
+
+    }
+
+    private static void container() {
+
+        for (int i = 0; i < 100; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Object bean = ContainerSingle.getBean("gu_pao.p1_design_parrent.code.p2_single.SingleTest");
+                    System.out.println(+System.currentTimeMillis() + ":" + bean);
+                }
+            }).start();
+        }
 
     }
 
@@ -44,7 +90,6 @@ public class SingleTest {
 
         //序列化测试
         //serializableEnum();
-
 
         //反射测试
         fanSheEnum();
