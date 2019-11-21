@@ -12,12 +12,14 @@ public class SingleTest {
 
     public static void main(String[] args) {
         //1 线程不安全方式
-        //        threadUnSafe();
+        //threadUnSafe();
+
         //2 线程安全方式
         //threadSafe();
 
         //3 单层检查 线程不安全
         //lazyDoubleCheckThreadUnSafe();
+
         //4 双重检查 线程安全
         //lazyDoubleCheckThreadSafe();
 
