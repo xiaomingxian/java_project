@@ -20,7 +20,23 @@ public class ProxyTest {
         //1.2 SpringDynamicDataSource[spring中的动态数据源接口简单demo]
 
         //2.1 JDK的动态代理
-        dynamicProxyJDk();
+        //dynamicProxyJDk();
+
+
+        //2.2 自定义动态代理(仿jdk)
+        mySelfDynamic();
+
+    }
+
+    /**
+     * https://blog.csdn.net/u011976388/article/details/80315850
+     */
+    private static void mySelfDynamic() {
+
+        //MyProxy.newProxyInstance();
+
+
+
     }
 
     private static void dynamicProxyJDk() {
@@ -34,6 +50,7 @@ public class ProxyTest {
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
                 System.out.println("前置增强");
+                System.out.println("--->>>>" + args);
                 Object invoke = method.invoke(son, args);
                 System.out.println("后置增强");
 
@@ -44,7 +61,7 @@ public class ProxyTest {
 
         //产生的代理类 $Proxy0@577 #@后指的是地址值
         //将代理类从内存中读出来写进磁盘 反编译看看
-        //继承被代理类实现接口 public final class $Proxy0 extends Proxy implements Person
+        //继承Proxy实现接口 public final class $Proxy0 extends Proxy implements Person
         //public final Person findLove() throws  {
         //    try {
         //        return (Person)super.h.invoke(this, m3, (Object[])null);//super.h指的是实现了InvocationHandler的类(此处是匿名方式)，调用增强后的方法
