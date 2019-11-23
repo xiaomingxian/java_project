@@ -1,9 +1,13 @@
 package gu_pao.p1_design_parrent.code.p4_proxy;
 
+import gu_pao.p1_design_parrent.code.p4_proxy.cglib.CglibProxy;
+import gu_pao.p1_design_parrent.code.p4_proxy.cglib.Proxyed;
 import gu_pao.p1_design_parrent.code.p4_proxy.myproxy.MyClassLoader;
 import gu_pao.p1_design_parrent.code.p4_proxy.myproxy.MyInvocationHandler;
 import gu_pao.p1_design_parrent.code.p4_proxy.myproxy.MyProxy;
 import gu_pao.p1_design_parrent.code.p4_proxy.pojo.*;
+import org.springframework.aop.framework.AopProxy;
+import org.springframework.cglib.core.DebuggingClassWriter;
 import sun.misc.ProxyGenerator;
 
 import java.io.FileOutputStream;
@@ -26,12 +30,54 @@ public class ProxyTest {
         //dynamicProxyJDk();
 
 
-        //2.2 自定义动态代理(仿jdk)
-        mySelfDynamic();
+        //2.2 自定义动态代理(仿jdk) jdk是动态生成类在
+        //mySelfDynamic();
+
+
+        //3 cglib代理(不能代理final修饰的类)
+        //cglibProxy();
+
+
+        //jdk与cglib代理区别
+        //cglib: asm直接生成class文件(不需要反射) ;jdk:反射
+        //执行效率cglib>jdk 1.8之后[jdk>cglib(官方的更新迭代速度慢)]但是jdk批量创建效率还是低于cglib
+        //https://blog.csdn.net/yhl_jxy/article/details/80635012
+
+
+        //spring中代理模式的应用
+        springProxy();
 
     }
 
+    private static void springProxy() {
+
+        AopProxy aopProxy = null;//查看类图
+        //没有配置且又接口用jdk
+        //没有接口用cglib
+        //可强制配置成cglib
+
+    }
+
+    private static void cglibProxy() {
+
+        try {
+
+            System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY,
+                    "/Users/xxm/develop/workspace/learn/src/test/java/gu_pao/p1_design_parrent/code/p4_proxy/cglib");
+
+            CglibProxy cglibProxy = new CglibProxy();
+            Proxyed instance = (Proxyed) cglibProxy.getInstance(Proxyed.class);
+            instance.say();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
+     *
+     * jdk动态代理为什么要实现共同接口(因为基于接口寻找方法属性，基于invocationHandler进行调用(传参需要方法相关内容))
+     *
+     *
      * https://blog.csdn.net/u011976388/article/details/80315850
      */
     private static void mySelfDynamic() {
