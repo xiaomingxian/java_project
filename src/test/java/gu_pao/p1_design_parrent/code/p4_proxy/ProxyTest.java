@@ -1,5 +1,8 @@
 package gu_pao.p1_design_parrent.code.p4_proxy;
 
+import gu_pao.p1_design_parrent.code.p4_proxy.myproxy.MyClassLoader;
+import gu_pao.p1_design_parrent.code.p4_proxy.myproxy.MyInvocationHandler;
+import gu_pao.p1_design_parrent.code.p4_proxy.myproxy.MyProxy;
 import gu_pao.p1_design_parrent.code.p4_proxy.pojo.*;
 import sun.misc.ProxyGenerator;
 
@@ -33,7 +36,21 @@ public class ProxyTest {
      */
     private static void mySelfDynamic() {
 
-        //MyProxy.newProxyInstance();
+        Son son = new Son();
+        MyClassLoader myClassLoader = new MyClassLoader();
+        Person person = (Person) MyProxy.newProxyInstance(myClassLoader, Son.class.getInterfaces(), new MyInvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+                System.out.println("--->前置增强");
+                method.invoke(son,args);
+                System.out.println("--->后置增强");
+
+                return null;
+            }
+        });
+
+        person.findLove();
 
 
 
