@@ -20,7 +20,7 @@ public class DelFileEndWithLasted {
         String win = "E:\\develop\\maven\\repository";
         String work = "C:\\xxm\\dev\\maven\\MavenRepository";
         File file = new File(mac);
-        //        System.out.println(file.isDirectory());
+        // System.out.println(file.isDirectory());
         //需要使用递归的方法
         deleteFile(file);
     }

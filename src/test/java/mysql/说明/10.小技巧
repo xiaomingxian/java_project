@@ -17,3 +17,11 @@ select table_name,table_comment from TABLES where TABLE_SCHEMA='aioa' and table_
 #读取表内容写入另一张表(或者本表)
 insert into oa_button_set(PROC_DEF_KEY_,TASK_DEF_KEY_,i_proc_button_id,i_button_id,i_order)  (select PROC_DEF_KEY_,TASK_DEF_KEY_,i_proc_button_id,i_button_id,i_order from oa_button_set where task_def_key_='usertask1')
 
+#批量插入
+    mysql连接允许批量操作：&allowMultiQueries=true
+    @Insert("<script>" +
+            " insert into  oa_task_dept(task_id,task_def_key,type,dept_ids) VALUES " +
+            "<foreach collection='pojo.deptMsg' item='value' index='key' separator=','>" +
+            " (#{pojo.tskId},#{pojo.taskDefKey},#{key},#{value} ) " +
+            "</foreach>" +
+            "</script>")
