@@ -1,0 +1,14 @@
+其他模块：
+    spring-messaging:spring4开始的加入的新模块，主要职责是为Spring集成一些基础的报文传送应用
+    spring-framework-bom:Bill of Materials 解决spring不通模块依赖版本不通问题
+大写转小写:字母转Char+32[大小写的ASCII码相差32大写字母的值小]
+
+类说明：
+    BeanFactory：定义容器
+    BeanDefinition：存储配置信息
+    BeanDefinitionReader：读取配置信息
+----------------IOC------------
+初始化：
+    定位：定位配置文件和扫描相关注解
+    加载：将配置信息载入到内存
+    注册：根据载入的信息，将对象初始化到IOC容器中

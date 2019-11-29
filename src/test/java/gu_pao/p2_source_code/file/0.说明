@@ -1,3 +1,0 @@
-其他模块：
-    spring-messaging:spring4开始的加入的新模块，主要职责是为Spring集成一些基础的报文传送应用
-    spring-framework-bom:Bill of Materials 解决spring不通模块依赖版本不通问题
