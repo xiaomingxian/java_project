@@ -13,3 +13,9 @@
     加载：将配置信息载入到内存
     注册：根据载入的信息，将对象初始化到IOC容器中
 初始化的时候IOC中已经保存了代理类
+
+
+
+BeanFactory和FactoryBean:https://blog.csdn.net/zero__007/article/details/91470870
+    FactoryBean:Spring中所有的容器都是FactoryBean(以&开头作为beanName)
+    BeanFactory:是Bean工厂的顶层规范，只是定义了getBean()方法
