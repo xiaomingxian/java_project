@@ -14,8 +14,21 @@
     注册：根据载入的信息，将对象初始化到IOC容器中
 初始化的时候IOC中已经保存了代理类
 
-
-
 BeanFactory和FactoryBean:https://blog.csdn.net/zero__007/article/details/91470870
     FactoryBean:Spring中所有的容器都是FactoryBean(以&开头作为beanName)
     BeanFactory:是Bean工厂的顶层规范，只是定义了getBean()方法
+
+----------------MVC------------
+initStrategies(ApplicationContext context){...}//初始化mvc九大组件
+优化建议：
+    1 Controller尽量单例
+    2 @RequestParam给具体的参数和URL中的参数进行一对一匹配
+        (spring通过sm?框架读取[初始化的时候读一次(load class文件)存起来])(使用注解就不用再load class文件不走sm框架？)
+    3 Spring mvc 并没有对Url和Method的对应关系进行缓存(spring对热部署的支持，类不变的前提下进行热部署)，建议自己对URL和Method进行缓存
+============================== Spring高仿 ==============================
+组成：
+    core:[beanFactory,factoryBean,...]
+    beans(ioc核心):
+    context:
+    aop:
+    webmvc:
