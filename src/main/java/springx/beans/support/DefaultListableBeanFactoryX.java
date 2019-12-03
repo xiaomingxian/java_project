@@ -21,8 +21,7 @@ public class DefaultListableBeanFactoryX extends AbstractApplicationContextX {
 
 
     @Override
-    protected void refresh() {
-
+    public void refresh() {
 
     }
 }

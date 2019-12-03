@@ -1,5 +1,11 @@
 package springx.beans.config;
 
-public class BeanDefinitionX {
 
+import lombok.Data;
+
+@Data
+public class BeanDefinitionX {
+    private String beanClassName;
+    private boolean lazyInit;
+    private String factoryBeanName;
 }

@@ -1,3 +1,7 @@
 =========================== IOC ===========================
+BeanFactory:顶层设计，容器规范(interface)
 AbstractApplicationContext:IOC容器顶层接口
 DefaultListableBeanFactory:IOC的默认实现，它里面定义了ioc容器：beanDefinitionMap[ConcurrentHashMap]
+ApplicationContext:最底层的实现
+ApplicationContextAware:通过解藕方式获取IOC容器的顶层设计
+    类实现了此接口，会被自动注入到容器中[调用setApplicationContext](通过监听器调用)
