@@ -23,6 +23,9 @@ public class BeanDefinitionReaderX {
     //所有扫描出来的类
     private List<String> scanClass = new ArrayList<>();
 
+    //BeanDefinition(扫描出来的类解析后封装的实体)容器
+    private List<BeanDefinitionX> beanDefinitionXES = new ArrayList<>();
+
 
     /**
      * 读取配置文件
@@ -76,24 +79,40 @@ public class BeanDefinitionReaderX {
 
 
     public List<BeanDefinitionX> loadBeanDefinitions(String... locations) {
+        for (String className : scanClass) {
+            BeanDefinitionX beanDefinitionX = doCreateBeanDefinition(className);
+            beanDefinitionXES.add(beanDefinitionX);
+        }
+        return beanDefinitionXES;
+    }
+
+    private BeanDefinitionX doCreateBeanDefinition(String className) {
+        BeanDefinitionX beanDefinitionX = new BeanDefinitionX();
+
         try {
-            for (String className : scanClass) {
-                Class<?> clazz = Class.forName(className);
-                //如果是接口就使用其实现类
-                if (clazz.isInterface()){continue;}
 
-
-
-
+            Class<?> clazz = Class.forName(className);
+            //如果是接口就使用其实现类
+            if (!clazz.isInterface()) {
+                beanDefinitionX.setBeanClassName(className);
+                beanDefinitionX.setFactoryBeanName(lowerFirstCase(clazz.getSimpleName()));
+                beanDefinitionX.setLazyInit(false);
             }
-
 
         } catch (Exception e) {
             log.error(e.toString());
         }
 
 
-        return null;
+        return beanDefinitionX;
+    }
+
+    private String lowerFirstCase(String simpleName) {
+
+        String first = simpleName.substring(0, 1).toLowerCase();
+        String other = simpleName.substring(1);
+
+        return first + other;
     }
 
 

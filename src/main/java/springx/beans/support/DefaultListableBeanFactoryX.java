@@ -17,7 +17,7 @@ public class DefaultListableBeanFactoryX extends AbstractApplicationContextX {
     /**
      * IOC容器
      */
-    private final Map<String, BeanDefinitionX> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinitionX>();
+    protected final Map<String, BeanDefinitionX> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinitionX>();
 
 
     @Override
