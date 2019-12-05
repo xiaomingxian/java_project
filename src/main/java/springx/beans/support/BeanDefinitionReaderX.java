@@ -80,8 +80,12 @@ public class BeanDefinitionReaderX {
 
     public List<BeanDefinitionX> loadBeanDefinitions(String... locations) {
         for (String className : scanClass) {
+
+
+
             BeanDefinitionX beanDefinitionX = doCreateBeanDefinition(className);
-            beanDefinitionXES.add(beanDefinitionX);
+
+            //beanDefinitionXES.add(beanDefinitionX);
         }
         return beanDefinitionXES;
     }
@@ -92,12 +96,21 @@ public class BeanDefinitionReaderX {
         try {
 
             Class<?> clazz = Class.forName(className);
+            if (clazz.isInterface()){return null;}
+
             //如果是接口就使用其实现类
             if (!clazz.isInterface()) {
                 beanDefinitionX.setBeanClassName(className);
                 beanDefinitionX.setFactoryBeanName(lowerFirstCase(clazz.getSimpleName()));
                 beanDefinitionX.setLazyInit(false);
             }
+            //
+            Class<?>[] interfaces = clazz.getInterfaces();
+            for (Class<?> c:interfaces){
+                //TODO
+            }
+
+
 
         } catch (Exception e) {
             log.error(e.toString());

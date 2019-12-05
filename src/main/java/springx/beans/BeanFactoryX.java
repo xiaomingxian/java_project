@@ -13,5 +13,5 @@ public interface BeanFactoryX {
      * @param className
      * @return
      */
-    Object getBean(String className);
+    Object getBean(String className) throws Exception;
 }

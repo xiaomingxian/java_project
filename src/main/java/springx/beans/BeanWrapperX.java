@@ -5,12 +5,21 @@ package springx.beans;
  */
 public class BeanWrapperX {
 
+
+    private Object wrapperInstance;
+    private Class<?> wrapperClass;
+
+    public BeanWrapperX(Object wrapperInstance) {
+        this.wrapperInstance = wrapperInstance;
+    }
+
+
     /**
      * 如果是单例直接获取对象
      * @return
      */
     public Object getWrapperInstance(){
-        return null;
+        return this.wrapperInstance;
     }
 
     /**
@@ -18,7 +27,7 @@ public class BeanWrapperX {
      * @return
      */
     public  Class<?> getWrapperClass(){
-        return null;
+        return this.wrapperClass.getClass();
     }
 
 }
