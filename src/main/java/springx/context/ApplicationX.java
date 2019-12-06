@@ -1,7 +1,8 @@
 package springx.context;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
+import springx.annotation.AutowiredX;
+import springx.annotation.ControllerX;
+import springx.annotation.ServiceX;
 import springx.beans.BeanFactoryX;
 import springx.beans.BeanWrapperX;
 import springx.beans.config.BeanDefinitionX;
@@ -79,10 +80,30 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
         Object instance = beanWrapperX.getWrapperInstance();
         //是否可以注入(此处标准为：Controller/Service可以注入)
         Class<?> beanClass = beanWrapperX.getWrapperClass();
-        if (!(beanClass.isAnnotationPresent(Controller.class)||beanClass.isAnnotationPresent(Service.class))){
+        if (!(beanClass.isAnnotationPresent(ControllerX.class) || beanClass.isAnnotationPresent(ServiceX.class))) {
             return;
         }
-        Field[] declaredFields = beanClass.getDeclaredFields();
+        Field[] fields = beanClass.getDeclaredFields();
+        for (Field field : fields) {//判断是否加了自动注入注解(此处简化-只考虑Autowired)
+            if (!field.isAnnotationPresent(AutowiredX.class)) {
+                continue;
+            }
+
+
+            AutowiredX autowiredX = field.getAnnotation(AutowiredX.class);
+            String autowriedBeanName = autowiredX.value().trim();
+            if ("".equals(autowriedBeanName)) {
+                autowriedBeanName = field.getType().getName();
+            }
+
+            field.setAccessible(true);//突破private
+
+            try {
+                field.set(instance, this.factoryBeanInstanceCache.get(autowriedBeanName).getWrapperClass());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
