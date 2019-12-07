@@ -43,8 +43,10 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
          * 为什么要先初始化在注入[而不是同时做]：因为要解决循环依赖的问题
          */
 
+        //BeanDefinitionX beanDefinitionX = new BeanDefinitionX();
+        //beanDefinitionX.setBeanClassName(beanName);
         //1 初始化(仅初始化，不注入属性值)
-        BeanWrapperX beanWrapperX = instatiateBean(beanName, new BeanDefinitionX());
+        BeanWrapperX beanWrapperX = instatiateBean(beanName, beanDefinitionMap.get(beanName));
 
         //2 将BeanWrapper保存到 wrapper容器中
         factoryBeanInstanceCache.put(beanName, beanWrapperX);
@@ -88,8 +90,7 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
             if (!field.isAnnotationPresent(AutowiredX.class)) {
                 continue;
             }
-
-
+            //读取注解中的bean值，如果没有就读取类型值，从ioc容器中获取对应的类信息(如果容器中没有呢？)
             AutowiredX autowiredX = field.getAnnotation(AutowiredX.class);
             String autowriedBeanName = autowiredX.value().trim();
             if ("".equals(autowriedBeanName)) {
@@ -99,6 +100,7 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
             field.setAccessible(true);//突破private
 
             try {
+                //自动注入(字段赋值)
                 field.set(instance, this.factoryBeanInstanceCache.get(autowriedBeanName).getWrapperClass());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,7 +118,7 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
         try {
             //实例化对象-先看容器中有没有
             //此处假设默认是单例
-            if (null == singletonContainer.get(beanName)) {
+            if (null != singletonContainer.get(beanName)) {
                 instance = singletonContainer.get(beanName);
             } else {
                 Class<?> clazz = Class.forName(className);

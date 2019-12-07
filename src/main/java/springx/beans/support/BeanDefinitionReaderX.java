@@ -33,8 +33,10 @@ public class BeanDefinitionReaderX {
      * @param locations
      */
     public BeanDefinitionReaderX(String... locations) {
-        //通过URL定位找到其所对应的文件，转化为文件流
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(locations[0].replace("classPath", ""));
+        //通过URL定位找到其所对应的文件，转化为文件流  //getResourceAsStream 从resource下开始计算
+        String local = locations[0];
+        if (local.contains("classpath:")) local = local.replace("classpath:", "");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(local);
 
         try {
             config.load(inputStream);
@@ -58,11 +60,13 @@ public class BeanDefinitionReaderX {
     //扫描类记录起来
     private void doScanner(String scanPackage) {
         //递归进行扫描
-        URL url = this.getClass().getClassLoader().getResource("/" + scanPackage.replaceAll("classPath", ""));
+        if (scanPackage.contains("classpath:")) scanPackage = scanPackage.replace("classpath:", "");
+
+        URL url = this.getClass().getClassLoader().getResource(scanPackage);
         File classPath = new File(url.getFile());
         for (File file : classPath.listFiles()) {
             if (file.isDirectory()) {
-                doScanner(scanPackage + "." + file.getName());
+                doScanner(scanPackage + "/" + file.getName());
             } else {
                 if (!file.getName().endsWith(".class")) continue;
                 String className = (scanPackage + "." + file.getName().replaceAll(".class", ""));
@@ -80,12 +84,12 @@ public class BeanDefinitionReaderX {
 
     public List<BeanDefinitionX> loadBeanDefinitions(String... locations) {
         for (String className : scanClass) {
+            String realClassName = className.replaceAll("/", ".");
 
+            BeanDefinitionX beanDefinitionX = doCreateBeanDefinition(realClassName);
 
+            if (beanDefinitionX!=null)beanDefinitionXES.add(beanDefinitionX);
 
-            BeanDefinitionX beanDefinitionX = doCreateBeanDefinition(className);
-
-            //beanDefinitionXES.add(beanDefinitionX);
         }
         return beanDefinitionXES;
     }
@@ -109,8 +113,6 @@ public class BeanDefinitionReaderX {
             for (Class<?> c:interfaces){
                 //TODO
             }
-
-
 
         } catch (Exception e) {
             log.error(e.toString());
