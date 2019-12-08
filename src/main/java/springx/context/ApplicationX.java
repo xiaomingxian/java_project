@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFactoryX {
 
+    public ApplicationX() {
+    }
 
     private String[] locations;
 
@@ -36,15 +38,13 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
     }
 
     @Override
-    public Object getBean(String beanName) throws Exception {
+    public Object getBean(String beanName) {
 
         //0 doGetBean
         /**
          * 为什么要先初始化在注入[而不是同时做]：因为要解决循环依赖的问题
          */
 
-        //BeanDefinitionX beanDefinitionX = new BeanDefinitionX();
-        //beanDefinitionX.setBeanClassName(beanName);
         //1 初始化(仅初始化，不注入属性值)
         BeanWrapperX beanWrapperX = instatiateBean(beanName, beanDefinitionMap.get(beanName));
 
@@ -71,7 +71,7 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
         //3 注册，把配置信息放到容器类里(自定义IOC容器[类定义信息容器])
         doRegisterBeanDefinition(beanDefinitionXES);
 
-        //4 不不是延迟加载的类初始化
+        //4 不是延迟加载的类初始化
         doAutowired();
 
     }
@@ -80,8 +80,13 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
     private void populateBean(String beanName, BeanWrapperX beanWrapperX) {
         //获取到Bean实例
         Object instance = beanWrapperX.getWrapperInstance();
+        if (instance == null) {
+            return;
+        }
         //是否可以注入(此处标准为：Controller/Service可以注入)
         Class<?> beanClass = beanWrapperX.getWrapperClass();
+
+
         if (!(beanClass.isAnnotationPresent(ControllerX.class) || beanClass.isAnnotationPresent(ServiceX.class))) {
             return;
         }

@@ -9,6 +9,9 @@ public class BeanWrapperX {
     private Object wrapperInstance;
     private Class<?> wrapperClass;
 
+    public BeanWrapperX() {
+    }
+
     public BeanWrapperX(Object wrapperInstance) {
         this.wrapperInstance = wrapperInstance;
     }
@@ -27,7 +30,7 @@ public class BeanWrapperX {
      * @return
      */
     public  Class<?> getWrapperClass(){
-        return this.wrapperClass.getClass();
+        return this.wrapperInstance.getClass();
     }
 
 }

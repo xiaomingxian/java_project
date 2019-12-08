@@ -5,6 +5,7 @@ import springx.beans.config.BeanDefinitionX;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,9 @@ public class BeanDefinitionReaderX {
 
 
     private Properties config = new Properties();
+
+    public BeanDefinitionReaderX() {
+    }
 
 
     //扫描包(最基层)
@@ -101,13 +105,12 @@ public class BeanDefinitionReaderX {
 
             Class<?> clazz = Class.forName(className);
             if (clazz.isInterface()){return null;}
+            if (Modifier.isAbstract(clazz.getModifiers())) return null;
 
-            //如果是接口就使用其实现类
-            if (!clazz.isInterface()) {
+            //如果是接口就使用其实现类(不是接口，不是抽象类)
                 beanDefinitionX.setBeanClassName(className);
                 beanDefinitionX.setFactoryBeanName(lowerFirstCase(clazz.getSimpleName()));
                 beanDefinitionX.setLazyInit(false);
-            }
             //
             Class<?>[] interfaces = clazz.getInterfaces();
             for (Class<?> c:interfaces){
