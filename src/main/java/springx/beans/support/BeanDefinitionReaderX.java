@@ -108,9 +108,9 @@ public class BeanDefinitionReaderX {
             if (Modifier.isAbstract(clazz.getModifiers())) return null;
 
             //如果是接口就使用其实现类(不是接口，不是抽象类)
-                beanDefinitionX.setBeanClassName(className);
-                beanDefinitionX.setFactoryBeanName(lowerFirstCase(clazz.getSimpleName()));
-                beanDefinitionX.setLazyInit(false);
+            beanDefinitionX.setBeanClassName(className);
+            beanDefinitionX.setFactoryBeanName(lowerFirstCase(clazz.getSimpleName()));
+            beanDefinitionX.setLazyInit(false);
             //
             Class<?>[] interfaces = clazz.getInterfaces();
             for (Class<?> c:interfaces){

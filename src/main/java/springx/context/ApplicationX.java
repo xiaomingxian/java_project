@@ -1,5 +1,6 @@
 package springx.context;
 
+import org.apache.commons.lang3.StringUtils;
 import springx.annotation.AutowiredX;
 import springx.annotation.ControllerX;
 import springx.annotation.ServiceX;
@@ -37,6 +38,20 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
         refresh();
     }
 
+    /**
+     * 根据类型获取
+     *
+     * @param clazz
+     * @return
+     */
+    public Object getBean(Class<?> clazz) {
+        String simpleName = clazz.getSimpleName();
+        //首字母小写
+        String beanName = StringUtils.lowerCase(simpleName.substring(0, 1)) + simpleName.substring(1);
+        //也可以在初始化的时候存储一份 key是类明的  [一式两份] 是否浪费空间
+        return getBean(beanName);
+    }
+
     @Override
     public Object getBean(String beanName) {
 
@@ -45,8 +60,9 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
          * 为什么要先初始化在注入[而不是同时做]：因为要解决循环依赖的问题
          */
 
-        //1 初始化(仅初始化，不注入属性值)
+        //1 初始化(仅初始化，不注入属性值)  得提前初始化吧  注入的时候类都没初始化怎么注入
         BeanWrapperX beanWrapperX = instatiateBean(beanName, beanDefinitionMap.get(beanName));
+
 
         //2 将BeanWrapper保存到 wrapper容器中
         factoryBeanInstanceCache.put(beanName, beanWrapperX);
@@ -80,13 +96,11 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
     private void populateBean(String beanName, BeanWrapperX beanWrapperX) {
         //获取到Bean实例
         Object instance = beanWrapperX.getWrapperInstance();
-        if (instance == null) {
-            return;
-        }
+        //if (instance == null) {//此处已经在 doCreateBeanDefinition 将不能实例化的类过滤了(抽象类，接口)
+        //    return;
+        //}
         //是否可以注入(此处标准为：Controller/Service可以注入)
         Class<?> beanClass = beanWrapperX.getWrapperClass();
-
-
         if (!(beanClass.isAnnotationPresent(ControllerX.class) || beanClass.isAnnotationPresent(ServiceX.class))) {
             return;
         }
@@ -99,14 +113,18 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
             AutowiredX autowiredX = field.getAnnotation(AutowiredX.class);
             String autowriedBeanName = autowiredX.value().trim();
             if ("".equals(autowriedBeanName)) {
-                autowriedBeanName = field.getType().getName();
+                String simpleName = field.getType().getSimpleName();
+                autowriedBeanName = StringUtils.lowerCase(simpleName.substring(0, 1)) + simpleName.substring(1);
             }
 
             field.setAccessible(true);//突破private
 
             try {
                 //自动注入(字段赋值)
-                field.set(instance, this.factoryBeanInstanceCache.get(autowriedBeanName).getWrapperClass());
+                System.out.println("===>>>" + this.factoryBeanInstanceCache.get(autowriedBeanName));
+                Object instanceWried = this.factoryBeanInstanceCache.get(autowriedBeanName).getWrapperInstance();
+                System.out.println("---->>>>被注入的类实例：" + instanceWried);
+                field.set(instance, instanceWried);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -162,6 +180,10 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
 
         beanDefinitionXES.stream().forEach(beanDefinitionX -> {
             super.beanDefinitionMap.put(beanDefinitionX.getFactoryBeanName(), beanDefinitionX);
+            //直接实例化---提前实例化用于依赖注入(并且解决循环依赖[只实例话并不对属性赋值])
+            BeanWrapperX beanWrapperX = instatiateBean(beanDefinitionX.getFactoryBeanName(), beanDefinitionX);
+            factoryBeanInstanceCache.put(beanDefinitionX.getFactoryBeanName(), beanWrapperX);
+
         });
     }
 
