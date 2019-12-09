@@ -7,6 +7,7 @@ import springx.annotation.ServiceX;
 import springx.beans.BeanFactoryX;
 import springx.beans.BeanWrapperX;
 import springx.beans.config.BeanDefinitionX;
+import springx.beans.config.BeanPostProcessorX;
 import springx.beans.support.BeanDefinitionReaderX;
 import springx.beans.support.DefaultListableBeanFactoryX;
 
@@ -19,9 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * AnnotationContext...
  * XmlContext...等等
  */
-public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFactoryX {
+public class ApplicationContextX extends DefaultListableBeanFactoryX implements BeanFactoryX {
 
-    public ApplicationX() {
+    public ApplicationContextX() {
     }
 
     private String[] locations;
@@ -33,7 +34,7 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
     //BeanWrapper容器(通用IOC容器)
     private Map<String, BeanWrapperX> factoryBeanInstanceCache = new ConcurrentHashMap<>();
 
-    public ApplicationX(String... locations) {
+    public ApplicationContextX(String... locations) {
         this.locations = locations;
         refresh();
     }
@@ -44,7 +45,7 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
      * @param clazz
      * @return
      */
-    public Object getBean(Class<?> clazz) {
+    public Object getBean(Class<?> clazz) throws Exception {
         String simpleName = clazz.getSimpleName();
         //首字母小写
         String beanName = StringUtils.lowerCase(simpleName.substring(0, 1)) + simpleName.substring(1);
@@ -53,16 +54,24 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
     }
 
     @Override
-    public Object getBean(String beanName) {
+    public Object getBean(String beanName) throws Exception {
 
         //0 doGetBean
         /**
          * 为什么要先初始化在注入[而不是同时做]：因为要解决循环依赖的问题
          */
+        BeanDefinitionX beanDefinitionX = beanDefinitionMap.get(beanName);
+        //工厂模式+策略模式[mybatis的sessionFactory实现方式]
+        BeanPostProcessorX beanPostProcessorX = new BeanPostProcessorX();
+
+        //前置通知
+        beanPostProcessorX.postProcessBeforeInitialization(beanDefinitionX, beanName);
 
         //1 初始化(仅初始化，不注入属性值)  得提前初始化吧  注入的时候类都没初始化怎么注入
         BeanWrapperX beanWrapperX = instatiateBean(beanName, beanDefinitionMap.get(beanName));
 
+        //后置通知
+        beanPostProcessorX.postProcessAfterInitialization(beanWrapperX, beanName);
 
         //2 将BeanWrapper保存到 wrapper容器中
         factoryBeanInstanceCache.put(beanName, beanWrapperX);
@@ -187,6 +196,22 @@ public class ApplicationX extends DefaultListableBeanFactoryX implements BeanFac
         });
     }
 
+
+    /**
+     * 获取容器的key
+     */
+    public String[] getBeanDefinitionNames() {
+        //只返回key--最少知道原则
+        return this.beanDefinitionMap.keySet().toArray(new String[this.beanDefinitionMap.size()]);
+    }
+
+    /**
+     * 获取容器对象数量
+     * @return
+     */
+    public int getBeanDefinitionCount() {
+        return this.beanDefinitionMap.size();
+    }
 
 
 }
