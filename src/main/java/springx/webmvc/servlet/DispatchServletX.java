@@ -1,6 +1,5 @@
 package springx.webmvc.servlet;
 
-import org.python.antlr.ast.Str;
 import springx.annotation.ControllerX;
 import springx.annotation.RequestMappingX;
 import springx.context.ApplicationContextX;
@@ -12,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class DispatchServletX extends HttpServlet {
 
@@ -19,6 +21,9 @@ public class DispatchServletX extends HttpServlet {
     private final String CONTEXT_CONFIG_LOCATION = "contextConfigLocation";
 
     ApplicationContextX applicationContextX;
+
+    //HandlerMapping容器
+    List<HandlerMappingX> handlerMappingXES = new ArrayList<>();
 
 
     @Override
@@ -115,7 +120,10 @@ public class DispatchServletX extends HttpServlet {
                     if (method.isAnnotationPresent(RequestMappingX.class)) continue;
                     RequestMappingX requestMappingX = method.getAnnotation(RequestMappingX.class);
                     String methodUrl= requestMappingX.value();
-                    String url=("/"+baseurl+"/"+methodUrl).replace("/+","/");
+                    //replaceAll("\\*",".*")   //url的正则不必写的太严格 严格方式xxx.*  修改后xxx*
+                    String url=("/"+baseurl+"/"+methodUrl.replaceAll("\\*",".*")).replace("/+","/");
+                    //缓存进容器{地址:方法}
+                    handlerMappingXES.add(new HandlerMappingX(controller, method, Pattern.compile(url)));
 
 
 
