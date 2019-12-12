@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DispatchServletX extends HttpServlet {
@@ -25,6 +28,9 @@ public class DispatchServletX extends HttpServlet {
     //HandlerMapping容器
     List<HandlerMappingX> handlerMappingXES = new ArrayList<>();
 
+    //HandlerMapping与HandlerAdapter的关系
+    Map<HandlerMappingX, HandlerAdapterX> handlerAdapterXMap = new HashMap<HandlerMappingX, HandlerAdapterX>();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,13 +40,48 @@ public class DispatchServletX extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //super.doPost(req, resp);
-        doDispatcher(req, resp);
+        try {
+            this.doDispatch(req, resp);
+        } catch (Exception e) {
+            resp.getWriter().write("500 Exception,Details:\r\n" + e.toString());
+            e.printStackTrace();
+        }
     }
 
-    private void doDispatcher(HttpServletRequest req, HttpServletResponse resp) {
-
+    private void doDispatch(HttpServletRequest req, HttpServletResponse resp) {
+        //1 通过从request中拿到URL去匹配一个HandlerMapping
+        HandlerMappingX handlerMappingX = getHandlerMapping(req);
+        if (handlerMappingX == null) {
+            //ModelAndView 404
+            return;
+        }
 
     }
+
+    /**
+     * 通过request中的URL获取到RequestMapping
+     */
+    private HandlerMappingX getHandlerMapping(HttpServletRequest req) {
+        if (this.handlerMappingXES.isEmpty()) return null;
+        String url = req.getRequestURI();
+        String contextPath = req.getContextPath();
+        url = url.replace(contextPath, "").replaceAll("/+", "/");
+
+        for (HandlerMappingX handlerMappingX : this.handlerMappingXES) {
+
+            try {
+                Matcher matcher = handlerMappingX.getPattern().matcher(url);
+                if (!matcher.matches()) continue;
+                return handlerMappingX;
+            } catch (Exception e) {
+                log(e.toString());
+            }
+
+        }
+
+        return null;
+    }
+
 
     @Override
     public void init(ServletConfig config) {
@@ -66,9 +107,9 @@ public class DispatchServletX extends HttpServlet {
         initLocalResolver(applicationContextX);
         //3 初始化模版处理器
         initThemeResolver(applicationContextX);
-        //4 handlerMapping
+        //4 handlerMapping  ok
         initHanderMapping(applicationContextX);
-        //5 初始化参数适配器
+        //5 初始化参数适配器   ok
         initHanderAdapters(applicationContextX);
         //6 初始化异常拦截器
         initHanderExceptionResolvers(applicationContextX);
@@ -96,6 +137,13 @@ public class DispatchServletX extends HttpServlet {
     }
 
     private void initHanderAdapters(ApplicationContextX applicationContextX) {
+
+        //https://www.jianshu.com/p/1ccd4b326cff
+        //handlerAdapter与HandlerMapping建立关系
+        for (HandlerMappingX handlerMappingX : this.handlerMappingXES) {
+            this.handlerAdapterXMap.put(handlerMappingX, new HandlerAdapterX());
+        }
+
     }
 
     private void initHanderMapping(ApplicationContextX applicationContextX) {
@@ -124,9 +172,6 @@ public class DispatchServletX extends HttpServlet {
                     String url=("/"+baseurl+"/"+methodUrl.replaceAll("\\*",".*")).replace("/+","/");
                     //缓存进容器{地址:方法}
                     handlerMappingXES.add(new HandlerMappingX(controller, method, Pattern.compile(url)));
-
-
-
                 }
 
 
