@@ -3,3 +3,6 @@ IOC DI
     2 将类信息放入类信息容器中(list集合)
     3 遍历类信息集合(容器)，构造bean的ioc容器(k:factoryBeanName,v:类的定义信息)
     3 遍历bean的ioc容器(map)，初始化与属性注入非懒加载的类[分两步防止循环依赖]
+
+MVC:
+    HandlerAdapter:请求适配(将请求适配到具体的方法[Handler])#个人理解

@@ -14,6 +14,7 @@ import springx.beans.support.DefaultListableBeanFactoryX;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -24,6 +25,8 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
 
     public ApplicationContextX() {
     }
+
+    private BeanDefinitionReaderX beanDefinitionReaderX;
 
     private String[] locations;
 
@@ -88,7 +91,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
     @Override
     public void refresh() {
         //1 定位配置文件
-        BeanDefinitionReaderX beanDefinitionReaderX = new BeanDefinitionReaderX(this.locations);
+        this.beanDefinitionReaderX = new BeanDefinitionReaderX(this.locations);
 
         //2 加载配置文件，扫描相关的类，把他们封装成BeanDefinition
         List<BeanDefinitionX> beanDefinitionXES = beanDefinitionReaderX.loadBeanDefinitions();
@@ -214,4 +217,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
     }
 
 
+    public Properties getConfig() {
+        return beanDefinitionReaderX.getConfig();
+    }
 }

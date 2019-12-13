@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public class DispatchServletX extends HttpServlet {
     //HandlerMapping与HandlerAdapter的关系
     Map<HandlerMappingX, HandlerAdapterX> handlerAdapterXMap = new HashMap<HandlerMappingX, HandlerAdapterX>();
 
+    //ViewResolver容器
+    List<ViewResolverX> viewResolverXES = new ArrayList<ViewResolverX>();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -50,12 +54,32 @@ public class DispatchServletX extends HttpServlet {
 
     private void doDispatch(HttpServletRequest req, HttpServletResponse resp) {
         //1 通过从request中拿到URL去匹配一个HandlerMapping
-        HandlerMappingX handlerMappingX = getHandlerMapping(req);
-        if (handlerMappingX == null) {
+        HandlerMappingX handler = getHandlerMapping(req);
+        if (handler == null) {
             //ModelAndView 404
             return;
         }
+        //2 准备调用前的参数
+        HandlerAdapterX handlerAdapterX = getHandlerAdapter(handler);
 
+        //3 真正的调用方法  返回modelAndView[存储了要传到页面的值，和页面模版的名称]
+        ModelAndViewX modelAndViewx = handlerAdapterX.handle(req, resp, handlerAdapterX);//第三个参数是具体执行方法(此处做简化处理)
+
+        //解析ModelAndView去真正的返回数据渲染页面
+        processDispatchResult(req, resp, modelAndViewx);
+    }
+
+    private void processDispatchResult(HttpServletRequest req, HttpServletResponse resp, ModelAndViewX modelAndViewx) {
+        //把ModelAndView变成一个Html,OutputStream,Json,Freemark,veolcity
+        //由ContextType决定
+
+
+    }
+
+    private HandlerAdapterX getHandlerAdapter(HandlerMappingX handlerMappingX) {
+
+
+        return null;
     }
 
     /**
@@ -117,7 +141,7 @@ public class DispatchServletX extends HttpServlet {
         initRequestToViewNameTranslator(applicationContextX);
         //8 初始化视图转换器
         initViewResolver(applicationContextX);
-        //9
+        //9 参数缓存器
         initFlashMapManager(applicationContextX);
 
 
@@ -128,6 +152,18 @@ public class DispatchServletX extends HttpServlet {
     }
 
     private void initViewResolver(ApplicationContextX applicationContextX) {
+        //拿到存放模版的跟目录
+        String templateRoot = applicationContextX.getConfig().getProperty("templateRoot");
+        //获取资源
+        String templateRootPath = this.getClass().getClassLoader().getResource(templateRoot).getFile();
+
+        File file = new File(templateRootPath);
+        for (File listFile : file.listFiles()) {
+
+            //ViewResolver
+            //    viewResolverXES
+
+        }
     }
 
     private void initRequestToViewNameTranslator(ApplicationContextX applicationContextX) {
