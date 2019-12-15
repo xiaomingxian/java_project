@@ -76,7 +76,15 @@ public class DispatchServletX extends HttpServlet {
 
     }
 
-    private HandlerAdapterX getHandlerAdapter(HandlerMappingX handlerMappingX) {
+    private HandlerAdapterX getHandlerAdapter(HandlerMappingX handler) {
+        if (this.handlerAdapterXMap.isEmpty()) {
+            return null;
+        }
+        HandlerAdapterX handlerAdapterX = this.handlerAdapterXMap.get(handler);
+        //判断是否支持
+        if (handlerAdapterX.support()) {
+            return handlerAdapterX;
+        }
 
 
         return null;
@@ -158,10 +166,10 @@ public class DispatchServletX extends HttpServlet {
         String templateRootPath = this.getClass().getClassLoader().getResource(templateRoot).getFile();
 
         File file = new File(templateRootPath);
-        for (File listFile : file.listFiles()) {
+        for (File file1 : file.listFiles()) {
 
-            //ViewResolver
-            //    viewResolverXES
+            //this.viewResolverXES.add(new ViewResolverX(templateRootPath));
+            this.viewResolverXES.add(new ViewResolverX(file1.getAbsolutePath()));
 
         }
     }
@@ -203,9 +211,9 @@ public class DispatchServletX extends HttpServlet {
                     //忽略没有加注解的方法[此处简化处理]
                     if (method.isAnnotationPresent(RequestMappingX.class)) continue;
                     RequestMappingX requestMappingX = method.getAnnotation(RequestMappingX.class);
-                    String methodUrl= requestMappingX.value();
+                    String methodUrl = requestMappingX.value();
                     //replaceAll("\\*",".*")   //url的正则不必写的太严格 严格方式xxx.*  修改后xxx*
-                    String url=("/"+baseurl+"/"+methodUrl.replaceAll("\\*",".*")).replace("/+","/");
+                    String url = ("/" + baseurl + "/" + methodUrl.replaceAll("\\*", ".*")).replace("/+", "/");
                     //缓存进容器{地址:方法}
                     handlerMappingXES.add(new HandlerMappingX(controller, method, Pattern.compile(url)));
                 }
