@@ -57,21 +57,37 @@ public class DispatchServletX extends HttpServlet {
         HandlerMappingX handler = getHandlerMapping(req);
         if (handler == null) {
             //ModelAndView 404
+            processDispatchResult(req,resp,new ModelAndViewX("404"));
             return;
         }
         //2 准备调用前的参数
         HandlerAdapterX handlerAdapterX = getHandlerAdapter(handler);
 
         //3 真正的调用方法  返回modelAndView[存储了要传到页面的值，和页面模版的名称]
-        ModelAndViewX modelAndViewx = handlerAdapterX.handle(req, resp, handlerAdapterX);//第三个参数是具体执行方法(此处做简化处理)
+        ModelAndViewX modelAndViewx = null;
+        try {
+            modelAndViewx = handlerAdapterX.handle(req, resp, handlerAdapterX);//第三个参数是具体执行方法(此处做简化处理)
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        //解析ModelAndView去真正的返回数据渲染页面
+        //解析ModelAndView去真正的返回数据渲染页面(真正的输出)
         processDispatchResult(req, resp, modelAndViewx);
     }
 
     private void processDispatchResult(HttpServletRequest req, HttpServletResponse resp, ModelAndViewX modelAndViewx) {
         //把ModelAndView变成一个Html,OutputStream,Json,Freemark,veolcity
         //由ContextType决定
+        if (null == modelAndViewx) return;
+        if (this.viewResolverXES.isEmpty()) return;
+
+        for (ViewResolverX viewResolverX : this.viewResolverXES) {
+
+            ViewX viewX = viewResolverX.resolverViewName(modelAndViewx.getViewName(), null);
+            viewX.render(modelAndViewx.getModel(), req, resp);
+            return;//????
+        }
+
 
 
     }

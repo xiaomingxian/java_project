@@ -1,11 +1,11 @@
 package springx.webmvc.servlet;
 
-import org.springframework.cglib.core.Local;
 import springx.annotation.RequestParamX;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class HandlerAdapterX {
      * @throws Exception
      */
 
-    ModelAndViewX handle(HttpServletRequest request, HttpServletResponse response, Object hadler)  {//throws Exception
+    ModelAndViewX handle(HttpServletRequest request, HttpServletResponse response, Object hadler) throws InvocationTargetException, IllegalAccessException {//throws Exception
 
 
         HandlerMappingX handlerMappingX = (HandlerMappingX) hadler;
@@ -67,7 +67,7 @@ public class HandlerAdapterX {
 
         for (Map.Entry<String, String[]> param : params.entrySet()) {
 
-            String value = Arrays.toString(param.getValue()).replaceAll("\\[|\\]", "")
+            String value = Arrays.toString(param.getValue()).replaceAll("\\[|\\]", "")//中括号表达式替换为空串
                     .replaceAll("\\s", ",");
 
             //提取出的参数中不包含
@@ -76,9 +76,30 @@ public class HandlerAdapterX {
             Integer index = paramIndexMapping.get(param.getKey());
             //参数值列表
             paramVals[index] = caseStringValue(value,parameterTypes[index]);
-
-
         }
+
+
+        /**
+         * 调用方法
+         */
+
+        if (paramIndexMapping.containsKey(HttpServletRequest.class.getName())) {
+            Integer index = paramIndexMapping.get(HttpServletRequest.class.getName());
+            paramVals[index] = request;
+        }
+
+        if (paramIndexMapping.containsKey(HttpServletResponse.class.getName())) {
+            Integer index = paramIndexMapping.get(HttpServletResponse.class.getName());
+            paramVals[index] = response;
+        }
+        Object result = handlerMappingX.getMethod().invoke(handlerMappingX.getController(), paramVals);
+        if (result == null || result instanceof Void) return null;
+        //判断返回类型
+        boolean isModelAndView = handlerMappingX.getMethod().getReturnType() == ModelAndViewX.class;
+        if (isModelAndView) {
+            return (ModelAndViewX) result;
+        }
+
 
 
         return null;
