@@ -18,6 +18,9 @@ public class HandlerAdapterX {
         return true;
     }
 
+
+
+    public HandlerAdapterX(){}
     /**
      * @param request
      * @param response

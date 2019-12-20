@@ -12,6 +12,7 @@ public class ModelAndViewX {
 
     private Map<String, ?> model;
 
+
     public ModelAndViewX(String viewName) {
         this.viewName = viewName;
     }

@@ -26,6 +26,9 @@ public class DispatchServletX extends HttpServlet {
 
     ApplicationContextX applicationContextX;
 
+    public DispatchServletX() {
+    }
+
     //HandlerMapping容器
     List<HandlerMappingX> handlerMappingXES = new ArrayList<>();
 
@@ -149,11 +152,11 @@ public class DispatchServletX extends HttpServlet {
      * @param applicationContextX
      */
     private void initStrategies(ApplicationContextX applicationContextX) {
-        //1 多文件上传组件
+        //1 多文件上传组件(略:未实现)
         initMultipartResolver(applicationContextX);
-        //2 初始化本地语言环境
+        //2 初始化本地语言环境(略:未实现)
         initLocalResolver(applicationContextX);
-        //3 初始化模版处理器
+        //3 初始化模版处理器(略:未实现)
         initThemeResolver(applicationContextX);
         //4 handlerMapping  ok
         initHanderMapping(applicationContextX);
@@ -225,7 +228,7 @@ public class DispatchServletX extends HttpServlet {
                 Method[] methods = clazz.getMethods();
                 for (Method method : methods) {
                     //忽略没有加注解的方法[此处简化处理]
-                    if (method.isAnnotationPresent(RequestMappingX.class)) continue;
+                    if (!method.isAnnotationPresent(RequestMappingX.class)) continue;
                     RequestMappingX requestMappingX = method.getAnnotation(RequestMappingX.class);
                     String methodUrl = requestMappingX.value();
                     //replaceAll("\\*",".*")   //url的正则不必写的太严格 严格方式xxx.*  修改后xxx*

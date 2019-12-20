@@ -20,9 +20,10 @@ public class ViewResolverX {
 
     public ViewResolverX(String templateRoot) {
 
-        String file = this.getClass().getClassLoader().getResource(templateRoot).getFile();
+        //String file = this.getClass().getClassLoader().getResource(templateRoot).getFile();
 
-        templateRootDir = new File(file);
+        //templateRootDir = new File(file);
+        templateRootDir = new File(templateRoot);
     }
 
     public ViewX resolverViewName(String viewName, Locale locale) {//locale国际化
@@ -30,7 +31,11 @@ public class ViewResolverX {
         if (StringUtils.isBlank(viewName)) return null;
 
         viewName=viewName.endsWith(DEFAULT_SUFFIX)?viewName:viewName+DEFAULT_SUFFIX;
-        //
+
+
+        File templateFile = new File((templateRootDir.getPath() + "/" + viewName).replaceAll("/+", "/"));
+
+        //return new ViewX(file);
         return null;
     }
 }
