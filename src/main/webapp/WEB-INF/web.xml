@@ -88,10 +88,10 @@
     <display-name>X Spring Application</display-name>
 
     <!-- spring容器  -->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring/applicationContext-*.xml</param-value>
-    </context-param>
+    <!--<context-param>-->
+        <!--<param-name>contextConfigLocation</param-name>-->
+        <!--<param-value>classpath:spring/applicationContext-*.xml</param-value>-->
+    <!--</context-param>-->
 
     <!-- springmvc前端控制器 -->
     <servlet>

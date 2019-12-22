@@ -8,7 +8,7 @@ public class MyControllerTest {
 
     @RequestMappingX(value = "xxx")
     public String xxx() {
-        return "400";
+        return "404";
     }
 
 

@@ -6,3 +6,4 @@ IOC DI
 
 MVC:
     HandlerAdapter:请求适配(将请求适配到具体的方法[Handler])#个人理解
+    1 初始化web.xml中配置的DispatchServlet -> init(1初始化)

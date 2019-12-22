@@ -41,7 +41,8 @@ public class DispatchServletX extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        //super.doGet(req, resp);
+        this.doPost(req, resp);
     }
 
     @Override
@@ -137,7 +138,7 @@ public class DispatchServletX extends HttpServlet {
     @Override
     public void init(ServletConfig config) {
         //super.init();
-        //1 初始化ApplicationContext
+        //1 初始化ApplicationContext(读取配置文件/初始化容器)
         String initParameter = config.getInitParameter(CONTEXT_CONFIG_LOCATION);
         applicationContextX = new ApplicationContextX(initParameter);
 
@@ -201,6 +202,8 @@ public class DispatchServletX extends HttpServlet {
 
     private void initHanderAdapters(ApplicationContextX applicationContextX) {
 
+        System.out.println("----------------------->>>9大组件初始5：handlerAdapter与HandlerMapping建立关系[一知半解](已实现：handlerAdapterXMap)");
+
         //https://www.jianshu.com/p/1ccd4b326cff
         //handlerAdapter与HandlerMapping建立关系
         for (HandlerMappingX handlerMappingX : this.handlerMappingXES) {
@@ -210,6 +213,9 @@ public class DispatchServletX extends HttpServlet {
     }
 
     private void initHanderMapping(ApplicationContextX applicationContextX) {
+
+        System.out.println("----------------------->>>9大组件初始4：建立类与url映射(已实现：handlerMappingXES)");
+
         String[] beanDefinitionNames = applicationContextX.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
             //建立类于URL的映射关系
@@ -248,13 +254,15 @@ public class DispatchServletX extends HttpServlet {
     }
 
     private void initThemeResolver(ApplicationContextX applicationContextX) {
+        System.out.println("----------------------->>>9大组件初始3：初始化模版处理器(略)");
     }
 
     private void initLocalResolver(ApplicationContextX applicationContextX) {
+        System.out.println("----------------------->>>9大组件初始2：初始化本地语言环境(略)");
 
     }
 
     private void initMultipartResolver(ApplicationContextX applicationContextX) {
-
+        System.out.println("----------------------->>>9大组件初始1：多文件上传组件(略)");
     }
 }
