@@ -35,11 +35,11 @@ public class ViewX {
             while (null != (line = randomAccessFile.readLine())) {
                 line = new String(line.getBytes("ISO-8859-1"), "utf8");
                 //X{}自定义标签解析格式 中间不能出现}
-                Pattern pattern = Pattern.compile("X\\{[^\\}]\\}", Pattern.CASE_INSENSITIVE);// Pattern.CASE_INSENSITIV逐个匹配
+                Pattern pattern = Pattern.compile("%\\{\\w+\\}", Pattern.CASE_INSENSITIVE);// Pattern.CASE_INSENSITIV逐个匹配
                 Matcher matcher = pattern.matcher(line);
                 while (matcher.find()) {
                     String paramName = matcher.group();
-                    paramName.replaceAll("X\\{|\\}", "");//把标签解析替换掉
+                    paramName.replaceAll("%\\{|\\}", "");//把标签解析替换掉
                     if (model!=null){
                         Object paramValue = model.get(paramName);
                         if (null == paramValue) continue;

@@ -6,4 +6,9 @@ IOC DI
 
 MVC:
     HandlerAdapter:请求适配(将请求适配到具体的方法[Handler])#个人理解
-    1 初始化web.xml中配置的DispatchServlet -> init(1初始化)
+    1 初始化web.xml中配置的DispatchServlet
+        -> init
+            初始化IOC容器
+            2初始化九大组件(handlerMapping,参数适配[adapter],视图相关)
+    2 请求 get/post...->doDispatcher->获取handlerMapping->参数适配->方法执行
+        ->返回ModelAndView->渲染视图 [参考mvc流程图]

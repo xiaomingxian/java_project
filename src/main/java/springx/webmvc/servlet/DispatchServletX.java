@@ -166,9 +166,9 @@ public class DispatchServletX extends HttpServlet {
         initHanderAdapters(applicationContextX);
         //6 初始化异常拦截器
         initHanderExceptionResolvers(applicationContextX);
-        //7 初始化视图预处理器
+        //7 初始化视图预处理器 ok
         initRequestToViewNameTranslator(applicationContextX);
-        //8 初始化视图转换器
+        //8 初始化视图转换器 ok
         initViewResolver(applicationContextX);
         //9 参数缓存器
         initFlashMapManager(applicationContextX);
