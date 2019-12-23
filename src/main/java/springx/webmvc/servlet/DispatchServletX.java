@@ -1,5 +1,6 @@
 package springx.webmvc.servlet;
 
+import org.apache.commons.lang3.StringUtils;
 import springx.annotation.ControllerX;
 import springx.annotation.RequestMappingX;
 import springx.context.ApplicationContextX;
@@ -70,7 +71,7 @@ public class DispatchServletX extends HttpServlet {
         //3 真正的调用方法  返回modelAndView[存储了要传到页面的值，和页面模版的名称]
         ModelAndViewX modelAndViewx = null;
         try {
-            modelAndViewx = handlerAdapterX.handle(req, resp, handlerAdapterX);//第三个参数是具体执行方法(此处做简化处理)
+            modelAndViewx = handlerAdapterX.handle(req, resp, handler);//第三个参数是具体执行方法(此处做简化处理)
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +103,7 @@ public class DispatchServletX extends HttpServlet {
         }
         HandlerAdapterX handlerAdapterX = this.handlerAdapterXMap.get(handler);
         //判断是否支持
-        if (handlerAdapterX.support()) {
+        if (handlerAdapterX.support(handler)) {
             return handlerAdapterX;
         }
 
@@ -176,33 +177,42 @@ public class DispatchServletX extends HttpServlet {
     }
 
     private void initFlashMapManager(ApplicationContextX applicationContextX) {
+        System.out.println("===================>>>9大组件初始9：参数缓存器(略)");
 
     }
 
-    private void initViewResolver(ApplicationContextX applicationContextX) {
+    private void    initViewResolver(ApplicationContextX applicationContextX) {
+        System.out.println("===================>>>9大组件初始8：初始化视图转换器(已实现)");
+
         //拿到存放模版的跟目录
         String templateRoot = applicationContextX.getConfig().getProperty("templateRoot");
         //获取资源
         String templateRootPath = this.getClass().getClassLoader().getResource(templateRoot).getFile();
 
         File file = new File(templateRootPath);
-        for (File file1 : file.listFiles()) {
+        this.viewResolverXES.add(new ViewResolverX(file.getAbsolutePath()));
 
-            //this.viewResolverXES.add(new ViewResolverX(templateRootPath));
-            this.viewResolverXES.add(new ViewResolverX(file1.getAbsolutePath()));
-
-        }
+        //for (File file1 : file.listFiles()) {
+        //
+        //    //this.viewResolverXES.add(new ViewResolverX(templateRootPath));
+        //    this.viewResolverXES.add(new ViewResolverX(file1.getAbsolutePath()));
+        //
+        //}
     }
 
     private void initRequestToViewNameTranslator(ApplicationContextX applicationContextX) {
+        System.out.println("===================>>>9大组件初始7：初始化视图预处理器(略)");
+
     }
 
     private void initHanderExceptionResolvers(ApplicationContextX applicationContextX) {
+        System.out.println("===================>>>9大组件初始6：初始化异常拦截器(略)");
+
     }
 
     private void initHanderAdapters(ApplicationContextX applicationContextX) {
 
-        System.out.println("----------------------->>>9大组件初始5：handlerAdapter与HandlerMapping建立关系[一知半解](已实现：handlerAdapterXMap)");
+        System.out.println("===================>>>9大组件初始5：handlerAdapter与HandlerMapping建立关系[一知半解](已实现：handlerAdapterXMap)");
 
         //https://www.jianshu.com/p/1ccd4b326cff
         //handlerAdapter与HandlerMapping建立关系
@@ -214,12 +224,14 @@ public class DispatchServletX extends HttpServlet {
 
     private void initHanderMapping(ApplicationContextX applicationContextX) {
 
-        System.out.println("----------------------->>>9大组件初始4：建立类与url映射(已实现：handlerMappingXES)");
+        System.out.println("===================>>>9大组件初始4：建立类与url映射(已实现：handlerMappingXES)");
 
+        //获取容器中所有bean名称
         String[] beanDefinitionNames = applicationContextX.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
             //建立类于URL的映射关系
             try {
+                //根据bean名称去获取bean
                 Object controller = applicationContextX.getBean(beanDefinitionName);
                 //判断是不是Controller
                 Class<?> clazz = controller.getClass();
@@ -238,7 +250,14 @@ public class DispatchServletX extends HttpServlet {
                     RequestMappingX requestMappingX = method.getAnnotation(RequestMappingX.class);
                     String methodUrl = requestMappingX.value();
                     //replaceAll("\\*",".*")   //url的正则不必写的太严格 严格方式xxx.*  修改后xxx*
-                    String url = ("/" + baseurl + "/" + methodUrl.replaceAll("\\*", ".*")).replace("/+", "/");
+                    String url = null;
+                    if (StringUtils.isBlank(baseurl)) {
+                        url = ("/" + methodUrl.replaceAll("\\*", ". * ")).replace("\\+", " / ");
+
+                    } else {
+                        url = ("/" + baseurl + "/" + methodUrl.replaceAll("\\*", ".*")).replace("\\+", "/");
+
+                    }
                     //缓存进容器{地址:方法}
                     handlerMappingXES.add(new HandlerMappingX(controller, method, Pattern.compile(url)));
                 }
@@ -254,15 +273,15 @@ public class DispatchServletX extends HttpServlet {
     }
 
     private void initThemeResolver(ApplicationContextX applicationContextX) {
-        System.out.println("----------------------->>>9大组件初始3：初始化模版处理器(略)");
+        System.out.println("===================>>>9大组件初始3：初始化模版处理器(略)");
     }
 
     private void initLocalResolver(ApplicationContextX applicationContextX) {
-        System.out.println("----------------------->>>9大组件初始2：初始化本地语言环境(略)");
+        System.out.println("===================>>>9大组件初始2：初始化本地语言环境(略)");
 
     }
 
     private void initMultipartResolver(ApplicationContextX applicationContextX) {
-        System.out.println("----------------------->>>9大组件初始1：多文件上传组件(略)");
+        System.out.println("===================>>>9大组件初始1：多文件上传组件(略)");
     }
 }

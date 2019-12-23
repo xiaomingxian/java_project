@@ -14,8 +14,8 @@ import java.util.Map;
  * HandlerAdapter
  */
 public class HandlerAdapterX {
-    public final boolean support() {
-        return true;
+    public final boolean support(Object handler) {
+        return handler instanceof HandlerMappingX;
     }
 
 
@@ -101,12 +101,12 @@ public class HandlerAdapterX {
         boolean isModelAndView = handlerMappingX.getMethod().getReturnType() == ModelAndViewX.class;
         if (isModelAndView) {
             return (ModelAndViewX) result;
+        }else {
+
+            ModelAndViewX modelAndViewX = new ModelAndViewX();
+            modelAndViewX.setViewName(result.toString());
+            return modelAndViewX;
         }
-
-
-
-        return null;
-
     }
 
     private Object caseStringValue(String value, Class<?> clazz) {

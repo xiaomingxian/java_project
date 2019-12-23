@@ -108,6 +108,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
     private void populateBean(String beanName, BeanWrapperX beanWrapperX) {
         //获取到Bean实例
         Object instance = beanWrapperX.getWrapperInstance();
+
         //if (instance == null) {//此处已经在 doCreateBeanDefinition 将不能实例化的类过滤了(抽象类，接口)
         //    return;
         //}
@@ -118,6 +119,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
         }
         Field[] fields = beanClass.getDeclaredFields();
         for (Field field : fields) {//判断是否加了自动注入注解(此处简化-只考虑Autowired)
+
             if (!field.isAnnotationPresent(AutowiredX.class)) {
                 continue;
             }
@@ -133,10 +135,13 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
 
             try {
                 //自动注入(字段赋值)
-                System.out.println("===>>>" + this.factoryBeanInstanceCache.get(autowriedBeanName));
                 Object instanceWried = this.factoryBeanInstanceCache.get(autowriedBeanName).getWrapperInstance();
-                System.out.println("---->>>>被注入的类实例：" + instanceWried);
-                field.set(instance, instanceWried);
+                //注入就一次，没注入的化再进行注入(我自己的做法)
+                Object o = field.get(instance);
+                if (o==null){
+                    System.out.println("-------------------->>>>依赖注入->被注入的类实例：" + instanceWried);
+                    field.set(instance, instanceWried);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

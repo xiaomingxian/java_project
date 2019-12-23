@@ -35,7 +35,7 @@ public class ViewResolverX {
 
         File templateFile = new File((templateRootDir.getPath() + "/" + viewName).replaceAll("/+", "/"));
 
-        //return new ViewX(file);
-        return null;
+        return new ViewX(templateFile);
+        //return null;
     }
 }

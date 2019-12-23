@@ -40,9 +40,12 @@ public class ViewX {
                 while (matcher.find()) {
                     String paramName = matcher.group();
                     paramName.replaceAll("X\\{|\\}", "");//把标签解析替换掉
-                    Object paramValue = model.get(paramName);
-                    if (null == paramValue) continue;
-                    line = matcher.replaceFirst(paramValue.toString());
+                    if (model!=null){
+                        Object paramValue = model.get(paramName);
+                        if (null == paramValue) continue;
+                        line = matcher.replaceFirst(paramValue.toString());
+                    }
+
                     matcher = pattern.matcher(line);
                 }
 
