@@ -4,6 +4,11 @@ import org.apache.commons.lang3.StringUtils;
 import springx.annotation.AutowiredX;
 import springx.annotation.ControllerX;
 import springx.annotation.ServiceX;
+import springx.aop.AopProxyX;
+import springx.aop.CglibDynamicProxyX;
+import springx.aop.JdkDynamicAopProxy;
+import springx.aop.config.AopConfigX;
+import springx.aop.support.AdvisedSupportX;
 import springx.beans.BeanFactoryX;
 import springx.beans.BeanWrapperX;
 import springx.beans.config.BeanDefinitionX;
@@ -162,6 +167,15 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
                 instance = singletonContainer.get(beanName);
             } else {
                 Class<?> clazz = Class.forName(className);
+                //在这里初始化Aop配置？？？
+                AdvisedSupportX config = instantionAopConfig(beanDefinitionX);
+                config.setTarget(instance);
+                config.setTargetClass(clazz);
+                //判断是否符合切面规则
+                if (config.pointCutMatch()) {
+                    instance = createProxy(config).getProxy();
+                }
+
                 instance = clazz.newInstance();
                 singletonContainer.put(beanName, instance);
             }
@@ -173,6 +187,28 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
         BeanWrapperX beanWrapperX = new BeanWrapperX(instance);
 
         return beanWrapperX;
+    }
+
+    private AopProxyX createProxy(AdvisedSupportX config) {
+        Class<?>[] interfaces = config.getTargetClass().getInterfaces();
+        if (interfaces.length > 0) {
+            return new JdkDynamicAopProxy(config);
+        } else {
+            return new CglibDynamicProxyX(config);
+        }
+    }
+
+    private AdvisedSupportX instantionAopConfig(BeanDefinitionX beanDefinitionX) {
+        AopConfigX aopConfigX = new AopConfigX();
+        aopConfigX.setAspectClass(this.beanDefinitionReaderX.getConfig().getProperty(""));
+        aopConfigX.setPointCut(this.beanDefinitionReaderX.getConfig().getProperty(""));
+        aopConfigX.setAspectBefore(this.beanDefinitionReaderX.getConfig().getProperty(""));
+        aopConfigX.setAspectAfter(this.beanDefinitionReaderX.getConfig().getProperty(""));
+        aopConfigX.setAspectAfterThrow(this.beanDefinitionReaderX.getConfig().getProperty(""));
+        aopConfigX.setAspectAfterThrowing(this.beanDefinitionReaderX.getConfig().getProperty(""));
+
+
+        return new AdvisedSupportX(aopConfigX);
     }
 
 
