@@ -160,6 +160,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
         String className = beanDefinitionX.getBeanClassName();
         //2 反射实例化，得到一个对象
         Object instance = null;
+        BeanWrapperX beanWrapperX = null;
         try {
             //实例化对象-先看容器中有没有
             //此处假设默认是单例
@@ -174,17 +175,19 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
                 //判断是否符合切面规则
                 if (config.pointCutMatch()) {
                     instance = createProxy(config).getProxy();
+                } else {
+                    instance = clazz.newInstance();
                 }
+                //3 将对象封装到BeanWrapper中
+                beanWrapperX = new BeanWrapperX(instance);
+                singletonContainer.put(className, instance);
+                factoryBeanInstanceCache.put(beanDefinitionX.getFactoryBeanName(), beanWrapperX);
 
-                instance = clazz.newInstance();
-                singletonContainer.put(beanName, instance);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //3 将对象封装到BeanWrapper中
-        BeanWrapperX beanWrapperX = new BeanWrapperX(instance);
 
         return beanWrapperX;
     }
@@ -200,14 +203,12 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
 
     private AdvisedSupportX instantionAopConfig(BeanDefinitionX beanDefinitionX) {
         AopConfigX aopConfigX = new AopConfigX();
-        aopConfigX.setAspectClass(this.beanDefinitionReaderX.getConfig().getProperty(""));
-        aopConfigX.setPointCut(this.beanDefinitionReaderX.getConfig().getProperty(""));
-        aopConfigX.setAspectBefore(this.beanDefinitionReaderX.getConfig().getProperty(""));
-        aopConfigX.setAspectAfter(this.beanDefinitionReaderX.getConfig().getProperty(""));
-        aopConfigX.setAspectAfterThrow(this.beanDefinitionReaderX.getConfig().getProperty(""));
-        aopConfigX.setAspectAfterThrowing(this.beanDefinitionReaderX.getConfig().getProperty(""));
-
-
+        aopConfigX.setAspectClass(this.beanDefinitionReaderX.getConfig().getProperty("aspectClass"));
+        aopConfigX.setPointCut(this.beanDefinitionReaderX.getConfig().getProperty("pointCut"));
+        aopConfigX.setAspectBefore(this.beanDefinitionReaderX.getConfig().getProperty("aspectBefore"));
+        aopConfigX.setAspectAfter(this.beanDefinitionReaderX.getConfig().getProperty("aspectAfter"));
+        aopConfigX.setAspectAfterThrow(this.beanDefinitionReaderX.getConfig().getProperty("aspectAfterThrow"));
+        aopConfigX.setAspectAfterThrowing(this.beanDefinitionReaderX.getConfig().getProperty("aspectAfterThrowing"));
         return new AdvisedSupportX(aopConfigX);
     }
 

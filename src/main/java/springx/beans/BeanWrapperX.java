@@ -1,7 +1,7 @@
 package springx.beans;
 
 /**
- *
+ *BeanWrapper是spring提供的一个用来操作JavaBean属性的工具，使用它可以直接修改一个对象的属性
  */
 public class BeanWrapperX {
 

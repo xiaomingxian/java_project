@@ -39,7 +39,8 @@ public class JdkDynamicAopProxy implements AopProxyX, InvocationHandler {
 
         List<Object> interceptorsAndDynamicMethodMatchers = this.advisedSupportX.getInterceptorsAndDynamicMethodMatchers();
 
-        MethodInvocationX methodInvocationX = new MethodInvocationX(proxy, this.advisedSupportX.getTaget(), method, args,
+
+        MethodInvocationX methodInvocationX = new MethodInvocationX(proxy, this.advisedSupportX.getTarget(), method, args,
                 this.advisedSupportX.getTargetClass(),
                 interceptorsAndDynamicMethodMatchers);
         //每个方法都对应一个执行器链，方法是key,执行器链是val
