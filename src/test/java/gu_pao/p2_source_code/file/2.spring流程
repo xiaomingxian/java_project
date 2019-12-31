@@ -12,3 +12,5 @@ MVC:
             2初始化九大组件(handlerMapping,参数适配[adapter],视图相关)
     2 请求 get/post...->doDispatcher->获取handlerMapping->参数适配->方法执行
         ->返回ModelAndView->渲染视图 [参考mvc流程图]
+
+AOP:https://blog.csdn.net/qq_38023748/article/details/88991465
