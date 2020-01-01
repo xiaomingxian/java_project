@@ -37,7 +37,8 @@ public class JdkDynamicAopProxy implements AopProxyX, InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-        List<Object> interceptorsAndDynamicMethodMatchers = this.advisedSupportX.getInterceptorsAndDynamicMethodMatchers();
+        List<Object> interceptorsAndDynamicMethodMatchers =
+                this.advisedSupportX.getInterceptorsAndDynamicMethodMatchers(method, proxy.getClass());
 
 
         MethodInvocationX methodInvocationX = new MethodInvocationX(proxy, this.advisedSupportX.getTarget(), method, args,

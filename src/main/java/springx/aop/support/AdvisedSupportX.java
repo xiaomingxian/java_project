@@ -2,6 +2,9 @@ package springx.aop.support;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import springx.aop.aspect.AfterReturningAdviceInterceptorX;
+import springx.aop.aspect.AfterThrowingInterceptorX;
+import springx.aop.aspect.MethodBeforeAdviceInterceptorX;
 import springx.aop.config.AopConfigX;
 
 import java.lang.reflect.Method;
@@ -17,11 +20,16 @@ import java.util.regex.Pattern;
 public class AdvisedSupportX {
 
 
-    AopConfigX aopConfigX;
+    private AopConfigX aopConfigX;
     private Class<?> targetClass;
     private Pattern pointCutClassPattern;
 
     private Object target;
+    /**
+     * key:方法 val:拦截器链
+     * transient:不做序列化
+     */
+    private transient Map<Method, List<Object>> methodCache;
 
 
     public AdvisedSupportX() {
@@ -37,6 +45,10 @@ public class AdvisedSupportX {
 
     }
 
+    /**
+     * 解析切面
+     * 构造执行器链
+     */
     private void parse() {
         String pointCut = aopConfigX.getPointCut();
         pointCut.replaceAll("\\.","\\\\.")
@@ -47,6 +59,7 @@ public class AdvisedSupportX {
         pointCutClassPattern = Pattern.compile("class" + pointCutForClassRegex.substring(pointCutForClassRegex.lastIndexOf(" ") + 1));
 
         try {
+            methodCache = new HashMap<>();
             //
             Pattern pattern = Pattern.compile(pointCut);
             //得到切面所在的类，并记录其方法
@@ -70,22 +83,30 @@ public class AdvisedSupportX {
                     List<Object> advices = new LinkedList<>();
                     //before
                     if (StringUtils.isNotBlank(aopConfigX.getAspectBefore())) {
-                        //MethodBeforeAdviceInterceptor
-                        //AfterReturningAdviceInterceptor
-                        //AfterThrowingInterceptor
+                        String aspectBefore = this.aopConfigX.getAspectBefore();
+                        //拦截器链加入 前置通知方法
+                        advices.add(new MethodBeforeAdviceInterceptorX(methods.get(aspectBefore), aspectClazz));
+
                     }
                     //after
                     if (StringUtils.isNotBlank(aopConfigX.getAspectAfter())) {
-                        //MethodBeforeAdviceInterceptor
-                        //AfterReturningAdviceInterceptor
-                        //AfterThrowingInterceptor
+                        String aspectAfter = this.aopConfigX.getAspectAfter();
+                        advices.add(new AfterReturningAdviceInterceptorX(methods.get(aspectAfter), aspectClazz));
+
                     }
                     //afterThrowing
                     if (StringUtils.isNotBlank(aopConfigX.getAspectAfterThrowing())) {
-                        //MethodBeforeAdviceInterceptor
-                        //AfterReturningAdviceInterceptor
-                        //AfterThrowingInterceptor
+                        String aspectAfterThrowing = this.aopConfigX.getAspectAfterThrowing();
+
+
+                        AfterThrowingInterceptorX afterThrowingInterceptorX =
+                                new AfterThrowingInterceptorX(methods.get(aspectAfterThrowing), aspectClazz);
+
+
+                        advices.add(afterThrowingInterceptorX);
+
                     }
+                    methodCache.put(method, advices);
 
                 }
 
@@ -99,8 +120,19 @@ public class AdvisedSupportX {
     }
 
 
-    public List<Object> getInterceptorsAndDynamicMethodMatchers(){
-        return null;
+    public List<Object> getInterceptorsAndDynamicMethodMatchers(Method method, Class<?> targetClass) throws Exception {
+
+        List<Object> cached = methodCache.get(method);
+        if (cached == null) {//方法没有存储对应的拦截器链
+            //Method m = targetClass.getMethod(method.getName(), method.getParameterTypes());
+            ////TODO 有问题把
+            //methodCache.put(m, cached);
+
+            //1 获取所有的拦截器链
+            //2 再存入
+
+        }
+        return cached;
     }
 
 
