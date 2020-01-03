@@ -2,7 +2,7 @@ package springx.aop.aspect;
 
 import java.lang.reflect.Method;
 
-public class AbstractAspectAdviceX {
+public class AbstractAspectAdviceX implements AdviceX {
 
     private Method aspectMethod;
     private Object aspectTarget;
@@ -12,10 +12,10 @@ public class AbstractAspectAdviceX {
         this.aspectTarget = aspectTartget;
     }
 
-    protected void invokeAdviceMethod(JoinPointX joinPointX, Object returnVal, Throwable exception) throws Throwable {
+    protected Object invokeAdviceMethod(JoinPointX joinPointX, Object returnVal, Throwable exception) throws Throwable {
         Class<?>[] parameterTypes = this.aspectMethod.getParameterTypes();
         if (null == parameterTypes || parameterTypes.length == 0) {
-            //return this.aspectMethod.invoke(aspectTarget);
+            return this.aspectMethod.invoke(aspectTarget);
         } else {
             Object[] args = new Object[parameterTypes.length];
             for (int i = 0; i < parameterTypes.length; i++) {
@@ -29,7 +29,7 @@ public class AbstractAspectAdviceX {
                     args[i] = returnVal;
                 }
             }
-            //return this.aspectMethod.invoke(aspectTarget, args);
+            return this.aspectMethod.invoke(aspectTarget, args);
         }
 
 

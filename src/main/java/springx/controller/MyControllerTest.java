@@ -1,14 +1,20 @@
 package springx.controller;
 
+import springx.annotation.AutowiredX;
 import springx.annotation.ControllerX;
 import springx.annotation.RequestMappingX;
 import springx.annotation.RequestParamX;
+import springx.service.AopService;
 import springx.webmvc.servlet.ModelAndViewX;
 
 import java.util.HashMap;
 
 @ControllerX
 public class MyControllerTest {
+
+    @AutowiredX
+    private AopService aopService;
+
 
     @RequestMappingX(value = "xxx")
     public String xxx() {
@@ -25,6 +31,19 @@ public class MyControllerTest {
         map.put("v2", v2);
         modelAndViewX.setModel(map);
         modelAndViewX.setViewName("testPage");
+
+        return modelAndViewX;
+    }
+
+
+    @RequestMappingX(value = "aop")
+    public ModelAndViewX aopTest() {
+        ModelAndViewX modelAndViewX = new ModelAndViewX();
+        modelAndViewX.setViewName("testPage");
+        aopService.test();
+        aopService.exceptionTest();
+        aopService.exceptionThrow();
+
 
         return modelAndViewX;
     }

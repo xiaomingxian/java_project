@@ -10,4 +10,9 @@ public interface JoinPointX {
 
     Method getMethod();
 
+    /**
+     * 干啥用的
+     */
+    Object getUserAttribute(String key);
+
 }

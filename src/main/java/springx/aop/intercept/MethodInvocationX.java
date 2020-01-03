@@ -3,7 +3,9 @@ package springx.aop.intercept;
 import springx.aop.aspect.JoinPointX;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MethodInvocationX implements JoinPointX {
 
@@ -14,6 +16,9 @@ public class MethodInvocationX implements JoinPointX {
     private Object[] arguments;
     private Class<?> targetClass;
     private List<Object> interceptorsAndDynamicMethodMatchers;
+
+    //Map存储自定义属性
+    private Map<String, Object> userAttribute;
 
 
     //定义一个索引，从-1开始，记录当前拦截器执行的位置
@@ -70,5 +75,29 @@ public class MethodInvocationX implements JoinPointX {
     @Override
     public Method getMethod() {
         return null;
+    }
+
+
+    public void setUserAttribute(String key, Object value) {
+        if (value != null) {
+            if (this.userAttribute == null) {
+                this.userAttribute = new HashMap<String, Object>();
+            }
+            this.setUserAttribute(key, value);
+        } else {
+            if (this.userAttribute != null) {
+                //????
+                this.userAttribute.remove(key);
+            }
+
+        }
+
+    }
+
+    @Override
+    public Object getUserAttribute(String key) {
+
+
+        return (this.userAttribute == null ? this.userAttribute.get(key) : null);
     }
 }
