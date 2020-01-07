@@ -8,7 +8,10 @@ import java.lang.reflect.Method;
 public class AfterReturningAdviceInterceptorX extends AbstractAspectAdviceX implements AdviceX, MethodInterceptorX {
 
 
+
     private JoinPointX joinPointX;
+
+
 
     public AfterReturningAdviceInterceptorX(Method aspectMethod, Object aspectTartget) {
         super(aspectMethod, aspectTartget);

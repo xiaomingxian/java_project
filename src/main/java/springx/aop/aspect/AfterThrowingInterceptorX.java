@@ -9,6 +9,7 @@ public class AfterThrowingInterceptorX  extends AbstractAspectAdviceX implements
 
     private String throwName;
 
+
     public AfterThrowingInterceptorX(Method aspectMethod, Object aspectTartget) {
         super(aspectMethod, aspectTartget);
     }

@@ -170,14 +170,15 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
                 Class<?> clazz = Class.forName(className);
                 //在这里初始化Aop配置？？？
                 AdvisedSupportX config = instantionAopConfig(beanDefinitionX);
-                config.setTarget(instance);
-                config.setTargetClass(clazz);
+
                 //判断是否符合切面规则
                 if (config.pointCutMatch()) {
                     instance = createProxy(config).getProxy();
                 } else {
                     instance = clazz.newInstance();
                 }
+                config.setTarget(instance);
+                config.setTargetClass(clazz);
                 //3 将对象封装到BeanWrapper中
                 beanWrapperX = new BeanWrapperX(instance);
                 singletonContainer.put(className, instance);

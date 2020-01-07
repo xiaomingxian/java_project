@@ -13,6 +13,9 @@ public class JdkDynamicAopProxy implements AopProxyX, InvocationHandler {
 
     AdvisedSupportX advisedSupportX;
 
+
+    public JdkDynamicAopProxy(){}
+
     public JdkDynamicAopProxy(AdvisedSupportX advisedSupportX) {
         //获取被代理类
         this.advisedSupportX = advisedSupportX;

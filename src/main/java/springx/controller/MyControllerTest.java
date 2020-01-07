@@ -37,14 +37,12 @@ public class MyControllerTest {
 
 
     @RequestMappingX(value = "aop")
-    public ModelAndViewX aopTest() {
+    public ModelAndViewX aopTest() throws Exception {
         ModelAndViewX modelAndViewX = new ModelAndViewX();
         modelAndViewX.setViewName("testPage");
         aopService.test();
         aopService.exceptionTest();
         aopService.exceptionThrow();
-
-
         return modelAndViewX;
     }
 

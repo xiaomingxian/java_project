@@ -51,12 +51,13 @@ public class AdvisedSupportX {
      */
     private void parse() {
         String pointCut = aopConfigX.getPointCut();
-        pointCut.replaceAll("\\.","\\\\.")
-                .replaceAll("\\\\.\\*",".*")
-                .replaceAll("\\(","\\\\(")
-                .replaceAll("\\)","\\\\)");
-        String pointCutForClassRegex = pointCut.substring(0, pointCut.lastIndexOf("\\(") - 4);
-        pointCutClassPattern = Pattern.compile("class" + pointCutForClassRegex.substring(pointCutForClassRegex.lastIndexOf(" ") + 1));
+        //pointCut.replaceAll("\\.","\\\\.")
+        //        .replaceAll("\\\\.\\*",".*")
+        //        .replaceAll("\\(","\\\\(")
+        //        .replaceAll("\\)","\\\\)");
+        //String pointCutForClassRegex = pointCut.substring(0, pointCut.lastIndexOf("\\(") - 4);
+        //pointCutClassPattern = Pattern.compile("class" + pointCutForClassRegex.substring(pointCutForClassRegex.lastIndexOf(" ") + 1));
+        pointCutClassPattern = Pattern.compile("class." + pointCut);
 
         try {
             methodCache = new HashMap<>();
