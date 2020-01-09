@@ -10,6 +10,8 @@ public class MethodBeforeAdviceInterceptorX extends AbstractAspectAdviceX implem
 
     private JoinPointX joinPointX;
 
+    public MethodBeforeAdviceInterceptorX(){}
+
     public MethodBeforeAdviceInterceptorX(Method aspectMethod, Object aspectTartget) {
         super(aspectMethod, aspectTartget);
     }

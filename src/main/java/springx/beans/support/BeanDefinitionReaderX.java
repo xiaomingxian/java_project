@@ -104,7 +104,11 @@ public class BeanDefinitionReaderX {
         try {
 
             Class<?> clazz = Class.forName(className);
-            if (clazz.isInterface()){return null;}
+            if (clazz.isInterface()){
+                clazz.getMethods();
+                return null;
+            }
+
             if (Modifier.isAbstract(clazz.getModifiers())) return null;
 
             //如果是接口就使用其实现类(不是接口，不是抽象类)

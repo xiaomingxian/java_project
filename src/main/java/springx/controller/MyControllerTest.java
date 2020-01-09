@@ -10,7 +10,7 @@ import springx.webmvc.servlet.ModelAndViewX;
 import java.util.HashMap;
 
 @ControllerX
-public class MyControllerTest {
+public  class MyControllerTest {
 
     @AutowiredX
     private AopService aopService;

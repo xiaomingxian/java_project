@@ -11,7 +11,8 @@ public class AfterReturningAdviceInterceptorX extends AbstractAspectAdviceX impl
 
     private JoinPointX joinPointX;
 
-
+    public AfterReturningAdviceInterceptorX() {
+    }
 
     public AfterReturningAdviceInterceptorX(Method aspectMethod, Object aspectTartget) {
         super(aspectMethod, aspectTartget);

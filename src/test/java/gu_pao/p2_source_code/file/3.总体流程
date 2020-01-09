@@ -1,0 +1,15 @@
+IOC:
+    refresh()->定位，加载，注册
+     定位:getResource() #xml/配置类 等信息?
+     加载:reader.loadBeanDefinitions()
+     注册:BeanDefinition #伪ioc容器 只是保存了配置信息
+DI:
+    getBean()->保存到真正的ioc容器中
+     initationBean() 创建出 BeanWrapper
+     populateBean()  依赖注入
+AOP：
+    getBean()
+    AdvisedSupport 加载的AOP的代理配置(配置文件中的切点,切面等)
+    通过解析配置针对每一个方法创建一个 MethodInterceptor chain
+    MethodInterceptor proceed() 执行拦截器链 调用内部的invoke() 调用Advice的 before/after等
+

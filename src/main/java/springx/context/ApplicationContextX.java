@@ -140,6 +140,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
 
             try {
                 //自动注入(字段赋值)
+                System.out.println("========+>>>>>>"+autowriedBeanName);
                 Object instanceWried = this.factoryBeanInstanceCache.get(autowriedBeanName).getWrapperInstance();
                 //注入就一次，没注入的化再进行注入(我自己的做法)
                 Object o = field.get(instance);
@@ -170,7 +171,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
                 Class<?> clazz = Class.forName(className);
                 //在这里初始化Aop配置？？？
                 AdvisedSupportX config = instantionAopConfig(beanDefinitionX);
-
+                config.setTargetClass(clazz);
                 //判断是否符合切面规则
                 if (config.pointCutMatch()) {
                     instance = createProxy(config).getProxy();
@@ -178,7 +179,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
                     instance = clazz.newInstance();
                 }
                 config.setTarget(instance);
-                config.setTargetClass(clazz);
+
                 //3 将对象封装到BeanWrapper中
                 beanWrapperX = new BeanWrapperX(instance);
                 singletonContainer.put(className, instance);

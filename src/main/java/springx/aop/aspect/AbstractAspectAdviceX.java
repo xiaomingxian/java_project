@@ -7,6 +7,8 @@ public class AbstractAspectAdviceX implements AdviceX {
     private Method aspectMethod;
     private Object aspectTarget;
 
+    public AbstractAspectAdviceX(){}
+
     public AbstractAspectAdviceX(Method aspectMethod, Object aspectTartget) {
         this.aspectMethod = aspectMethod;
         this.aspectTarget = aspectTartget;
