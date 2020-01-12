@@ -117,9 +117,13 @@ public class BeanDefinitionReaderX {
             beanDefinitionX.setLazyInit(false);
             //
             Class<?>[] interfaces = clazz.getInterfaces();
-            for (Class<?> c:interfaces){
-                //TODO
-            }
+            //for (Class<?> c:interfaces){
+            //    //TODO
+            //    String interfaceName = c.getName();
+            //    beanDefinitionX.setBeanClassName(interfaceName);
+            //    beanDefinitionX.setFactoryBeanName(lowerFirstCase(c.getSimpleName()));
+            //    beanDefinitionX.setLazyInit(false);
+            //}
 
         } catch (Exception e) {
             log.error(e.toString());
@@ -129,7 +133,7 @@ public class BeanDefinitionReaderX {
         return beanDefinitionX;
     }
 
-    private String lowerFirstCase(String simpleName) {
+    public static String lowerFirstCase(String simpleName) {
 
         String first = simpleName.substring(0, 1).toLowerCase();
         String other = simpleName.substring(1);

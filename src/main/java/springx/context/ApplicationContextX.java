@@ -17,6 +17,7 @@ import springx.beans.support.BeanDefinitionReaderX;
 import springx.beans.support.DefaultListableBeanFactoryX;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -169,6 +170,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
                 instance = singletonContainer.get(beanName);
             } else {
                 Class<?> clazz = Class.forName(className);
+                Class<?>[] interfaces = clazz.getInterfaces();
                 //在这里初始化Aop配置？？？
                 AdvisedSupportX config = instantionAopConfig(beanDefinitionX);
                 config.setTargetClass(clazz);
@@ -176,14 +178,32 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
                 if (config.pointCutMatch()) {
                     instance = createProxy(config).getProxy();
                 } else {
+                    //if (Modifier.isAbstract(clazz.getModifiers()) || Modifier.isInterface(clazz.getModifiers())) {
+                    //    instance = null;
+                    //} else {
+                    //    instance = clazz.newInstance();
+                    //}
+
                     instance = clazz.newInstance();
+
                 }
                 config.setTarget(instance);
 
+
                 //3 将对象封装到BeanWrapper中
                 beanWrapperX = new BeanWrapperX(instance);
+                System.out.println("::::"+className+"::"+instance);
                 singletonContainer.put(className, instance);
                 factoryBeanInstanceCache.put(beanDefinitionX.getFactoryBeanName(), beanWrapperX);
+
+                //如果有接口 就将接口作为key往容器里存一份
+                //if (interfaces.length > 0) {
+                //    for (Class<?> anInterface : interfaces) {
+                //        String interfaceName = anInterface.getName();
+                //        singletonContainer.put(interfaceName, instance);
+                //        factoryBeanInstanceCache.put(BeanDefinitionReaderX.lowerFirstCase(anInterface.getSimpleName()), beanWrapperX);
+                //    }
+                //}
 
             }
         } catch (Exception e) {

@@ -12,4 +12,9 @@ AOP：
     AdvisedSupport 加载的AOP的代理配置(配置文件中的切点,切面等)
     通过解析配置针对每一个方法创建一个 MethodInterceptor chain
     MethodInterceptor proceed() 执行拦截器链 调用内部的invoke() 调用Advice的 before/after等
-
+MVC:Spring的扩展模块
+    DispatchServlet init() 开始
+    initStrategies() 初始化9大组件
+        initHandlerMapping url与方法建立映射；
+        initHandlerAdapter 将request中的参数转换成方法能接收的参数
+        initViewResolver 将返回值转换成ModelAndView(model数据 view页面[View render()方法往浏览器输出Http协议所支持的字符内容])
