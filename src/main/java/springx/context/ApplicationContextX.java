@@ -141,7 +141,7 @@ public class ApplicationContextX extends DefaultListableBeanFactoryX implements 
 
             try {
                 //自动注入(字段赋值)
-                System.out.println("========+>>>>>>"+autowriedBeanName);
+                //System.out.println("========+>>>>>>"+autowriedBeanName);
                 Object instanceWried = this.factoryBeanInstanceCache.get(autowriedBeanName).getWrapperInstance();
                 //注入就一次，没注入的化再进行注入(我自己的做法)
                 Object o = field.get(instance);

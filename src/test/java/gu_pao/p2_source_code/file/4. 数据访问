@@ -1,0 +1,4 @@
+Connection 跟数据库建立联系的一个封装，说到底是Socket TCP
+Statement语句集 sql解析器，解析sql语法(协议，语法，语义)
+ResultSet 通过执行sql 获得的一个结果的封装，在java中的体现形式(Map + Cursor)
+Session 是对 dataSource的封装 表示数据库的一次连接
