@@ -19,5 +19,19 @@ https://www.cnblogs.com/ubuntu1/p/8999403.html
     脏读：读到未提交
     虚读：读到修改后的(前后不一致)
     幻读：修改范围数据 但是另一事物在范围内新增了数据  另一事物的新增数据没有被修改
-spring的事物隔离级别：
-    默认：
+spring的事物隔离级别：默认,其他4个与jdbc的隔离级别一致
+    ISOLATION_DEFAULT： 使用数据库设置的隔离级别 ( 默认 ) ，由 DBA 默认的设置来决定隔离级别
+    ISOLATION_READ_UNCOMMITTED:
+    ISOLATION_READ_COMMITTED:
+    ISOLATION_REPEATABLE_READ:
+    ISOLATION_SERIALIZABLE:
+
+分布式事物(DTS)：
+    强一致性-->弱一致性(最终一致性)
+    CAP
+        Consistency 一致性
+        Availability 可用性
+        Partition Tolerace 分区容错性
+
+        通过日志还原(滞后，异步操作)
+
