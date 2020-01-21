@@ -1,0 +1,5 @@
+1 BeanFactory和ApplicationContext 区别
+2 Spring Bean 的生命周期
+3 Spring Bean 各作用域区别(寿命长短) :总共5个, prototype(5),singleton(最长),request(4),session(3),global-session(第2)
+4 Spring Bean 是线程安全吗(跟自己写的代码有关系,跟spring没关系)
+5 Spring中用到的设计模式
