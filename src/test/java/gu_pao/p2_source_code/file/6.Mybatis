@@ -1,0 +1,38 @@
+Mybatis文档:https://mybatis.org/mybatis-3/zh/
+
+核心对象的生命周期：
+    SqlSessionFactoryBuilder(创建完SqlSession就销毁)[方法局部method]
+    SqlSessionFactory(单例：应用的整个生命周期都存在，用来创建会话)[应用级别application]
+    SqlSession[请求和操作request/method]
+    Mapper[方法method 与Session的生命周期一致] 通过SqlSession.getMapper(xxxMapper.xml)获得
+
+
+#标签
+    <cache>
+    <cache-ref>
+    <resultMap>
+    <sql>
+    <insert> <update> <delete> <select>
+#属性
+    <cacheEnabled>  缓存
+    <localCacheScope> 缓存范围
+    <proxyFactory>  代理工厂
+    <lazyLoadingEnable> 延迟加载
+    <aggressiveLazyLoading>
+    <lazyLoadTriggerMethods>
+    <defaultExecutorType> 执行器类型
+    <logIMpl> 日志配置
+
+N+1:
+    结果嵌套查询：
+    1:原本的一次查询  N:查询出n条数据 每条数据再去关联一次查询  #association与collection https://www.cnblogs.com/yansum/p/5819973.html
+        select .... <association property='xxx' javaType='com.xxm.Person' column='id'    select='指定的查询方法'>
+    <setting name='lazyLoadingEnabled' value='true'/>
+        延迟加载开关打开后回一定程度上缓解(在需要用那个字段关联的内容时,才会查询)  #连表查询的好办法
+    <setting name='aggressiveLazyLoading' value='true'/>
+        #aggressive有侵略性的，积极的 开启后 任何方法的调用都会加载该对象的全部属性
+    <setting name='proxyFactory' value='CGLIB'/>
+        #Mybatis创建具有延迟加载能力的对象所用到的代理工具 默认是 JAVASSIST
+            #JAVASSIST 动态编程https://blog.csdn.net/ShuSheng0007/article/details/81269295
+分页：逻辑分页(查出所有数据删选所需数据)/物理分页(使用数据库语法分页 eg:mysql:limit)
+

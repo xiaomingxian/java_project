@@ -3,6 +3,7 @@
 <configuration>
 
 
+    <!--<properties resource="properties/db.properties"/>-->
     <!-- 全局配置参数，需要时再设置 -->
     <settings>
         <!-- 打开延迟加载的开关 -->
