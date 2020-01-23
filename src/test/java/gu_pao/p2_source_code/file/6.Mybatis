@@ -36,3 +36,30 @@ N+1:
             #JAVASSIST 动态编程https://blog.csdn.net/ShuSheng0007/article/details/81269295
 分页：逻辑分页(查出所有数据删选所需数据)/物理分页(使用数据库语法分页 eg:mysql:limit)
 
+
+缓存：org.apache.ibatis.cache
+    顶层接口：Cache #要集成其他缓存 得实现这个接口
+    默认实现：PerpetualCache #一级二级缓存都是通过它实现
+    装饰：decorators.* #对 PerpetualCache进行了增强 适用于不同的场景
+缓存对象什么时候创建？什么情况下被装饰
+    一级缓存(本地缓存)：Session级别 #在执行器内 DefaultSqlSession 内的Executor 的父类 BaseExecutor ==>PerpetualCache(localCache)
+    二级缓存：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
