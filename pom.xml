@@ -11,7 +11,7 @@
 
     <properties>
         <spring.version>4.3.7.RELEASE</spring.version>
-        <shiro.version>1.3.1</shiro.version>
+        <shiro.version>1.5.0</shiro.version>
         <druid.version>1.0.4</druid.version>
         <mysql.version>5.1.38</mysql.version>
         <mybatis.version>3.4.4</mybatis.version>
