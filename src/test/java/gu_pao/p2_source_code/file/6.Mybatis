@@ -62,6 +62,25 @@ N+1:
     XMLStatement 解析 <insert><update...等
     插件解析：解析后放入InterceptorChain类中的一个集合中interceptors
 
+解析environmentsElement(xml解析environments标签:事物,数据源,多数据...)
+    TransactionFactory  创建会话使用
+    DataSourceFactory   创建会话使用
+    DataSource          创建会话使用
+    configuration.newExecutor(tx,execType) 创建执行器
+        #执行器类型:对jdbc的 Stament 的封装
+            BatchExecutor   支持Stament重用,还支持批量操作
+            ReuseExecutor   Stament用完会缓存在一个Map里
+            SimpleExecutor  Stament用完就关闭
+事物:(只有2种配置)
+    <environments ...
+        <transactionManager type="JDBC"/>
+    JDBC:直接使用jdbc的事物
+    MANAGED:单独使用时配置成 MANAGED 没有事物
+
+接口容器类 MapperRegister
+    private final Map<Class<?>,MapperProxyFactory<?>> knownMappers =new HashMap<>();
+根据Mapper接口产生的代理对象是jdk的方式，源码使用 (T)Proxy.newInstance(...)
+
 
 
 
