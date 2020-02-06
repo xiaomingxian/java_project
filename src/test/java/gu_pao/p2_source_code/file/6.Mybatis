@@ -56,7 +56,7 @@ N+1:
     type:可替换为redis等   分布式中使用独立的缓存组件
     readOnly="false" 可以读写 写后返回的是一个copy对象,实体得实现序列化   true是同一个对象，不需要copy速递更快 false更安全
     为什么比一级缓存的范围更广:因为使用了装饰器
-
+Cache对象创建 ：解析xml文件时<cache/> 创建
 解析过程：
     XMLConfigBuilder XmlMapperBuilder解析mapper映射器(接口与Mapper.xml关系)
     XMLStatement 解析 <insert><update...等
@@ -79,7 +79,12 @@ N+1:
 
 接口容器类 MapperRegister
     private final Map<Class<?>,MapperProxyFactory<?>> knownMappers =new HashMap<>();
-根据Mapper接口产生的代理对象是jdk的方式，源码使用 (T)Proxy.newInstance(...)
+根据Mapper接口产生的代理对象是jdk的方式，源码使用 (T)Proxy.newInstance(...)  Mybatis使用的是jdk但是只用找到对应的sql所以不需要有实现类
+    执行 MapperProxy类中的invoke方法
+        排除Object的方法/
+    一级缓存命中条件 sqlId,分页信息,sql,where条件  从哪里拿结果：根据sqlId从本地缓存中拿(LocalCache) 如果没有先放入一个占位符 查处结果后将占位符移除然后替换结果
+
+
 
 
 
