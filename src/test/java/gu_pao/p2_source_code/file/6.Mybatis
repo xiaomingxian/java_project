@@ -85,8 +85,21 @@ Cache对象创建 ：解析xml文件时<cache/> 创建
     一级缓存命中条件 sqlId,分页信息,sql,where条件  从哪里拿结果：根据sqlId从本地缓存中拿(LocalCache) 如果没有先放入一个占位符 查处结果后将占位符移除然后替换结果
 
 
+MyBatis中可以被拦截的四大对象(执行sql的时候才被包装)  都会添加到interceptorChain中
+    ParameterHandler    参数转换                                 执行sql时被代理
+    ResultSetHandler    结果集转换(转换java对象等)                 执行sql时被代理
+    StatementHandler    sql执行(封装了JDBC里的Statement操作)       执行sql时被代理
+    Executor                                                    OpenSession的时候被代理
+    其他：
+        MapperProxy 通过接口找sql
+        MappedStatement 解析增删改查等标签后 会封装到这个对象中
 
-
+插件原理：
+    使用插件：只需实现 Interceptor 接口,并指定要拦截的方法签名即可
+        @Interceptor({@signature(...)})
+        插件编写配置：百度
+    原理：JDK的动态代理
+    代理能不能被代理
 
 
 
