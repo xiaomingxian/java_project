@@ -94,17 +94,54 @@ MyBatis中可以被拦截的四大对象(执行sql的时候才被包装)  都会
         MapperProxy 通过接口找sql
         MappedStatement 解析增删改查等标签后 会封装到这个对象中
 
-插件原理：
+==================================== 插件原理 ====================================
     使用插件：只需实现 Interceptor 接口,并指定要拦截的方法签名即可
         @Interceptor({@signature(...)})
         插件编写配置：百度
     原理：JDK的动态代理
-    代理能不能被代理
+    代理能不能被代理：可以，层层代理后，代理顺序是自内而外，执行顺序是自外而内
+    相关方法：
+        代理后执行哪个方法：intercept(Invocation invocation)
+            ... 在Plugin的invoke中调用被代理类的intercept,调用被代理的原方法(invocation.proceed())
+        创建代理类的方法：plugin() 内部调用的是JDK的动态代理 (Plugin.wrap()的内部调用)
+        提供属性的方法：setProperties() 设置一些属性
+    InterceptionChain:Configure中的属性 用来保存所有编写和注册的插件 是个List
+================================== 注意问题 =========================================
+DefaultSqlSession不能直接使用(线程不安全,源码注解写的)替代品 SqlSessionTemplate
+SqlSessionTemplate为什么是线程安全的：https://blog.csdn.net/xlgen157387/article/details/79438676
+    SqlSessionTemplate最终使用的也是DefaultSqlSession 但是SqlSessionTemplate是从当前线程中获取()
+        //根据sqlSessionFactory从当前线程对应的资源map中获取SqlSessionHolder，
+        // 当sqlSessionFactory创建了sqlSession，
+        //就会在事务管理器中添加一对映射：key为sqlSessionFactory，value为SqlSessionHolder，
+        // 该类保存sqlSession及执行方式
+        SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager.
+                getResource(sessionFactory);
 
+        //从SqlSessionHolder中提取SqlSession对象
+        SqlSession session = sessionHolder(executorType, holder);
+        ...
+    原文链接：https://blog.csdn.net/xlgen157387/article/details/79438676
+Mapper注册到spring容器中是啥 MapperFactoryBean  BeanPostProcessor时?
 
+获取@AutoWired的Bean 是接口的代理类
+    MapperFactoryBean.getObject()
+        因为 MapperFactoryBean 继承了 SqlDaoSupport 可以从里面拿到 SqlSessionTemplate[线程安全]
 
-
-
+============================= Mybatis中的设计模式 ===============================
+工厂：SqlSessionFactory
+单例：SqlSessionFactory    Configuration
+建造者：SqlSessionFactoryBuilder ...Builder
+装饰者：CachingExector[对Simple,Reuse,batch的装饰]各种Cache eg:LRUCache FiFoCache [对 PerpetualCache 的装饰]
+代理：
+    Spring集成Mybatis 时 SqlSessionInterceptor 是对 DefaultSqlSession 的代理
+    MapperProxy
+    Plugin [对四大对象进行代理，调用interceptor()对方法进行增强]
+    延迟加载(也是通过代理模式实现) ProxyFactory 使用 javassit 或者 CGlib
+    Log[判断日志配置有没有开启,开启的话就返回代理对象,其他类似] ConnectionLogger StatementLogger ...
+适配器：日志包下 sl4j(接口，规范) log4j(具体实现)  解决接口不兼容问题(某些日志模块没有实现sl4j但是想使用它的方法)
+模版方法：Executor BaseExecutor 具体实现是 Simple,Reuse,batch
+责任链：interceptorChain
+策略模式：
 
 
 
