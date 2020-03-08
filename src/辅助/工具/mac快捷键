@@ -2,6 +2,8 @@
     编辑 ~/.bash_profile, 加入以下代码:
     export CLICOLOR=1
     export LSCOLORS=gxfxaxdxcxegedabagacad
+
+命令行下载 curl -O(大写O) 地址
 --------------------------------------
 mac连接linux
     · 打开Mac终端，切换到root权限下
