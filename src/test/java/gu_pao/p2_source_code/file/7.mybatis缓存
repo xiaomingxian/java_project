@@ -1,0 +1,6 @@
+一级缓存：
+    作用域：SqlSession
+    存储位置：SqlSession的属性中
+            SqlSession的默认实现DefaultSqlSession中有两个属性
+                Configuration(设置相关[全局唯一])
+                Executor的父类BaseExecutor(执行器-中的 PrepetualCache localCache)
