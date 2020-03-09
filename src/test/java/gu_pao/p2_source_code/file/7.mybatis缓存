@@ -1,6 +1,27 @@
-一级缓存：
+顺序:二级缓存-->一级缓存-->db
+一级缓存：(默认打开)
     作用域：SqlSession
     存储位置：SqlSession的属性中
             SqlSession的默认实现DefaultSqlSession中有两个属性
                 Configuration(设置相关[全局唯一])
                 Executor的父类BaseExecutor(执行器-中的 PrepetualCache localCache)
+    标签属性：
+        < ... flushCache="false"'>
+        select 默认为false,其他更新操作默认为true
+    存在的问题：
+        1 跨会话【分布式和场景存在(或者多个session操作同一条数据可以演示出来，SqlSessionFactory.openSession())】,
+            对用一条数据进行更新,可能不会读取到最新的数据
+            (会话1更新,会话2在会话1更新之前查询了一次[已经缓存],在更新后再查使用的还是缓存的数据[旧数据])
+    spring管理mybatis一级缓存失效(提交完自动关闭会话[默认的事务是mysql的事务])[可通过事务管理开启]
+
+二级缓存:
+    场景：大量查询,几乎不修改的数据(eg:历史数据)
+    如何打开:最简单的<cache/>(其他都是默认)，各种注意事项参考6
+    解决一级缓存脏数据的问题:不同session对数据的操作导致缓存的数据不更新(旧数据)===>二级缓存跨session共享数据
+    (namespace)同一接口调用同意方法能共享二级缓存[不管是不是同一个会话]
+    二级缓存工作在一级缓存之前:二级缓存作用域更广(返例:一级缓存因为不同的session原因读到旧数据)
+    做缓存的位置:SqlSession-->DefaultSqlSession-->中的Executor-->父类BaseExecutor-->的装饰着CachingExecutor
+        1 持有对Executor的引用(装饰者特点)
+        2 TransactionalCacheManager(事务性缓存)[事务性缓存-->允许批量的走缓存(直到提交后这批数据才放缓存)] 得commit后才会存入二级缓存
+
+    问题:不同namespace数据不更新

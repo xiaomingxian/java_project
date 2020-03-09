@@ -57,6 +57,7 @@ N+1:
     readOnly="false" 可以读写 写后返回的是一个copy对象,实体得实现序列化   true是同一个对象，不需要copy速递更快 false更安全
     为什么比一级缓存的范围更广:因为使用了装饰器
 Cache对象创建 ：解析xml文件时<cache/> 创建
+============================================================================================
 解析过程：
     XMLConfigBuilder XmlMapperBuilder解析mapper映射器(接口与Mapper.xml关系)
     XMLStatement 解析 <insert><update...等
